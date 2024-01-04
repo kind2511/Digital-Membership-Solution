@@ -1,0 +1,13 @@
+# For backend
+gnist/backend/node_modules/
+gnist/backend/config.env
+gnist/backend/.DS_Store
+
+# For frontend
+gnist/frontend/node_modules/
+
+# General ignores
+.DS_Store
+.vscode/
+.history/
+.hintrc
