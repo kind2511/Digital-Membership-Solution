@@ -1,6 +1,6 @@
-# $$$$$
+# GenNex
 
-Welcome to $$$$$! This project is developed by $$$$$ for prog2900 at NTNU.
+Welcome to GenNex This project is developed by group for prog2900 at NTNU.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ Welcome to $$$$$! This project is developed by $$$$$ for prog2900 at NTNU.
 
 ## Project Structure
 
-The $$$$$ project is organized into frontend and backend components:
+The GenNex project is organized into frontend and backend components:
 
 - **frontend/**: Contains the React frontend code, which is the user interface.
 - **backend/**: Manages the backend, including API, database connections, and server-side tasks.
@@ -84,3 +84,7 @@ Before beginning, make sure you have installed:
 
 Developed by:
 
+-
+-
+-
+-
