@@ -1,0 +1,101 @@
+.home-page {
+    display: flex;
+    height: 100vh; /* Full height */
+}
+
+/* Style for the left side of the home page */
+.home-page .left {
+    width: 50%;
+    background-color: rgb(234, 231, 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for the right side of the home page */
+.home-page .right {
+    width: 50%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Paragraph styling for the sliding sentences */
+.sentence-section p {
+    font-size: 40px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Styling for the logo */
+.nav-logo {
+    font-family: 'Fredoka One', cursive; /* Fredoka One font */
+    font-weight: 700; /* Bold weight */
+    font-size: 3rem; /* Adjust size as needed */
+    letter-spacing: -2px; /* Make letters closer */
+    color: black; /* Default color for 'Gen' */
+    text-transform: uppercase; /* All letters in uppercase */
+    text-decoration: none;
+    display: inline-block;
+
+    /* Additional styling can be added here if needed */
+}
+
+
+.nav-logo span {
+    color: yellow; /* Color for 'Nex' */
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.2); /* Optional: Adds depth */
+}
+
+/* Styling for the buttons */
+.home-page .right button {
+    margin: 10px 20px;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    width: 150px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.home-page .right button:hover {
+    background-color: #61dafb;
+    color: #333;
+}
+
+/* Remove underline from links inside buttons */
+.home-page .right button a {
+    text-decoration: none;
+    color: yellow;
+}
+
+.home-page .right button a:hover {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Styling for the footer/about section */
+.home-page .right .footer-about {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 16px;
+    color: #059b16;
+    font-weight: bold;
+}
+
+/* Link component styling */
+.home-page .right .footer-about a,
+.home-page .right .footer-about a:visited {
+    text-decoration: none;
+    color: #059b16;
+}
+
+.home-page .right .footer-about a:hover {
+    color: #1cf7f3;
+}
