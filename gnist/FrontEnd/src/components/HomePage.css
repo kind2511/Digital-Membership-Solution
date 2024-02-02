@@ -40,10 +40,7 @@
     text-transform: uppercase; /* All letters in uppercase */
     text-decoration: none;
     display: inline-block;
-
-    /* Additional styling can be added here if needed */
 }
-
 
 .nav-logo span {
     color: yellow; /* Color for 'Nex' */
@@ -85,7 +82,7 @@
     bottom: 10px;
     left: 10px;
     font-size: 16px;
-    color: #059b16;
+    color: #059b16; /* Original color, will be overridden below for black color */
     font-weight: bold;
 }
 
@@ -93,9 +90,22 @@
 .home-page .right .footer-about a,
 .home-page .right .footer-about a:visited {
     text-decoration: none;
-    color: #059b16;
+    color: black; /* Changed color to black */
 }
 
 .home-page .right .footer-about a:hover {
     color: #1cf7f3;
+}
+
+/* -- Additional styling for the footer/about section for alignment -- */
+.home-page .right .footer-about {
+    align-self: center; /* center of the flex container */
+    width: 100%; /* Sets the width to 100% of the container */
+    text-align: center; /* Centers the text within the footer-about */
+    position: relative; /* Changes from absolute to relative positioning */
+    font-size: 14px;
+    color: black; /* Ensures the text is black */
+    font-weight: bold;
+    margin-top: auto; /* Pushes the footer-about to the bottom of the flex container */
+    top: 300px; /* move About us downwards */
 }
