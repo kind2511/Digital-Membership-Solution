@@ -1,6 +1,5 @@
 # For backend
-gnist/backend/node_modules/
-gnist/backend/config.env
+gnist_env
 gnist/backend/.DS_Store
 
 # For frontend
