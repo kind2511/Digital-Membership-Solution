@@ -58,6 +58,7 @@
     width: 150px;
     text-align: center;
     transition: background-color 0.3s;
+    color: yellow; /* Set text color to yellow */
 }
 
 .home-page .right button:hover {
