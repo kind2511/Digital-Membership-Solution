@@ -6,9 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 
 function App() {
-  // TODO: will be replaced with domain and client ID later
-  const auth0Domain = "****_AUTH0_DOMAIN";
-  const auth0ClientId = "****_AUTH0_CLIENT_ID";
+  const auth0Domain = process.env.REACT_APP_AUTH0_DOMAIN;
+  const auth0ClientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
   return (
     <Auth0Provider
