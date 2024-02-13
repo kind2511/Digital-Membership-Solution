@@ -76,11 +76,11 @@ WSGI_APPLICATION = "gnist.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "Gnist",
-	"USER": "root",
-	"PASSWORD": "Jdqo4tt9",
+        "NAME": "gnist",
+	"USER": "admin",
+	"PASSWORD": "bg9uxDPNYXZzIuX5Fke8",
 	"PORT": 3306,
-	"HOST": "127.0.0.1",
+	"HOST": "database-1.chiwoyka4rye.eu-north-1.rds.amazonaws.com",
     }
 }
 
