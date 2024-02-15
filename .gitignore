@@ -5,7 +5,7 @@ myenv/
 db.sqlite3
 
 # Backend .env file
-BackEnd/gnist/.env
+gnist/BackEnd/gnist/.env
 
 # Python compiled files
 *.pyc
@@ -19,9 +19,9 @@ __pycache__/
 *.log
 
 # Frontend node modules and environment files
-FrontEnd/node_modules/
-FrontEnd/.env
-FrontEnd/build/
+gnist/FrontEnd/node_modules/
+gnist/FrontEnd/.env
+gnist/FrontEnd/build/
 
 # General system files
 .DS_Store
