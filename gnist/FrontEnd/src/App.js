@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import UserDashboard from './components/UserDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import Loading from './components/Loading';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const auth0Domain = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -16,15 +17,22 @@ function App() {
     <Auth0Provider
       domain={auth0Domain}
       clientId={auth0ClientId}
-      redirectUri={window.location.origin}
+      authorizationParams={{
+        redirect_uri: window.location.origin
+      }}
     >
       <Router>
         <Routes>
           <Route path="/" element={<HomePageWithRedirection />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/user-dashboard" element={<UserDashboard />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/user-dashboard" element={
+              <ProtectedRoute component={UserDashboard} />
+            } />
+          <Route path="/admin-dashboard" element={
+            <ProtectedRoute component={AdminDashboard} />
+          } />
         </Routes>
       </Router>
     </Auth0Provider>
