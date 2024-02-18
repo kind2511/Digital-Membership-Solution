@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserDashboard from './components/UserDashboard';
 import AdminDashboard from './components/AdminDashboard';
+import Loading from './components/Loading';
 
 function App() {
   const auth0Domain = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -51,5 +52,5 @@ function HomePageWithRedirection() {
     }
   }, [isAuthenticated, isLoading, navigate, user]);
 
-  return <HomePage />;
+  return isLoading ? <Loading /> : <HomePage />;
 }
