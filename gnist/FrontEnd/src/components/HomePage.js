@@ -3,17 +3,18 @@ import { useAuth0 } from '@auth0/auth0-react';
 import './HomePage.css';
 
 const promoSentences = [
-    "Add your sentence here",
-    "Add your sentence here!",
-    "Add your sentence here!",
-    "Add your sentence here"
+  "Add your sentence here",
+  "Add your sentence here!",
+  "Add your sentence here!",
+  "Add your sentence here"
 ];
 
 
 const HomePage = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [sentenceIndex, setSentenceIndex] = useState(0);
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect} = useAuth0();
+ // when remove comment from useEffect function below, should put isAuthenticated, user const useAuth0
 
   useEffect(() => {
     let currentTimer;
@@ -31,7 +32,7 @@ const HomePage = () => {
         setDisplayedText(newText);
       }, 50);
     }
- 
+
     return () => {
       clearTimeout(currentTimer);
     };
@@ -42,12 +43,28 @@ const HomePage = () => {
     loginWithRedirect();
   };
 
+  /*
+   * useEffect hook for redirecting users to their dashboards after login
+   */
+
+  // useEffect(() => {
+  //   if (isAuthenticated && user) {
+  //     const role = user['https://my-namespace/role'];
+  //     if (role === 'admin') {
+  //       window.location.href = '/admin-dashboard';
+  //     } else {
+  //       window.location.href = '/user-dashboard';
+  //     }
+  //   }
+  // }, [isAuthenticated, user]);
+
+
   // Functoin to handler user regiser
   const handleRegister = () => {
     loginWithRedirect({ screen_hint: 'signup' });
   };
 
- //Render function 
+  //Render function 
 
   return (
     <div className="home-page">

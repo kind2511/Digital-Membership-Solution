@@ -1,0 +1,20 @@
+.user-dashboard {
+    position: relative; /* make sure the child elements can be positioned absolutely within. */
+  }
+  
+  .logout-button {
+    position: absolute;
+    top: 20px; /* test position */
+    right: 20px; /* test position*/
+    padding: 10px;
+    background-color: #f00; /* this is just test will be changed later */
+    color: #fff;  
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-button:hover {
+    background-color: #c00; /* hover effect darker when put mouse curser*/
+  }
+  

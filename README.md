@@ -1,6 +1,6 @@
-# GenNex
+# GNIST
 
-Welcome to GenNex This project is developed by group for prog2900 at NTNU.
+Welcome to GNIST. This project is developed by Gruppe 208 for PROG2900 at NTNU.
 
 ## Table of Contents
 
@@ -13,78 +13,85 @@ Welcome to GenNex This project is developed by group for prog2900 at NTNU.
 
 ## Project Structure
 
-The GenNex project is organized into frontend and backend components:
+The GNIST project is organized into two main components:
 
-- **frontend/**: Contains the React frontend code, which is the user interface.
-- **backend/**: Manages the backend, including API, database connections, and server-side tasks.
+- **FrontEnd/**: Contains the React application that serves as the user interface.
+- **BackEnd/**: Houses the Django application responsible for server-side operations, including API and database management.
 
 Root directory files:
-- `.gitignore`: For untracked files and folders.
-- `README.md`: This document, explaining the project setup and guidelines.
+- `.gitignore`: Specifies intentionally untracked files to ignore.
+- `README.md`: Documentation that provides setup instructions and information.
 
 ## Getting Started
 
 ### Prerequisites
 
-Before beginning, make sure you have installed:
-- Node.js
-- npm (Node Package Manager)
-- Visual Studio Code (or any other preferred IDE)
+To get started, you'll need to install:
+- Node.js and npm (Node Package Manager)
+- Python and pip (Python Package Manager)
+- A preferred IDE, such as Visual Studio Code
 
 ### Local Setup
 
 1. **Clone the Repository**:
+   Clone the repository to your local machine using the following command:
     ```
-    git clone https://gitlab.stud.idi.ntnu.no/ahmadmm/prog2900-gnistdigital.git
+    git clone https://gitlab.stud.idi.ntnu.no/ahmadmm/gnist.git
     ```
-    Navigate to the project directory:
+    Then, navigate to the project directory:
     ```
-    cd prog2900-gnistdigital/gnist
+    cd gnist
     ```
 
-2. **Frontend Setup**:
-    - Open Visual Studio Code and open the cloned project directory group5-prog2052.
-    - Open a terminal in Visual Studio Code.
-    - Navigate to the frontend directory:
-      ```
-      cd gnist/FrontEnd 
-      ```
-    - Install the required dependencies:
-      ```
-      npm install
-      ```
-    - Start the frontend server:
-      ```
-      npm start
-      ```
+2. **FrontEnd Setup**:
+    Navigate to the FrontEnd directory:
+    ```
+    cd FrontEnd
+    ```
+    Install the necessary npm packages:
+    ```
+    npm install
+    ```
 
-3. **Backend Setup**:
-    - Open a new terminal tab in Visual Studio Code.
-    - Navigate to the backend directory:
-      ```
-      cd gnist/BackEnd
-      ```
-    - Install necessary dependencies:
-      ```
-      npm install
-      ```
-    - Create a `config.env` file in the backend directory and fill in the necessary configurations 
-    
+3. **BackEnd Setup**:
+    Navigate to the BackEnd directory:
+    ```
+    cd ../BackEnd
+    ```
+    Set up a Python virtual environment:
+    ```
+    python -m venv venv
+    ```
+    Activate the virtual environment:
+    For Windows:
+    ```
+    venv\Scripts\activate
+    ```
+    For macOS and Linux:
+    ```
+    source venv/bin/activate
+    ```
+    Install the required Python packages:
+    ```
+    pip install -r requirements.txt
+    ```
 
-      <!-- Placeholder for future configuration details -->
+## Running the Application
 
-    - Start the backend server:
-      ```
-      npm start
-      ```
+1. **Start the FrontEnd**:
+   Inside the FrontEnd directory, start the React application:
+    ```
+    npm start
+    ```
+   Your default web browser will open to `http://localhost:3000`.
 
-
+2. **Start the BackEnd**:
+   In a new terminal window, ensure you're in the BackEnd directory and the virtual environment is activated, then start the Django server:
+    ```
+    python manage.py runserver
+    ```
+   The Django API will be available at `http://localhost:8000`.
 
 ## Credits
 
-Developed by:
-
--
--
--
--
+T
