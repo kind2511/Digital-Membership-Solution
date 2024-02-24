@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; 
 import './UserInfo.css';
+
 
 function UserInfo() {
   const [formData, setFormData] = useState({
@@ -13,6 +13,14 @@ function UserInfo() {
     isSixteenOrAbove: false,
     agreesToTerms: false,
   });
+
+  // Prevent the user from go back to the previous page
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.href);
+    window.addEventListener('popstate', () => {
+      window.history.pushState(null, null, window.location.href);
+    });
+  }, []);
 
  // const navigate = useNavigate();
 
