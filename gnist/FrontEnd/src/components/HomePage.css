@@ -6,7 +6,7 @@
 /* Style for the left side of the home page */
 .home-page .left {
     width: 50%;
-    background-color: rgb(65, 65, 48);
+    background-color: #ffd700;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,7 +25,7 @@
 /* Paragraph styling for the sliding sentences */
 .sentence-section p {
     font-size: 40px;
-    color: rgb(241, 238, 238);
+    color: black;
     text-align: center;
     font-weight: bold;
 }
@@ -43,7 +43,7 @@
 }
 
 .nav-logo span {
-    color: yellow; /* Color for 'Nex' */
+    color: #ffd700; /* Color for 'Nex' */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.2); /* Optional: Adds depth */
 }
 
@@ -54,11 +54,11 @@
     font-size: 1.5rem;
     border: none;
     cursor: pointer;
-    background-color: rgb(4, 95, 4);
+    background-color: black;
     width: 150px;
     text-align: center;
     transition: background-color 0.3s;
-    color: white; /* Set text color to yellow */
+    color: #ffd700; /* Set text color to yellow */
 }
 
 .home-page .right button:hover {
