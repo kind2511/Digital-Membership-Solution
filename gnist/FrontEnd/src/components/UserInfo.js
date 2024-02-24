@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
+import { useAuth0 } from '@auth0/auth0-react';
 import './UserInfo.css';
 
 
@@ -13,6 +14,7 @@ function UserInfo() {
     isSixteenOrAbove: false,
     agreesToTerms: false,
   });
+  const { logout } = useAuth0(); // Destructure logout function from useAuth0
 
   // Prevent the user from go back to the previous page
   useEffect(() => {
@@ -43,9 +45,19 @@ function UserInfo() {
     // i will add the logic here later
   }
 
+  const handleLogout = () => {
+    const isConfirmed = window.confirm("Er du sikker?"); // Confirmation dialog
+    if (isConfirmed) {
+      logout({ returnTo: window.location.origin }); // Logs the user out and redirects to the homepage
+    }
+  };
+
+
   return (
     <div className="userinfo-background">
       <div className="userinfo-container">
+        {/*here the logout button at top right of userInfo page */}
+        <button onClick={handleLogout} className="logout-button">Logg Ut</button>
         <h2>Vennligst fullfør din registrering</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="firstName" placeholder="Fornavn" value={formData.firstName} onChange={handleInputChange} required />
