@@ -62,14 +62,14 @@
 }
 
 .home-page .right button:hover {
-    background-color: #61dafb;
+    background-color: #ffd700;
     color: #333;
 }
 
 /* Remove underline from links inside buttons */
 .home-page .right button a {
     text-decoration: none;
-    color: yellow;
+    color: #ffd700;
 }
 
 .home-page .right button a:hover {
@@ -95,7 +95,7 @@
 }
 
 .home-page .right .footer-about a:hover {
-    color: #1cf7f3;
+    color: #ffd700;
 }
 
 /* -- Additional styling for the footer/about section for alignment -- */
