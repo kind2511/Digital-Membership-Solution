@@ -108,7 +108,7 @@
     color: black; /* Ensures the text is black */
     font-weight: bold;
     margin-top: auto; /* Pushes the footer-about to the bottom of the flex container */
-    top: 250px; /* move About us downwards */
+    top: 280px; /* move About us downwards */
 }
 
 .nav-logo img {
@@ -117,5 +117,13 @@
     display: block; /* !! */
     margin: 0 auto; /* Center the logo  */
     position: relative; /* Relative position */
-    top: -40px; /* Move the logo 50px up from its original position */
+    top: -70px; /* Move the logo 50px up from its original position */
+    opacity: 0.7; /*Transparency for logo*/
+}
+
+.home-page .right .footer-about .links-container a {
+    margin-right: 30px; /* Add margin between the links */
+    margin-left: 27px;
+    text-decoration: underline;
+    opacity: 0.5; /*Transparency for Terms of use Privacy policy*/
 }

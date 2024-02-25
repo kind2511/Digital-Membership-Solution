@@ -68,9 +68,10 @@ const HomePage = () => {
           <button onClick={handleLogin}>Login</button>
           <button onClick={handleRegister}>Register</button>
           <div className="footer-about">
-            {/*Personvernerklæring will be in about us component */}
-            <a href="/about">Personvernerklæring</a>
-            {/* the logo will be top of Bruksvilkår and  */}
+            <div className="links-container">
+              <a href="/terms-of-use">Brukervilkår</a>
+              <a href="/privacy-policy">Personvern</a>
+            </div>
             <div className="nav-logo">
               <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
             </div>
