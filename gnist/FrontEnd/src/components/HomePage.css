@@ -108,5 +108,14 @@
     color: black; /* Ensures the text is black */
     font-weight: bold;
     margin-top: auto; /* Pushes the footer-about to the bottom of the flex container */
-    top: 300px; /* move About us downwards */
+    top: 250px; /* move About us downwards */
+}
+
+.nav-logo img {
+    width: 50px; /* width of the logo*/
+    height: auto; /* !! */
+    display: block; /* !! */
+    margin: 0 auto; /* Center the logo  */
+    position: relative; /* Relative position */
+    top: -40px; /* Move the logo 50px up from its original position */
 }

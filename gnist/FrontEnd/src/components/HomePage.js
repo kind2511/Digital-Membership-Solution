@@ -63,12 +63,17 @@ const HomePage = () => {
         </div>
       </div>
       <div className="right">
-        <div className="nav-logo">Gen<span>Nex</span></div>
+        {<div className="nav-logo">Kom i<span> gang</span></div>}
         <div className="navigation-section">
           <button onClick={handleLogin}>Login</button>
           <button onClick={handleRegister}>Register</button>
           <div className="footer-about">
-            <a href="/about">About Us</a>
+            {/*Personvernerklæring will be in about us component */}
+            <a href="/about">Personvernerklæring</a>
+            {/* the logo will be top of Bruksvilkår and  */}
+            <div className="nav-logo">
+              <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
+            </div>
           </div>
         </div>
       </div>
