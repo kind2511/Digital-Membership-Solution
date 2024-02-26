@@ -1,20 +1,43 @@
-.user-dashboard {
-    position: relative; /* make sure the child elements can be positioned absolutely within. */
-  }
-  
-  .logout-button {
-    position: absolute;
-    top: 20px; /* test position */
-    right: 20px; /* test position*/
-    padding: 10px;
-    background-color: #f00; /* this is just test will be changed later */
-    color: #fff;  
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .logout-button:hover {
-    background-color: #c00; /* hover effect darker when put mouse curser*/
-  }
-  
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color:black;
+  color: white;
+  height: 100%;
+  position: relative;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:black;
+}
+
+.sidebar-item {
+  padding: 10px;
+  border-top: 1px solid #555;
+  cursor: pointer;
+  background-color:black;
+}
+
+.sidebar-item:hover {
+  background-color: #ffd700;
+  color: black;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.sidebar-logo {
+  width: 100px;  
+  margin-left: 38px;
+}

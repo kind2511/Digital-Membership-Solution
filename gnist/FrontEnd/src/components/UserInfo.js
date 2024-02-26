@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
 import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
 
 
@@ -15,6 +16,7 @@ function UserInfo() {
     agreesToTerms: false,
   });
   const { logout } = useAuth0(); // Destructure logout function from useAuth0
+  const navigate = useNavigate(); // Hook for navigation
 
   // Prevent the user from go back to the previous page
   useEffect(() => {
@@ -40,10 +42,16 @@ function UserInfo() {
       alert('Du må bekrefte at du er 16 år eller eldre og godtar vilkårene.');
       return;
     }
-    console.log(formData);
- 
-    // i will add the logic here later
+    // Mock a successful form submission
+    console.log('Form data submitted:', formData);
+
+    // Simulate a delay  if communicating with the backend-> // for testing//
+    setTimeout(() => {
+      // Redirect to user dashboard after a simulated delay
+      navigate('/user-dashboard');
+    }, 1000); //  timeout 
   }
+
 
   const handleLogout = () => {
     const isConfirmed = window.confirm("Er du sikker?"); // Confirmation dialog
