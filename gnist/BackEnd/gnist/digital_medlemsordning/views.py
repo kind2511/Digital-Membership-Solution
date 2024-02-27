@@ -97,3 +97,20 @@ def ban_member(request, user_id):
     member.save()
 
     return JsonResponse({'message': 'Member banned successfully'})
+
+def add_day(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return JsonResponse({'error': 'User does not exist'}, status=404)
+    
+    is_banned = member.banned
+
+    if is_banned == False:
+        member.days_without_incident += 1
+        member.save()
+        return JsonResponse({'message': 'Successfully added one day without incident'})
+    else:
+        return JsonResponse({'message': 'Member is banned, cannot increase days'})
+
+    
