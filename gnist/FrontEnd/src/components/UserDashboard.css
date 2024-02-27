@@ -80,3 +80,10 @@
 .level-section.rookie { background-color: #ff9800; }
 .level-section.pro { background-color: #4caf50; }
 .level-section.legend { background-color: #3f51b5; }
+
+
+/* Active sidebar item */
+.sidebar-item.active, .sidebar-item.active:hover {
+  background-color: #ffd700;
+  color: black;
+}

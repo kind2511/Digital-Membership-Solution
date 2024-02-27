@@ -9,13 +9,14 @@ function UserDashboard() {
   const levelColors = ['noob', 'rookie', 'pro', 'legend'];
   const userLevelIndex = levelColors.indexOf(user.level?.toLowerCase()) + 1;
   const [memberData, setMemberData] = useState(null); 
+  const [activeSidebarItem, setActiveSidebarItem] = useState('Profil'); // Default active sidebar item
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
 
   useEffect(() => {
-    // test to get member data
+    // Fetch member data
     const fetchMemberData = async () => {
       try {
         const response = await axios.get('/api/member-data', { params: { userId: user.sub } });
@@ -25,51 +26,63 @@ function UserDashboard() {
       }
     };
 
-    if (user.sub) { // Only fetch member data if user.sub exist
+    if (user.sub) { // Only fetch member data if user.sub exists
       fetchMemberData();
     }
-  }, [user.sub]); // No  include setMemberData here
+  }, [user.sub]); // useEffect dependency array fixed
 
-  // "Lock" the current page in the browser's history
-  window.history.pushState(null, document.title, window.location.href);
-  window.addEventListener('popstate', function (event) {
+  // "Lock" the current page in the browser history the user will not be able to get exit the user dashboard
+  useEffect(() => {
     window.history.pushState(null, document.title, window.location.href);
-  });
+    const handlePopState = (event) => {
+      window.history.pushState(null, document.title, window.location.href);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    // Cleanup the event listener
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []); 
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar */}
       <div className="sidebar">
         <div className="sidebar-header">
           <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" className="sidebar-logo" />
         </div>
         <div className="menu">
-          <div className="sidebar-item">Innstillinger</div>
-          <div className="sidebar-item">Mine Aktiviteter</div>
-          <div className="sidebar-item">Meldinger</div>
-          <div className="sidebar-item">Hjelp</div>
+          {/* Update className to include 'active' based on state */}
+          <div className={`sidebar-item ${activeSidebarItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveSidebarItem('Profil')}>Profil</div>
+          <div className={`sidebar-item ${activeSidebarItem === 'Innstillinger' ? 'active' : ''}`} onClick={() => setActiveSidebarItem('Innstillinger')}>Innstillinger</div>
+          <div className={`sidebar-item ${activeSidebarItem === 'Mine Aktiviteter' ? 'active' : ''}`} onClick={() => setActiveSidebarItem('Mine Aktiviteter')}>Mine Aktiviteter</div>
+          <div className={`sidebar-item ${activeSidebarItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveSidebarItem('Meldinger')}>Meldinger</div>
+          <div className={`sidebar-item ${activeSidebarItem === 'Hjelp' ? 'active' : ''}`} onClick={() => setActiveSidebarItem('Hjelp')}>Hjelp</div>
           <div className="sidebar-item logout-item" onClick={handleLogout}>Logg Ut</div>
         </div>
       </div>
 
-      {/* Main Content- the white page in user dashboard */}
+      {/* Main Content */}
       <div className="main-content">
-        {/* Users Picture */}
-        {user.picture && <img src={user.picture} alt="User" className="user-picture" />}
+        {/* Conditional rendering based on activeSidebarItem */}
+        {activeSidebarItem === 'Profil' && (
+          <>
+            {/* User's Picture */}
+            {user.picture && <img src={user.picture} alt="User" className="user-picture" />}
 
-        {/* Welcome Message */}
-        {user.name && <h1 className="welcome-message">Velkommen {user.name.split(' ')[0]}!</h1>}
+            {/* Welcome Message */}
+            {user.name && <h1 className="welcome-message">Velkommen {user.name.split(' ')[0]}!</h1>}
 
-        {/* User Level Indicator */}
-        <div className="user-level-indicator">
-          {levelColors.map((color, index) => (
-            <div key={color} className={`level-section ${color}`} style={{ width: userLevelIndex > index ? '25%' : '0%' }}></div>
-          ))}
-        </div>
+            {/* User Level Indicator */}
+            <div className="user-level-indicator">
+              {levelColors.map((color, index) => (
+                <div key={color} className={`level-section ${color}`} style={{ width: userLevelIndex > index ? '25%' : '0%' }}></div>
+              ))}
+            </div>
 
-        {/* Todays Date */}
-        <p className="current-date">Dato: {date}</p>
-
+            {/* Today's Date */}
+            <p className="current-date">Dato: {date}</p>
+          </>
+        )}
       </div>
     </div>
   );
