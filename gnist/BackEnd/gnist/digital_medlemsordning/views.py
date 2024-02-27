@@ -6,6 +6,7 @@ from .models import Activity
 from .models import ActivityDate
 from .models import ActivitySignup
 
+
 # Create your views here.
 
 def index(request):
@@ -129,16 +130,21 @@ def get_activity(request):
     }
     return JsonResponse(response_data)
 
+
 def get_all_activity(request):
-     # Get all activities
     activities = Activity.objects.all()
 
     activity_data = []
     for activity in activities:
+        activity_dates = ActivityDate.objects.filter(activityID=activity)
+        dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
+
         activity_info = {
-            'title': activity.title, 
+            'title': activity.title,
             'description': activity.description,
+            'dates': dates_list
         }
+
         activity_data.append(activity_info)
 
     response_data = {
@@ -146,17 +152,19 @@ def get_all_activity(request):
     }
     return JsonResponse(response_data)
 
-
 def get_member_activity(request, user_id):
     try:
-     
         activity_signups = ActivitySignup.objects.filter(userID=user_id)
 
         activity_data = []
         for signup in activity_signups:
+            activity_dates = signup.activityID.activitydate_set.all()
+            dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
+
             activity_info = {
                 'title': signup.activityID.title, 
                 'description': signup.activityID.description,
+                'dates': dates_list
             }
             activity_data.append(activity_info)
 
@@ -166,6 +174,7 @@ def get_member_activity(request, user_id):
         return JsonResponse(response_data)
     except Members.DoesNotExist:
         return JsonResponse({'error': 'User does not exist'}, status=404)
+
 
 def add_day(request, user_id):
     try:
