@@ -1,10 +1,6 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-
 from django.http import JsonResponse
-import json
-from datetime import date
-from django.shortcuts import get_object_or_404
+from datetime import date, datetime, timedelta
 from .models import Members
 
 # Create your views here.
@@ -35,9 +31,11 @@ def get_all_member_data(request):
             profile_color = "red"
 
         member_info = {
-            'first_name': member.first_name,
+            'first_name': member.first_name.upper(),
             'level': level,
-            'profile_color': profile_color 
+            'profile_color': profile_color,
+            'profile_pic': member.profile_pic.url,  
+            'banned_until': member.banned_until,
         }
         member_data.append(member_info)
     
@@ -45,9 +43,9 @@ def get_all_member_data(request):
 
     response_data = {
         'date': today_date,
-        'members': member_data
+        'members': member_data,
     }
-    return JsonResponse(response_data, safe=False)
+    return JsonResponse(response_data)
 
 
 
@@ -74,9 +72,11 @@ def get_one_member_data(request, user_id):
         profile_color = "green"
 
     member_info = {
-        'first_name': member.first_name,
+        'first_name': member.first_name.upper(),
         'level': level,
-        'profile_color': profile_color 
+        'profile_color': profile_color,
+        'profile_pic': member.profile_pic.url,
+        'banned_until': member.banned_until, 
     }
     
     today_date = date.today().strftime("%Y-%m-%d")
@@ -87,13 +87,28 @@ def get_one_member_data(request, user_id):
     }
     return JsonResponse(response_data)
 
-def ban_member(request, user_id):
+
+def update_ban_status(request, user_id, ban_status):
     try:
         member = Members.objects.get(userID=user_id)
-    except Members.DoesNotExist:
+    except Members.ObjectDoesNotExist:
         return JsonResponse({'error': 'User does not exist'}, status=404)
+    
+    member.banned = ban_status
 
-    member.banned = True
+    if ban_status:
+        member.banned_until = datetime.now() + timedelta(5)
+    else:
+        member.banned_until = None
+
     member.save()
 
-    return JsonResponse({'message': 'Member banned successfully'})
+    action = 'banned' if ban_status else 'unbanned'
+    return JsonResponse({'message': f'Member {action} successfully'})
+
+def ban_member(request, user_id):
+    return update_ban_status(request, user_id, True)
+
+def unban_member(request, user_id):
+    return update_ban_status(request, user_id, False)
+

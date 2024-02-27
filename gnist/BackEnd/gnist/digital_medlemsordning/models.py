@@ -32,6 +32,8 @@ class Members(models.Model):
     last_name = models.CharField(max_length=45)
     birthdate = models.DateField()
 
+    profile_pic = models.ImageField(upload_to="digital_medlemsordning/files/profile_pics", default="digital_medlemsordning/files/profile_pics/default_profile_picture.png", null=True)
+
     # Enum for gender possibilities
     GENDER_CHOICES = [
         ("gutt", "Gutt"),
@@ -51,7 +53,7 @@ class Members(models.Model):
     guardian_phone = models.CharField(max_length=20)
     verified = models.BooleanField(default=False)
     banned = models.BooleanField(default=False)
-
+    banned_until = models.DateField(null=True)
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus
 class MemberDates(models.Model):
