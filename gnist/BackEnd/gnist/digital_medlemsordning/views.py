@@ -2,6 +2,9 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from datetime import date, datetime, timedelta
 from .models import Members
+from .models import Activity
+from .models import ActivityDate
+from .models import ActivitySignup
 
 # Create your views here.
 
@@ -105,6 +108,81 @@ def update_ban_status(request, user_id, ban_status):
 
     action = 'banned' if ban_status else 'unbanned'
     return JsonResponse({'message': f'Member {action} successfully'})
+
+def get_activity(request):
+    today_date = date.today()
+
+    # Filter activity dates happening on the same day
+    activity_dates = ActivityDate.objects.filter(date=today_date)
+
+    activity_data = []
+    for activity_date in activity_dates:
+        activity_info = {
+            'title': activity_date.activityID.title, 
+            'description': activity_date.activityID.description,
+        }
+        activity_data.append(activity_info)
+
+    response_data = {
+        'date': today_date.strftime("%Y-%m-%d"),
+        'activities': activity_data
+    }
+    return JsonResponse(response_data)
+
+def get_all_activity(request):
+     # Get all activities
+    activities = Activity.objects.all()
+
+    activity_data = []
+    for activity in activities:
+        activity_info = {
+            'title': activity.title, 
+            'description': activity.description,
+        }
+        activity_data.append(activity_info)
+
+    response_data = {
+        'activities': activity_data
+    }
+    return JsonResponse(response_data)
+
+
+def get_member_activity(request, user_id):
+    try:
+     
+        activity_signups = ActivitySignup.objects.filter(userID=user_id)
+
+        activity_data = []
+        for signup in activity_signups:
+            activity_info = {
+                'title': signup.activityID.title, 
+                'description': signup.activityID.description,
+            }
+            activity_data.append(activity_info)
+
+        response_data = {
+            'activities': activity_data
+        }
+        return JsonResponse(response_data)
+    except Members.DoesNotExist:
+        return JsonResponse({'error': 'User does not exist'}, status=404)
+
+def add_day(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return JsonResponse({'error': 'User does not exist'}, status=404)
+    
+    is_banned = member.banned
+
+    if is_banned == False:
+        member.days_without_incident += 1
+        member.save()
+        return JsonResponse({'message': 'Successfully added one day without incident'})
+    else:
+        return JsonResponse({'message': 'Member is banned, cannot increase days'})
+
+    
 
 def ban_member(request, user_id):
     return update_ban_status(request, user_id, True)
