@@ -6,7 +6,7 @@
 /* Style for the left side of the home page */
 .home-page .left {
     width: 50%;
-    background-color: rgb(65, 65, 48);
+    background-color: #ffd700;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,7 +25,7 @@
 /* Paragraph styling for the sliding sentences */
 .sentence-section p {
     font-size: 40px;
-    color: rgb(241, 238, 238);
+    color: black;
     text-align: center;
     font-weight: bold;
 }
@@ -43,7 +43,7 @@
 }
 
 .nav-logo span {
-    color: yellow; /* Color for 'Nex' */
+    color: #ffd700; /* Color for 'Nex' */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.2); /* Optional: Adds depth */
 }
 
@@ -54,22 +54,22 @@
     font-size: 1.5rem;
     border: none;
     cursor: pointer;
-    background-color: rgb(4, 95, 4);
+    background-color: black;
     width: 150px;
     text-align: center;
     transition: background-color 0.3s;
-    color: white; /* Set text color to yellow */
+    color: #ffd700; /* Set text color to yellow */
 }
 
 .home-page .right button:hover {
-    background-color: #61dafb;
+    background-color: #ffd700;
     color: #333;
 }
 
 /* Remove underline from links inside buttons */
 .home-page .right button a {
     text-decoration: none;
-    color: yellow;
+    color: #ffd700;
 }
 
 .home-page .right button a:hover {
@@ -95,7 +95,7 @@
 }
 
 .home-page .right .footer-about a:hover {
-    color: #1cf7f3;
+    color: #ffd700;
 }
 
 /* -- Additional styling for the footer/about section for alignment -- */
@@ -108,5 +108,22 @@
     color: black; /* Ensures the text is black */
     font-weight: bold;
     margin-top: auto; /* Pushes the footer-about to the bottom of the flex container */
-    top: 300px; /* move About us downwards */
+    top: 280px; /* move About us downwards */
+}
+
+.nav-logo img {
+    width: 50px; /* width of the logo*/
+    height: auto; /* !! */
+    display: block; /* !! */
+    margin: 0 auto; /* Center the logo  */
+    position: relative; /* Relative position */
+    top: -70px; /* Move the logo 50px up from its original position */
+    opacity: 0.7; /*Transparency for logo*/
+}
+
+.home-page .right .footer-about .links-container a {
+    margin-right: 30px; /* Add margin between the links */
+    margin-left: 27px;
+    text-decoration: underline;
+    opacity: 0.5; /*Transparency for Terms of use Privacy policy*/
 }

@@ -10,10 +10,23 @@ function UserDashboard() {
   };
 
   return (
-    <div className="user-dashboard">
-      <button className="logout-button" onClick={handleLogout}>Log Out</button>
-      <h1>User Dashboard</h1>
-      {/* Dashboard content add later */}
+    <div className="dashboard-container">
+      <div className="sidebar">
+        <div className="sidebar-header">
+          <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" className="sidebar-logo" />
+        </div>
+        <div className="menu">
+          <div className="sidebar-item">Profil</div>
+          <div className="sidebar-item">Innstillinger</div>
+          <div className="sidebar-item">Mine Aktiviteter</div>
+          <div className="sidebar-item">Meldinger</div>
+          <div className="sidebar-item">Hjelp</div>
+          <div className="sidebar-item" onClick={handleLogout}>Logg Ut</div>
+        </div>
+      </div>
+      <div className="main-content">
+        {/* will be added later */}
+      </div>
     </div>
   );
 }

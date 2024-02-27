@@ -13,11 +13,16 @@ const promoSentences = [
 const HomePage = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [sentenceIndex, setSentenceIndex] = useState(0);
-  const { loginWithRedirect} = useAuth0();
- // when remove comment from useEffect function below, should put isAuthenticated, user const useAuth0
+  const { loginWithRedirect } = useAuth0();
+  // when remove comment from useEffect function below, should put isAuthenticated, user const useAuth0
 
   useEffect(() => {
     let currentTimer;
+    // Prevent back navigation
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = () => {
+      window.history.go(1);
+    };
 
     const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
     if (isCompleteSentence) {
@@ -43,22 +48,6 @@ const HomePage = () => {
     loginWithRedirect();
   };
 
-  /*
-   * useEffect hook for redirecting users to their dashboards after login
-   */
-
-  // useEffect(() => {
-  //   if (isAuthenticated && user) {
-  //     const role = user['https://my-namespace/role'];
-  //     if (role === 'admin') {
-  //       window.location.href = '/admin-dashboard';
-  //     } else {
-  //       window.location.href = '/user-dashboard';
-  //     }
-  //   }
-  // }, [isAuthenticated, user]);
-
-
   // Functoin to handler user regiser
   const handleRegister = () => {
     loginWithRedirect({ screen_hint: 'signup' });
@@ -74,12 +63,18 @@ const HomePage = () => {
         </div>
       </div>
       <div className="right">
-        <div className="nav-logo">Gen<span>Nex</span></div>
+        {<div className="nav-logo">Kom i<span> gang</span></div>}
         <div className="navigation-section">
           <button onClick={handleLogin}>Login</button>
           <button onClick={handleRegister}>Register</button>
           <div className="footer-about">
-            <a href="/about">About Us</a>
+            <div className="links-container">
+              <a href="/terms-of-use">Brukervilkår</a>
+              <a href="/privacy-policy">Personvern</a>
+            </div>
+            <div className="nav-logo">
+              <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
+            </div>
           </div>
         </div>
       </div>
