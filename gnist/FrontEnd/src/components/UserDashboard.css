@@ -64,7 +64,7 @@
 .user-level-indicator {
   height: 20px;
   display: flex;
-  width: 50%; 
+  width: 100%; 
   background-color: black; 
   border-radius: 5px; 
   overflow: hidden; /* this is just for test */
@@ -86,4 +86,37 @@
 .sidebar-item.active, .sidebar-item.active:hover {
   background-color: #ffd700;
   color: black;
+}
+
+.level-names {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;  
+}
+
+.level-name {
+  width: 25%;
+  text-align: center;
+  font-size: 12px;  
+}
+
+/*here colors for the words of the levels under the indicator */
+.noob-name { 
+  color: #f44336;
+  font-weight: bold;
+ }
+
+.rookie-name { 
+  color: #ff9800; 
+  font-weight: bold;
+}
+
+.pro-name { 
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.legend-name { 
+  color: #3f51b5; 
+  font-weight: bold;
 }

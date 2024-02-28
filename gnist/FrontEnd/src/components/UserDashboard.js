@@ -7,8 +7,9 @@ function UserDashboard() {
   const { logout, user } = useAuth0();
   const date = new Date().toLocaleDateString();
   const levelColors = ['noob', 'rookie', 'pro', 'legend'];
+  const levelNames = { noob: 'Nybegynner', rookie: 'Lærling', pro: 'Erfaren', legend: 'Legende' };
   const userLevelIndex = levelColors.indexOf(user.level?.toLowerCase()) + 1;
-  const [memberData, setMemberData] = useState(null); 
+  const [memberData, setMemberData] = useState(null);
   const [activeSidebarItem, setActiveSidebarItem] = useState('Profil'); // Default active sidebar item
 
   const handleLogout = () => {
@@ -42,7 +43,7 @@ function UserDashboard() {
 
     // Cleanup the event listener
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []); 
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -79,12 +80,19 @@ function UserDashboard() {
               ))}
             </div>
 
+            {/* Display Level Names */}
+            <div className="level-names">
+              {levelColors.map((color) => (
+                <div key={color} className={`level-name ${color}-name`}>{levelNames[color]}</div>
+              ))}
+            </div>
+            
             {/* Today's Date */}
             <p className="current-date">Dato: {date}</p>
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 
