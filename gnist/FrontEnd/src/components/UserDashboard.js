@@ -15,22 +15,26 @@ function UserDashboard() {
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
-
+ 
+  // for testing
   useEffect(() => {
-    // Fetch member data
     const fetchMemberData = async () => {
       try {
-        const response = await axios.get('/api/member-data', { params: { userId: user.sub } });
-        setMemberData(response.data);
+        const response = await axios.get('http://localhost:8000/digital_medlemsordning/get_member/1', {
+          params: { userId: user.sub }
+        });
+        setMemberData(response.data.member);
       } catch (error) {
-        console.error('There was an error fetching the member data:', error);
+        console.error('Error fetching member data:', error);
       }
     };
 
-    if (user.sub) { // Only fetch member data if user.sub exists
+    if (user.sub) {
       fetchMemberData();
     }
-  }, [user.sub]); // useEffect dependency array fixed
+  }, [user.sub]);
+
+
 
   // "Lock" the current page in the browser history the user will not be able to get exit the user dashboard
   useEffect(() => {
@@ -86,7 +90,7 @@ function UserDashboard() {
                 <div key={color} className={`level-name ${color}-name`}>{levelNames[color]}</div>
               ))}
             </div>
-            
+
             {/* Today's Date */}
             <p className="current-date">Dato: {date}</p>
           </>
