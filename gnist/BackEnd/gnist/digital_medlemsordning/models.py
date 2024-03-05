@@ -49,11 +49,12 @@ class Members(models.Model):
     # EmailField checks that the value is a valid email address using EmailValidator.
     email = models.EmailField(max_length=45, unique=True)
     
-    guardian_name = models.CharField(max_length=100)
-    guardian_phone = models.CharField(max_length=20)
+    guardian_name = models.CharField(max_length=100, null=True)
+    guardian_phone = models.CharField(max_length=20, null=True)
     verified = models.BooleanField(default=False)
     banned = models.BooleanField(default=False)
     banned_until = models.DateField(null=True)
+    info = models.CharField(max_length=1000, default="")
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus
 class MemberDates(models.Model):
