@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
-
 
 function UserInfo() {
   const [formData, setFormData] = useState({
@@ -15,10 +14,10 @@ function UserInfo() {
     isSixteenOrAbove: false,
     agreesToTerms: false,
   });
-  const { logout } = useAuth0(); // Destructure logout function from useAuth0
-  const navigate = useNavigate(); // Hook for navigation
+  const [ageError, setAgeError] = useState(''); // State for managing the age error message
+  const { logout } = useAuth0();
+  const navigate = useNavigate();
 
-  // Prevent the user from go back to the previous page
   useEffect(() => {
     window.history.pushState(null, null, window.location.href);
     window.addEventListener('popstate', () => {
@@ -26,58 +25,73 @@ function UserInfo() {
     });
   }, []);
 
- // const navigate = useNavigate();
+  const calculateAge = (dob) => {
+    const birthday = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthday.getFullYear();
+    const m = today.getMonth() - birthday.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setFormData(prevState => ({
+    if (name === 'dateOfBirth') {
+      const age = calculateAge(value);
+      if (age < 16) {
+        setAgeError('Du må være minst 16 år gammel.');
+      } else {
+        setAgeError(''); // Clear error message if age is valid
+      }
+    }
+    setFormData((prevState) => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value,
     }));
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.isSixteenOrAbove || !formData.agreesToTerms) {
-      alert('Du må bekrefte at du er 16 år eller eldre og godtar vilkårene.');
+    const age = calculateAge(formData.dateOfBirth);
+    if (age < 16) {
+      // Prevent form submission if age is invalid
       return;
     }
-    // Mock a successful form submission
     console.log('Form data submitted:', formData);
-
-    // Simulate a delay  if communicating with the backend-> // for testing//
     setTimeout(() => {
-      // Redirect to user dashboard after a simulated delay
       navigate('/user-dashboard');
-    }, 1000); //  timeout 
-  }
-
+    }, 1000);
+  };
 
   const handleLogout = () => {
-    const isConfirmed = window.confirm("Er du sikker?"); // Confirmation dialog
+    const isConfirmed = window.confirm('Er du sikker?');
     if (isConfirmed) {
-      logout({ returnTo: window.location.origin }); // Logs the user out and redirects to the homepage
+      logout({ returnTo: window.location.origin });
     }
   };
 
+  const age = calculateAge(formData.dateOfBirth);
+  const showGuardianFields = age >= 16 && age < 18;
 
   return (
     <div className="userinfo-background">
       <div className="userinfo-container">
-        {/*here the logout button at top right of userInfo page */}
         <button onClick={handleLogout} className="logout-button">Logg Ut</button>
-        <h2>Vennligst fullfør din registrering</h2>
+        <h2>Vennligst fullfør registrering</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="firstName" placeholder="Fornavn" value={formData.firstName} onChange={handleInputChange} required />
           <input type="text" name="lastName" placeholder="Etternavn" value={formData.lastName} onChange={handleInputChange} required />
           <label htmlFor="dateOfBirth">Fødselsdato</label>
-        <input 
-          type="date" 
-          name="dateOfBirth" 
-          value={formData.dateOfBirth} 
-          onChange={handleInputChange} 
-          required 
-        />
+          <input
+            type="date"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleInputChange}
+            required
+          />
+          {ageError && <p className="error-message">{ageError}</p>}
           <select name="gender" value={formData.gender} onChange={handleInputChange} required>
             <option value="">Velg kjønn</option>
             <option value="male">Mann</option>
@@ -85,16 +99,22 @@ function UserInfo() {
             <option value="non-binary">Ikke-binær</option>
             <option value="prefer-not-to-say">Foretrekker å ikke si</option>
           </select>
-          <input type="text" name="guardianName" placeholder="Fornavn og etternavn på en foresatt" value={formData.guardianName} onChange={handleInputChange} required />
-          <input type="text" name="guardianPhone" placeholder="Telefonnummer på en foresatt " value={formData.guardianPhone} onChange={handleInputChange} required />
+          {showGuardianFields && (
+            <>
+              <input type="text" name="guardianName" placeholder="Fornavn og etternavn på en foresatt" value={formData.guardianName} onChange={handleInputChange} required />
+              <input type="text" name="guardianPhone" placeholder="Telefonnummer på en foresatt" value={formData.guardianPhone} onChange={handleInputChange} required />
+            </>
+          )}
+          {/* comment unused code
           <label className="checkbox-container">
             <input type="checkbox" name="isSixteenOrAbove" checked={formData.isSixteenOrAbove} onChange={handleInputChange} />
-            Jeg bekrefter at jeg er 16 år eller eldre..
+            Jeg bekrefter at jeg er 16 år eller eldre.
           </label>
           <label className="checkbox-container">
             <input type="checkbox" name="agreesToTerms" checked={formData.agreesToTerms} onChange={handleInputChange} />
-            Jeg godtar vilkårene .
+            Jeg godtar vilkårene.
           </label>
+          */}
           <button type="submit" className="submit-button">Send inn</button>
         </form>
       </div>
