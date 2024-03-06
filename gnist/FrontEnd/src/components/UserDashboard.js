@@ -75,7 +75,7 @@ function UserDashboard() {
             {user.picture && <img src={user.picture} alt="User" className="user-picture" />}
 
             {/* Welcome Message */}
-            {user.name && <h1 className="welcome-message">Velkommen {user.name.split(' ')[0]}!</h1>}
+            {user.name && <h1 className="welcome-message"> {user.name.split(' ')[0]}!</h1>}
 
             {/* User Level Indicator */}
             <div className="user-level-indicator">
