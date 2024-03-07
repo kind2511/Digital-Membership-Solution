@@ -13,5 +13,6 @@ urlpatterns = [
     path('add_day/<int:user_id>/', views.add_day, name='add_day'),
     path('unban_member/<int:user_id>/', views.unban_member, name='unban_member'),
     path('register_user/', views.register_user, name='register_user'),
+    path('get_members_today/', views.get_members_today, name='get_member_today'),
 ]
 

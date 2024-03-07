@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from datetime import date, datetime, timedelta
 from .models import Members
+from .models import MemberDates
 from .models import Activity
 from .models import ActivityDate
 from .models import ActivitySignup
@@ -184,19 +185,28 @@ def get_member_activity(request, user_id):
 
 @api_view(['GET'])
 def add_day(request, user_id):
+    today = datetime.today()
+
     try:
         member = Members.objects.get(userID=user_id)
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
     
     is_banned = member.banned
+    dates = MemberDates.objects.filter(date=today, userID=member)
+    if not dates:
+        is_registered = False
+    else:
+        is_registered = True
 
-    if is_banned == False:
+    if is_banned == False and is_registered == False:
         member.days_without_incident += 1
         member.save()
+        new_memberdate = MemberDates(date = today, userID = member)
+        new_memberdate.save()
         return Response({'message': 'Successfully added one day without incident'})
     else:
-        return Response({'message': 'Member is banned, cannot increase days'})
+        return Response({'message': 'Cannot add one extra day'})
 
     
 @api_view(['GET'])
@@ -231,3 +241,30 @@ def register_user(request):
         return Response({'message': 'Added new user'})
     else:
         return Response({'error': 'Invalid request method'})
+    
+@api_view(['GET'])
+def get_members_today(request):
+    today = datetime.today()
+    try:
+        datelist = MemberDates.objects.filter(date=today)
+    except MemberDates.DoesNotExist:
+        return Response({'message': 'No one has registered today'})
+    
+    members_present = []
+    for member in datelist:
+        members_present.append(member.userID.first_name + " " + member.userID.last_name)
+    
+    return Response(members_present)
+
+@api_view(['GET'])
+def get_members_for_date(request, one_date):
+    try:
+        datelist = MemberDates.objects.filter(date=one_date)
+    except MemberDates.DoesNotExist:
+        return Response({'message': 'No one has registered today'})
+    
+    members_present = []
+    for member in datelist:
+        members_present.append(member.userID.first_name + " " + member.userID.last_name)
+    
+    return Response(members_present)
