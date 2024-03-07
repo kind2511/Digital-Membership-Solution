@@ -14,5 +14,6 @@ urlpatterns = [
     path('unban_member/<int:user_id>/', views.unban_member, name='unban_member'),
     path('register_user/', views.register_user, name='register_user'),
     path('get_members_today/', views.get_members_today, name='get_member_today'),
+    path('get_members_for_date/<str:one_date>/', views.get_members_for_date, name='get_members_for_date'),
 ]
 
