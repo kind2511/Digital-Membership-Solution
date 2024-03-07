@@ -8,6 +8,7 @@ from .models import ActivitySignup
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count
 import json
 
 
@@ -268,3 +269,22 @@ def get_members_for_date(request, one_date):
         members_present.append(member.userID.first_name + " " + member.userID.last_name)
     
     return Response(members_present)
+
+@api_view(['GET'])
+def get_visit_numbers(request):
+    try:
+        dates = MemberDates.objects.all().values('date').annotate(visits=Count('userID', distinct=True)).order_by()
+    except:
+        return Response({'error':'No dates exist'}, status=404)
+    
+    return Response(dates)
+
+@api_view(['GET'])
+def get_ban_expiry(request, user_id):
+    banned_member = Members.objects.get(userID=user_id)
+
+    if banned_member.banned:
+        return Response(banned_member.banned_until)
+    else:
+        return Response({'error': 'member not banned'})
+    
