@@ -148,10 +148,10 @@ function UserInfo() {
             required
           >
             <option value="">Velg kjønn</option>
-            <option value="male">Mann</option>
-            <option value="female">Kvinne</option>
-            <option value="non-binary">Ikke-binær</option>
-            <option value="prefer-not-to-say">Foretrekker å ikke si</option>
+            <option value="gutt">gutt</option>
+            <option value="jente">jente</option>
+            <option value="ikke-binær">ikke-binær</option>
+            <option value="vil ikke si">vil ikke si</option>
           </select>
           <input
             type="date"
