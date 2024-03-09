@@ -10,7 +10,7 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden; /* Prevent any kind of scrolling */
+  overflow: hidden;
 }
 
 .navbar {
@@ -54,7 +54,7 @@ html, body {
   padding: 20px;
   position: relative;
   background-color: #ffd700;
-  overflow: auto; /* Allow scrolling inside main content if necessary */
+  overflow: auto;
 }
 
 .date-block {
@@ -68,12 +68,13 @@ html, body {
 
 .registration-status {
   position: absolute;
-  top: 60px;
-  right: 60px;
+  top: 308px;
+  left: 133px;
   display: flex;
   align-items: center;
   cursor: pointer;
   font-weight: bold;
+  font-size: 20px;
 }
 
 .register-checkbox {
@@ -84,7 +85,7 @@ html, body {
 .profile-img-container {
   position: absolute;
   top: 70px;
-  left: 70px;
+  left: 20px;
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -108,4 +109,20 @@ html, body {
 
 .profile-img {
   object-fit: cover;
+}
+
+
+.user-info {
+  position: absolute;
+  top: 230px; 
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name, .user-level {
+  font-size: 20px;
+  margin: 5px 0;
+  margin-left: 120px;
+  font-weight: bold;
 }

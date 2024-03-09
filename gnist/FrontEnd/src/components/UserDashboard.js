@@ -7,6 +7,8 @@ function UserDashboard() {
   const [activeNavItem, setActiveNavItem] = useState('Profil');
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
+  const [firstName, setFirstName] = useState('Example'); // Placeholder 
+  const [level, setLevel] = useState(1); // Placeholder 
   const date = new Date().toLocaleDateString();
 
   useEffect(() => {
@@ -32,13 +34,11 @@ function UserDashboard() {
     }
   };
 
-  // Function to render content based on the activeNavItem
   const renderContent = () => {
     switch (activeNavItem) {
       case 'Profil':
         return (
           <div className="profile-content">
-            {/* Profile content here */}
             <div className="date-block">Dato: {date}</div>
             <div className="registration-status" onClick={toggleRegistration}>
               <input
@@ -49,7 +49,6 @@ function UserDashboard() {
               />
               Registrer
             </div>
-            {/* Profile Image Section */}
             <div className="profile-img-container" onClick={() => document.getElementById('profileImgInput').click()}>
               {profileImg ? (
                 <img src={profileImg} alt="Profile" className="profile-img" />
@@ -66,12 +65,16 @@ function UserDashboard() {
                 style={{ display: 'none' }}
               />
             </div>
+            <div className="user-info">
+              <div className="user-name">Name: {firstName.toUpperCase()}</div>
+              <div className="user-level">Level: {level}</div>
+            </div>
           </div>
         );
       case 'Program':
-        return <div>Program content here</div>; // Placeholder for Program content
+        return <div>Program content here</div>;
       case 'Meldinger':
-        return <div>Meldinger content here</div>; // Placeholder for Meldinger content
+        return <div>Meldinger content here</div>;
       default:
         return <div>Select a nav item</div>;
     }
@@ -88,7 +91,6 @@ function UserDashboard() {
           <div className="nav-item logout-item" onClick={handleLogout}>Logg Ut</div>
         </div>
       </div>
-
       <div className="main-content">
         {renderContent()}
       </div>
