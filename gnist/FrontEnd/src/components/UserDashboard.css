@@ -81,7 +81,6 @@ html, body {
   margin-right: 5px;
 }
 
-/* Profile Image Styles */
 .profile-img-container {
   position: absolute;
   top: 70px;
@@ -111,7 +110,6 @@ html, body {
   object-fit: cover;
 }
 
-
 .user-info {
   position: absolute;
   top: 230px; 
@@ -125,4 +123,33 @@ html, body {
   margin: 5px 0;
   margin-left: 120px;
   font-weight: bold;
+}
+
+.activities-title {
+  font-size: 24px;
+  position: absolute;
+  top: auto;
+  bottom: 40%; 
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff; 
+}
+
+.activities-container {
+  width: 50%; 
+  max-width: 1000px; 
+  margin: 40px auto 0; 
+  background: rgb(241, 202, 202); 
+  border-radius: 80px;
+  box-shadow: 0 2px 4px rgba(235, 3, 3, 0.1); 
+  position: absolute;
+  bottom: 10%; 
+  left: 0;
+  right: 0;
+  padding: 100px; 
+  overflow-y: auto; 
+}
+
+.main-content {
+  padding-bottom: 250px; 
 }

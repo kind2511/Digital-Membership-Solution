@@ -7,8 +7,8 @@ function UserDashboard() {
   const [activeNavItem, setActiveNavItem] = useState('Profil');
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
-  const [firstName, setFirstName] = useState('Example'); // Placeholder 
-  const [level, setLevel] = useState(1); // Placeholder 
+  const [firstName, setFirstName] = useState('Example'); // Placeholder
+  const [level, setLevel] = useState(1); // Placeholder
   const date = new Date().toLocaleDateString();
 
   useEffect(() => {
@@ -69,6 +69,11 @@ function UserDashboard() {
               <div className="user-name">Name: {firstName.toUpperCase()}</div>
               <div className="user-level">Level: {level}</div>
             </div>
+            {/* "Dette skjer idag" section specific to the Profil page */}
+            <h2 className="activities-title">Dette skjer idag</h2>
+            <div className="activities-container">
+              {/* Dynamic content for activities will be inserted here */}
+            </div>
           </div>
         );
       case 'Program':
@@ -88,7 +93,7 @@ function UserDashboard() {
           <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
           <div className={`nav-item ${activeNavItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveNavItem('Meldinger')}>Meldinger</div>
-          <div className="nav-item logout-item" onClick={handleLogout}>Logg Ut</div>
+          <div className="nav-item logout-item" onClick={handleLogout}>LoggUt</div>
         </div>
       </div>
       <div className="main-content">
