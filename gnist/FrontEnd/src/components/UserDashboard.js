@@ -4,11 +4,16 @@ import './UserDashboard.css';
 
 function UserDashboard() {
   const { logout } = useAuth0();
-  const [activeNavItem, setActiveNavItem] = useState('Profil'); // 'Profil' is set as the default choice
-  const date = new Date().toLocaleDateString(); // Today's date
+  const [activeNavItem, setActiveNavItem] = useState('Profil');
+  const [isRegistered, setIsRegistered] = useState(false);
+  const date = new Date().toLocaleDateString();
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
+  };
+
+  const toggleRegistration = () => {
+    setIsRegistered(!isRegistered);
   };
 
   return (
@@ -25,10 +30,15 @@ function UserDashboard() {
 
       <div className="main-content">
         <div className="date-block">Dato: {date}</div>
-        {activeNavItem === 'Profil' && (
-          <div>
-          </div>
-        )}
+        <div className="registration-status" onClick={toggleRegistration}>
+          <input
+            type="checkbox"
+            checked={isRegistered}
+            onChange={toggleRegistration}
+            className="register-checkbox"
+          />
+          Registrer
+        </div>
       </div>
     </div>
   );
