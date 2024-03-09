@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import './UserDashboard.css'; 
+import './UserDashboard.css';
 
 function UserDashboard() {
   const { logout } = useAuth0();
   const [activeNavItem, setActiveNavItem] = useState('Profil'); // 'Profil' is set as the default choice
+  const date = new Date().toLocaleDateString(); // Today's date
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
@@ -12,7 +13,6 @@ function UserDashboard() {
 
   return (
     <div className="dashboard-container">
-      {/* Navigation Bar */}
       <div className="navbar">
         <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" className="navbar-logo" />
         <div className="navbar-menu">
@@ -23,12 +23,10 @@ function UserDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="main-content">
-        {/* Content that changes based on activeNavItem */}
+        <div className="date-block">Dato: {date}</div>
         {activeNavItem === 'Profil' && (
           <div>
-            {/* the profile content will be added here*/}
           </div>
         )}
       </div>
