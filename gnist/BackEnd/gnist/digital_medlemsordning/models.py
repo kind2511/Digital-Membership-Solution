@@ -32,7 +32,7 @@ class Members(models.Model):
     last_name = models.CharField(max_length=45)
     birthdate = models.DateField()
 
-    profile_pic = models.ImageField(upload_to="digital_medlemsordning/files/profile_pics", default="digital_medlemsordning/files/profile_pics/default_profile_picture.png", null=True)
+    profile_pic = models.ImageField(upload_to="profile_pics", default="profile_pics/default_profile_picture.png", null=True)
 
     # Enum for gender possibilities
     GENDER_CHOICES = [
@@ -53,8 +53,10 @@ class Members(models.Model):
     guardian_phone = models.CharField(max_length=20, null=True)
     verified = models.BooleanField(default=False)
     banned = models.BooleanField(default=False)
-    banned_until = models.DateField(null=True)
-    info = models.CharField(max_length=1000, default="")
+    banned_from = models.DateField(blank=True, null=True)
+    banned_until = models.DateField(blank=True, null=True)
+    info = models.CharField(max_length=1000, default="", null=True)
+
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus
 class MemberDates(models.Model):
@@ -71,3 +73,8 @@ class ActivitySignup(models.Model):
     # ForeignKey for the userID, linking to the Members model
     userID = models.ForeignKey(Members, on_delete=models.CASCADE)
 
+
+class SuggestionBox(models.Model):
+    suggestionID = models.AutoField(primary_key=True, unique=True)
+    title = models.CharField(max_length=45, null=True)
+    description = models.CharField(max_length=500, null=True) 

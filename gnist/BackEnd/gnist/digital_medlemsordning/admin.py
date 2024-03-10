@@ -5,6 +5,7 @@ from .models import Members
 from .models import Employee
 from .models import MemberDates
 from .models import ActivitySignup
+from .models import SuggestionBox
 
 # Register your models here.
 admin.site.register(Activity)
@@ -13,3 +14,4 @@ admin.site.register(Members)
 admin.site.register(Employee)
 admin.site.register(MemberDates)
 admin.site.register(ActivitySignup)
+admin.site.register(SuggestionBox)
