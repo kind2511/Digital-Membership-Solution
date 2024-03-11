@@ -29,16 +29,24 @@ def get_all_member_data(request):
     members = Members.objects.all()
     member_data = []
 
+    # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
     for member in members:
         days_without_incident = member.days_without_incident
-        if days_without_incident <= 19:
-            level = "Noob"
-        elif 20 <= days_without_incident <= 49:
-            level = "Rookie"
-        elif 50 <= days_without_incident <= 99:
-            level = "Pro"
-        else:
-            level = "Legend"
+
+        # Iterate through levels to find the correct level for the member
+        for level in levels:
+            if days_without_incident <= level.points:
+                level_name = level.name
+                break
+
+        # Check if the member's points exceed the highest level's points
+        if days_without_incident > highest_level.points:
+            level_name = highest_level.name
         
         is_banned = member.banned
         if is_banned == 0:
@@ -48,7 +56,7 @@ def get_all_member_data(request):
 
         member_info = {
             'first_name': member.first_name.upper(),
-            'level': level,
+            'level': level_name,
             'profile_color': profile_color,
             'profile_pic': member.profile_pic.url,
             'certificate': member.certificate.url,
@@ -74,15 +82,23 @@ def get_one_member_data(request, user_id):
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
 
+     # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
     days_without_incident = member.days_without_incident
-    if days_without_incident <= 19:
-        level = "Noob"
-    elif 20 <= days_without_incident <= 49:
-        level = "Rookie"
-    elif 50 <= days_without_incident <= 99:
-        level = "Pro"
-    else:
-        level = "Legend"
+
+    # Iterate through levels to find the correct level for the member
+    for level in levels:
+        if days_without_incident <= level.points:
+            level_name = level.name
+            break
+
+    # Check if the member's points exceed the highest level's points
+    if days_without_incident > highest_level.points:
+        level_name = highest_level.name
     
     is_banned = member.banned
     if is_banned:
@@ -92,7 +108,7 @@ def get_one_member_data(request, user_id):
 
     member_info = {
         'first_name': member.first_name.upper(),
-        'level': level,
+        'level': level_name,
         'profile_color': profile_color,
         'profile_pic': member.profile_pic.url,
         'certificate': member.certificate.url,
