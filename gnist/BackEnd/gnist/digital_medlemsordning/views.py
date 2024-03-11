@@ -348,6 +348,9 @@ def delete_suggestion(request, suggestion_id):
         return Response({"error": "Suggestion not found"}, status=404)
 
     
+# Duplicate Code
+#-------------------------------------------------------------------------------------------------------
+
 # upload member profile picture
 @api_view(['PATCH'])
 def upload_member_profile_pic(request, user_id):
@@ -406,3 +409,4 @@ def upload_user_certificate(request, user_id):
         else:
             return Response({"error": "Member certificate not provided"}, status=400)
         
+#-------------------------------------------------------------------------------------------------------
