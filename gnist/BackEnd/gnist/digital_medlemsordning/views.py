@@ -5,12 +5,14 @@ from .models import Activity
 from .models import ActivityDate
 from .models import ActivitySignup
 from .models import SuggestionBox
+from .models import Level
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
+from .serializers import LevelSerializer
 
 
 
@@ -351,7 +353,7 @@ def delete_suggestion(request, suggestion_id):
 # Duplicate Code
 #-------------------------------------------------------------------------------------------------------
 
-# upload member profile picture
+# Upload member profile picture
 @api_view(['PATCH'])
 def upload_member_profile_pic(request, user_id):
     try:
@@ -372,6 +374,7 @@ def upload_member_profile_pic(request, user_id):
             return Response({"error": "Profile picture data not provided"}, status=400)
     
 
+# Upload activity image
 @api_view(['PATCH'])
 def upload_activity_image(request, activity_id):
     try:
@@ -390,6 +393,7 @@ def upload_activity_image(request, activity_id):
         return Response({"error": "Activity picture data not provided"}, status=400)
 
 
+# Upload member certificate
 @api_view(['PATCH'])
 def upload_user_certificate(request, user_id):
     try:
@@ -410,3 +414,23 @@ def upload_user_certificate(request, user_id):
             return Response({"error": "Member certificate not provided"}, status=400)
         
 #-------------------------------------------------------------------------------------------------------
+        
+
+# Create a user level
+@api_view(['POST'])
+def create_level(request):
+    if request.method == 'POST':
+        serializer = LevelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Level successfully created'}, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+# Get all levels
+@api_view(['GET'])
+def get_all_levels(request):
+    if request.method == 'GET':
+        levels = Level.objects.all()
+        serializer = LevelSerializer(levels, many=True)
+        return Response(serializer.data)

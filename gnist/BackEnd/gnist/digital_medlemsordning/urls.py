@@ -21,5 +21,7 @@ urlpatterns = [
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
     path('upload-profile-picture/<int:user_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
     path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
-    path('add_user_certificate/<int:user_id>/', views.upload_user_certificate, name="add_user_certificate")
+    path('add_user_certificate/<int:user_id>/', views.upload_user_certificate, name="add_user_certificate"),
+    path('create_level/', views.create_level, name='create_level'),
+    path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
 ]
