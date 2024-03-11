@@ -139,7 +139,8 @@ def get_all_activity(request):
         activity_info = {
             'title': activity.title,
             'description': activity.description,
-            'dates': dates_list
+            'dates': dates_list,
+            'image': activity.image.url
         }
 
         activity_data.append(activity_info)
@@ -365,3 +366,21 @@ def upload_member_profile_pic(request, user_id):
         else:
             return Response({"error": "Profile picture data not provided"}, status=400)
     
+
+@api_view(['PATCH'])
+def upload_activity_image(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({"error": "Activity not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        activity_pic_data = request.data.get('image')
+
+    if activity_pic_data:
+        activity.image = activity_pic_data
+        activity.save()
+        return Response({"message": "Activity picture updated successfully"}, status=200)
+    else:
+        return Response({"error": "Activity picture data not provided"}, status=400)
+

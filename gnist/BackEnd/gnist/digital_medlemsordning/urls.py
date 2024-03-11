@@ -19,5 +19,6 @@ urlpatterns = [
     path('create_suggestion/<int:user_id>/', views.create_suggestion, name='create_suggestion'),
     path('get_all_suggestions/', views.get_all_suggestions, name='get_all_suggestions'),
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
-    path('upload-profile-picture/<int:user_id>/', views.upload_member_profile_pic, name='upload-profile-picture')
+    path('upload-profile-picture/<int:user_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
+    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image")
 ]
