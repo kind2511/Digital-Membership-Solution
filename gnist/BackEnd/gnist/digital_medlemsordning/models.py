@@ -6,7 +6,8 @@ from django.db import models
 class Activity(models.Model):
     activityID = models.AutoField(primary_key=True, unique=True)
     title = models.CharField(max_length=45)
-    description = models.CharField(max_length=500) 
+    description = models.CharField(max_length=500)
+    image = models.ImageField(upload_to="activity_pics", blank=True ,null=True) 
 
 
 # The dates of the various activieties
