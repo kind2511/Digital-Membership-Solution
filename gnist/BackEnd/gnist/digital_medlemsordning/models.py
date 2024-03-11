@@ -76,7 +76,15 @@ class ActivitySignup(models.Model):
     userID = models.ForeignKey(Members, on_delete=models.CASCADE)
 
 
+# Lets users send in suggestions
 class SuggestionBox(models.Model):
     suggestionID = models.AutoField(primary_key=True, unique=True)
     title = models.CharField(max_length=45, null=True)
     description = models.CharField(max_length=500, null=True) 
+
+
+# Level of user
+class UserLevel(models.Model):
+    levelName = models.CharField(max_length=45, null=False)
+    points = models.IntegerField(null=False)
+
