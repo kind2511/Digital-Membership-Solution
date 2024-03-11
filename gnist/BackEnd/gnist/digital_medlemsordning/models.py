@@ -84,7 +84,8 @@ class SuggestionBox(models.Model):
 
 
 # Level of user
-class UserLevel(models.Model):
-    levelName = models.CharField(max_length=45, null=False)
-    points = models.IntegerField(null=False)
+class Level(models.Model):
+    levelID = models.AutoField(primary_key=True, unique=True)
+    naame = models.CharField(max_length=45)
+    points = models.IntegerField()
 
