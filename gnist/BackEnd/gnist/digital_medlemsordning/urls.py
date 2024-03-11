@@ -25,4 +25,5 @@ urlpatterns = [
     path('create_level/', views.create_level, name='create_level'),
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
+    path('edit_level/<int:level_id>/', views.edit_level, name='edit_level'),
 ]
