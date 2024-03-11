@@ -7,7 +7,7 @@ class Activity(models.Model):
     activityID = models.AutoField(primary_key=True, unique=True)
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
-    image = models.ImageField(upload_to="activity_pics", blank=True ,null=True) 
+    image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
 
 
 # The dates of the various activieties
@@ -33,8 +33,8 @@ class Members(models.Model):
     last_name = models.CharField(max_length=45)
     birthdate = models.DateField()
 
-    profile_pic = models.ImageField(upload_to="profile_pics", default="profile_pics/default_profile_picture.png", null=True)
-    certificate = models.ImageField(upload_to="certificates", default="certificates/placeholder-image.png" ,null=True)
+    profile_pic = models.ImageField(upload_to="profile_pics", default="profile_pics/default_profile_picture.png", null=True, blank=True)
+    certificate = models.ImageField(upload_to="certificates", default="certificates/placeholder-image.png" ,null=True, blank=True)
 
     # Enum for gender possibilities
     GENDER_CHOICES = [
