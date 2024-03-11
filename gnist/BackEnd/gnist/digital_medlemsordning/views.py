@@ -384,3 +384,22 @@ def upload_activity_image(request, activity_id):
     else:
         return Response({"error": "Activity picture data not provided"}, status=400)
 
+
+@api_view(['PATCH'])
+def upload_user_certificates(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        # Get the profile picture data from the request
+        profile_pic_data = request.data.get('profile_pic')
+        
+        # If profile picture data is provided, update the profile picture
+        if profile_pic_data:
+            member.profile_pic = profile_pic_data
+            member.save()
+            return Response({"message": "Profile picture updated successfully"}, status=200)
+        else:
+            return Response({"error": "Profile picture data not provided"}, status=400)

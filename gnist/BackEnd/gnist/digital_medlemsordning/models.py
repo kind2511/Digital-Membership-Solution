@@ -34,6 +34,7 @@ class Members(models.Model):
     birthdate = models.DateField()
 
     profile_pic = models.ImageField(upload_to="profile_pics", default="profile_pics/default_profile_picture.png", null=True)
+    certificate = models.ImageField(upload_to="certificates", default="certificates/placeholder-image.png" ,null=True)
 
     # Enum for gender possibilities
     GENDER_CHOICES = [
