@@ -427,10 +427,24 @@ def create_level(request):
         return Response(serializer.errors, status=400)
     
 
-# Get all levels
+# Get all user levels
 @api_view(['GET'])
 def get_all_levels(request):
     if request.method == 'GET':
         levels = Level.objects.all()
         serializer = LevelSerializer(levels, many=True)
         return Response(serializer.data)
+
+
+# Delete a user level
+@api_view(['DELETE'])
+def delete_level(request, level_id):
+    try:
+        level = Level.objects.get(levelID=level_id)
+    except Level.DoesNotExist:
+        return Response({'message': 'Level not found'}, status=404)
+
+    if request.method == 'DELETE':
+        level.delete()
+        return Response({'message': 'Level deleted successfully'}, status=204)
+    
