@@ -49,6 +49,7 @@ def get_all_member_data(request):
             'level': level,
             'profile_color': profile_color,
             'profile_pic': member.profile_pic.url,
+            'certificate': member.certificate.url,
             'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
         }
@@ -92,6 +93,7 @@ def get_one_member_data(request, user_id):
         'level': level,
         'profile_color': profile_color,
         'profile_pic': member.profile_pic.url,
+        'certificate': member.certificate.url,
         'banned_from': member.banned_from,  
         'banned_until': member.banned_until, 
     }
@@ -386,7 +388,7 @@ def upload_activity_image(request, activity_id):
 
 
 @api_view(['PATCH'])
-def upload_user_certificates(request, user_id):
+def upload_user_certificate(request, user_id):
     try:
         member = Members.objects.get(userID=user_id)
     except Members.DoesNotExist:
@@ -394,12 +396,13 @@ def upload_user_certificates(request, user_id):
     
     if request.method == 'PATCH':
         # Get the profile picture data from the request
-        profile_pic_data = request.data.get('profile_pic')
+        certificate_data = request.data.get('certificate')
         
         # If profile picture data is provided, update the profile picture
-        if profile_pic_data:
-            member.profile_pic = profile_pic_data
+        if certificate_data:
+            member.certificate = certificate_data
             member.save()
-            return Response({"message": "Profile picture updated successfully"}, status=200)
+            return Response({"message": "Member certificate updated successfully"}, status=200)
         else:
-            return Response({"error": "Profile picture data not provided"}, status=400)
+            return Response({"error": "Member certificate not provided"}, status=400)
+        
