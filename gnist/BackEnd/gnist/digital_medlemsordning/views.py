@@ -5,11 +5,16 @@ from .models import MemberDates
 from .models import Activity
 from .models import ActivityDate
 from .models import ActivitySignup
+from .models import SuggestionBox
+from .models import Level
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 import json
+from .serializers import MembersSerializer
+from .serializers import SuggestionBoxSerializer
+from .serializers import LevelSerializer
 
 
 
@@ -19,21 +24,31 @@ import json
 def index(request):
     return HttpResponse("Hello, from the root path of digital_medlemsording.")
 
+
+# Gets certain member data about all members
 @api_view(['GET'])
 def get_all_member_data(request):
     members = Members.objects.all()
     member_data = []
 
+    # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
     for member in members:
         days_without_incident = member.days_without_incident
-        if days_without_incident <= 19:
-            level = "Noob"
-        elif 20 <= days_without_incident <= 49:
-            level = "Rookie"
-        elif 50 <= days_without_incident <= 99:
-            level = "Pro"
-        else:
-            level = "Legend"
+
+        # Iterate through levels to find the correct level for the member
+        for level in levels:
+            if days_without_incident <= level.points:
+                level_name = level.name
+                break
+
+        # Check if the member's points exceed the highest level's points
+        if days_without_incident > highest_level.points:
+            level_name = highest_level.name
         
         is_banned = member.banned
         if is_banned == 0:
@@ -43,9 +58,11 @@ def get_all_member_data(request):
 
         member_info = {
             'first_name': member.first_name.upper(),
-            'level': level,
+            'level': level_name,
             'profile_color': profile_color,
-            'profile_pic': member.profile_pic.url,  
+            'profile_pic': member.profile_pic.url,
+            'certificate': member.certificate.url,
+            'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
         }
         member_data.append(member_info)
@@ -59,6 +76,7 @@ def get_all_member_data(request):
     return Response(response_data)
 
 
+# Gets certain member data about a specific user
 @api_view(['GET'])
 def get_one_member_data(request, user_id):
     try:
@@ -66,15 +84,23 @@ def get_one_member_data(request, user_id):
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
 
+     # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
     days_without_incident = member.days_without_incident
-    if days_without_incident <= 19:
-        level = "Noob"
-    elif 20 <= days_without_incident <= 49:
-        level = "Rookie"
-    elif 50 <= days_without_incident <= 99:
-        level = "Pro"
-    else:
-        level = "Legend"
+
+    # Iterate through levels to find the correct level for the member
+    for level in levels:
+        if days_without_incident <= level.points:
+            level_name = level.name
+            break
+
+    # Check if the member's points exceed the highest level's points
+    if days_without_incident > highest_level.points:
+        level_name = highest_level.name
     
     is_banned = member.banned
     if is_banned:
@@ -84,9 +110,11 @@ def get_one_member_data(request, user_id):
 
     member_info = {
         'first_name': member.first_name.upper(),
-        'level': level,
+        'level': level_name,
         'profile_color': profile_color,
         'profile_pic': member.profile_pic.url,
+        'certificate': member.certificate.url,
+        'banned_from': member.banned_from,  
         'banned_until': member.banned_until, 
     }
     
@@ -98,24 +126,6 @@ def get_one_member_data(request, user_id):
     }
     return Response(response_data)
 
-@api_view(['GET'])
-def update_ban_status(request, user_id, ban_status):
-    try:
-        member = Members.objects.get(userID=user_id)
-    except Members.ObjectDoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
-    
-    member.banned = ban_status
-
-    if ban_status:
-        member.banned_until = datetime.now() + timedelta(5)
-    else:
-        member.banned_until = None
-
-    member.save()
-
-    action = 'banned' if ban_status else 'unbanned'
-    return Response({'message': f'Member {action} successfully'})
 
 @api_view(['GET'])
 def get_activity(request):
@@ -138,6 +148,7 @@ def get_activity(request):
     }
     return Response(response_data)
 
+
 @api_view(['GET'])
 def get_all_activity(request):
     activities = Activity.objects.all()
@@ -150,7 +161,8 @@ def get_all_activity(request):
         activity_info = {
             'title': activity.title,
             'description': activity.description,
-            'dates': dates_list
+            'dates': dates_list,
+            'image': activity.image.url
         }
 
         activity_data.append(activity_info)
@@ -159,6 +171,7 @@ def get_all_activity(request):
         'activities': activity_data
     }
     return Response(response_data)
+
 
 @api_view(['GET'])
 def get_member_activity(request, user_id):
@@ -183,6 +196,7 @@ def get_member_activity(request, user_id):
         return Response(response_data)
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
+
 
 @api_view(['GET'])
 def add_day(request, user_id):
@@ -209,15 +223,50 @@ def add_day(request, user_id):
     else:
         return Response({'message': 'Cannot add one extra day'})
 
-    
-@api_view(['GET'])
-def ban_member(request, user_id):
-    return update_ban_status(request, user_id, True)
 
+# Bans a member
+@api_view(['PUT'])
+def ban_member(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    ban_duration = request.data.get('ban_duration')
+
+    try:
+        ban_duration = int(ban_duration)
+        if ban_duration <= 0:
+            raise ValueError("Ban duration must be a positive integer")
+    except (ValueError, TypeError):
+        return Response({"error": "Invalid ban duration"}, status=400)
+
+    member.banned = True
+    member.banned_from = datetime.now()
+    member.banned_until = datetime.now() + timedelta(days=ban_duration)
+    member.save()
+
+    return Response({'message': f'Member banned successfully until {member.banned_until}'})
+
+
+# Unbanns a memebr
 @api_view(['GET'])
 def unban_member(request, user_id):
-    return update_ban_status(request, user_id, False)
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    member.banned = False
+    member.banned_from = None
+    member.banned_until = None
 
+    member.save()
+
+    return Response({'message': f'Member unbanned successfully'})
+
+
+# Registering a new user
 @api_view(['POST'])
 @csrf_exempt
 def register_user(request):
@@ -287,4 +336,227 @@ def get_ban_expiry(request, user_id):
         return Response(banned_member.banned_until)
     else:
         return Response({'error': 'member not banned'})
+    
+    
+@api_view(['POST'])
+@csrf_exempt
+def add_activity(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        activityid = data['activityID']
+        title = data['title']
+        description = data['description']
+        date = data['date'] 
+
+
+        new_activity  = Activity(activityID=activityid, title=title, description=description)
+        new_activity .save()
+
+        new_activity_date = ActivityDate(activityID=new_activity, date=date)
+        new_activity_date.save()
+
+        return Response({'message': 'Activity added successfully'})
+    else:
+        return Response({'error': 'Invalid request method'})
+    
+
+# Gets all info about all members
+@api_view(['GET'])
+def get_all_members_info(request):
+    members = Members.objects.all()
+    serializer = MembersSerializer(members, many=True)
+    return Response(serializer.data)
+    
+
+# Lets a member add additional info about a specific memeber
+@api_view(['PUT'])
+def alter_member_info(request, user_id):
+        try:
+            member = Members.objects.get(userID=user_id)
+        except Members.DoesNotExist:
+             return Response({"error": "Member not found"}, status=404)
+        
+        new_info = request.data.get("info")
+        if new_info is None:
+            return Response({"error": "Missing 'info' field in request data"}, status=400)
+        
+        member.info = new_info
+        member.save()
+
+        serializer = MembersSerializer(member)
+        return Response(serializer.data)
+        
+
+# Lets an employee adjust the members points total up or down
+@api_view(['PUT'])
+def adjust_member_points_total(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    adjusted_points = request.data.get("days_without_incident")
+    if adjusted_points is None:
+        return Response({"error": "Missing 'days_without_incident' field in request data"}, status=400)
+
+    member.days_without_incident = member.days_without_incident + adjusted_points
+    member.save()
+
+    serializer = MembersSerializer(member)
+    return Response(serializer.data)
+
+
+# Lets a user create a new suggestion
+@api_view(['POST'])
+def create_suggestion(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'POST':
+        serializer = SuggestionBoxSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else:
+            return Response(serializer.errors, status=400)
+
+
+# Gets all the suggestions
+@api_view(['GET'])
+def get_all_suggestions(request):
+    suggestions = SuggestionBox.objects.all()
+    serializer = SuggestionBoxSerializer(suggestions, many=True)
+    return Response(serializer.data)
+
+
+# Deletes a suggestion
+@api_view(['GET','DELETE'])
+def delete_suggestion(request, suggestion_id):
+    try:
+        suggestion = SuggestionBox.objects.get(suggestionID=suggestion_id)
+        suggestion.delete()
+        return Response({"message": "Suggestion successfully deleted"}, status=204)
+    
+    except SuggestionBox.DoesNotExist:
+        return Response({"error": "Suggestion not found"}, status=404)
+
+    
+# Duplicate Code
+#-------------------------------------------------------------------------------------------------------
+
+# Upload member profile picture
+@api_view(['PATCH'])
+def upload_member_profile_pic(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        # Get the profile picture data from the request
+        profile_pic_data = request.data.get('profile_pic')
+        
+        # If profile picture data is provided, update the profile picture
+        if profile_pic_data:
+            member.profile_pic = profile_pic_data
+            member.save()
+            return Response({"message": "Profile picture updated successfully"}, status=200)
+        else:
+            return Response({"error": "Profile picture data not provided"}, status=400)
+    
+
+# Upload activity image
+@api_view(['PATCH'])
+def upload_activity_image(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({"error": "Activity not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        activity_pic_data = request.data.get('image')
+
+    if activity_pic_data:
+        activity.image = activity_pic_data
+        activity.save()
+        return Response({"message": "Activity picture updated successfully"}, status=200)
+    else:
+        return Response({"error": "Activity picture data not provided"}, status=400)
+
+
+# Upload member certificate
+@api_view(['PATCH'])
+def upload_user_certificate(request, user_id):
+    try:
+        member = Members.objects.get(userID=user_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        # Get the profile picture data from the request
+        certificate_data = request.data.get('certificate')
+        
+        # If profile picture data is provided, update the profile picture
+        if certificate_data:
+            member.certificate = certificate_data
+            member.save()
+            return Response({"message": "Member certificate updated successfully"}, status=200)
+        else:
+            return Response({"error": "Member certificate not provided"}, status=400)
+        
+#-------------------------------------------------------------------------------------------------------
+
+
+# Get all user levels
+@api_view(['GET'])
+def get_all_levels(request):
+    if request.method == 'GET':
+        levels = Level.objects.all()
+        serializer = LevelSerializer(levels, many=True)
+        return Response(serializer.data)
+
+
+# Create a user level
+@api_view(['POST'])
+def create_level(request):
+    if request.method == 'POST':
+        serializer = LevelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Level successfully created'}, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+# Delete a user level
+@api_view(['DELETE'])
+def delete_level(request, level_id):
+    try:
+        level = Level.objects.get(levelID=level_id)
+    except Level.DoesNotExist:
+        return Response({'message': 'Level not found'}, status=404)
+
+    if request.method == 'DELETE':
+        level.delete()
+        return Response({'message': 'Level deleted successfully'}, status=204)
+    
+
+# Edit a user level
+@api_view(['PUT'])
+def edit_level(request, level_id):
+    try:
+        level = Level.objects.get(pk=level_id)
+    except Level.DoesNotExist:
+        return Response({'message': 'Level not found'}, status=404)
+
+    if request.method == 'PUT':
+        # Partial allows us not to update only selected fields, and not all
+        serializer = LevelSerializer(level, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Level updated successfully'}, status=200)
+        return Response(serializer.errors, status=400)
     
