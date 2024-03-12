@@ -231,3 +231,25 @@ def register_user(request):
         return Response({'message': 'Added new user'})
     else:
         return Response({'error': 'Invalid request method'})
+    
+@api_view(['POST'])
+@csrf_exempt
+def add_activity(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        activityid = data['activityID']
+        title = data['title']
+        description = data['description']
+        date = data['date'] 
+
+
+        new_activity  = Activity(activityID=activityid, title=title, description=description)
+        new_activity .save()
+
+        new_activity_date = ActivityDate(activityID=new_activity, date=date)
+        new_activity_date.save()
+
+        return Response({'message': 'Activity added successfully'})
+    else:
+        return Response({'error': 'Invalid request method'})
