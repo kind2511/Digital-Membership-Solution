@@ -548,7 +548,7 @@ def delete_level(request, level_id):
 @api_view(['PUT'])
 def edit_level(request, level_id):
     try:
-        level = Level.objects.get(pk=level_id)
+        level = Level.objects.get(levelID=level_id)
     except Level.DoesNotExist:
         return Response({'message': 'Level not found'}, status=404)
 
