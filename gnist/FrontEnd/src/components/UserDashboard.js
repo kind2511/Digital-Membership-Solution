@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import './UserDashboard.css';
+import ProgramComponent from './ProgramComponent';  
+import MeldingerComponent from './MeldingerComponent';  
+
 
 function UserDashboard() {
   const { logout } = useAuth0();
@@ -53,9 +56,7 @@ function UserDashboard() {
               {profileImg ? (
                 <img src={profileImg} alt="Profile" className="profile-img" />
               ) : (
-                <div className="profile-img-placeholder">
-                  <span>Legg til bilde</span>
-                </div>
+                <div className="profile-img-placeholder">Legg til bilde</div>
               )}
               <input
                 id="profileImgInput"
@@ -69,21 +70,20 @@ function UserDashboard() {
               <div className="user-name">Name: {firstName.toUpperCase()}</div>
               <div className="user-level">Level: {level}</div>
             </div>
-            {/* "Dette skjer idag" section specific to the Profil page */}
             <h2 className="activities-title">Dette skjer idag</h2>
             <div className="activities-container">
-              {/* Dynamic content for activities will be inserted here */}
             </div>
           </div>
         );
       case 'Program':
-        return <div>Program content here</div>;
+        return <ProgramComponent />;  
       case 'Meldinger':
-        return <div>Meldinger content here</div>;
+        return <MeldingerComponent />;  
       default:
         return <div>Select a nav item</div>;
     }
   };
+  
 
   return (
     <div className="dashboard-container">
