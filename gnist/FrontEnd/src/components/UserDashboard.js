@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import './UserDashboard.css';
-import ProgramComponent from './ProgramComponent';  
-import MeldingerComponent from './MeldingerComponent';  
+import ProgramComponent from './ProgramComponent';
+import MeldingerComponent from './MeldingerComponent';
 
 
 function UserDashboard() {
   const { logout } = useAuth0();
-  const [activeNavItem, setActiveNavItem] = useState('Profil');
+  const [activeNavItem, setActiveNavItem] = useState(localStorage.getItem('activeNavItem') || 'Profil');
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
   const [firstName, setFirstName] = useState('Example'); // Placeholder
   const [level, setLevel] = useState(1); // Placeholder
   const date = new Date().toLocaleDateString();
+
+
+  // Update localStorage whenever activeNavItem changes
+  useEffect(() => {
+    localStorage.setItem('activeNavItem', activeNavItem);
+  }, [activeNavItem]);
 
   useEffect(() => {
     localStorage.setItem('profileImg', profileImg);
@@ -76,14 +82,14 @@ function UserDashboard() {
           </div>
         );
       case 'Program':
-        return <ProgramComponent />;  
+        return <ProgramComponent />;
       case 'Meldinger':
-        return <MeldingerComponent />;  
+        return <MeldingerComponent />;
       default:
         return <div>Select a nav item</div>;
     }
   };
-  
+
 
   return (
     <div className="dashboard-container">

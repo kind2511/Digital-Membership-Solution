@@ -1,0 +1,29 @@
+.meldinger-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .message-card {
+    background-color: #f9f9f9; 
+    border: 1px solid #2af506; 
+    border-radius: 80px;  
+    padding: 16px;  
+    margin-bottom: 16px;  
+    width: 90%;  
+    max-width: 600px;  
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+    word-wrap: break-word; /* Ensures the content breaks to prevent overflow */
+  }
+  
+  .message-timestamp {
+    color: #0988f8;  
+    font-size: 0.85rem;  
+    margin-bottom: 8px;  
+  }
+  
+  .message-text {
+    font-size: 1rem;  
+  }
+  
