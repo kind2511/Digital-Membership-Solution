@@ -4,7 +4,7 @@ import './EmployeeDashboard.css';
 function EmployeeDashboard() {
   return (
     <div className="employee-dashboard">
-      <h1>Employee Dashboard</h1>
+      <h1>Employee Dashboar</h1>
     </div>
   );
 }
