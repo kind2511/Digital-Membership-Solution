@@ -58,6 +58,7 @@ class Members(models.Model):
     banned_from = models.DateField(blank=True, null=True)
     banned_until = models.DateField(blank=True, null=True)
     info = models.CharField(max_length=1000, default="", null=True)
+    role = models.CharField(max_length=20, default="member", null=False)
 
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus
