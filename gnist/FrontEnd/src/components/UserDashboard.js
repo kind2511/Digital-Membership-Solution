@@ -1,19 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios'; 
 import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
 
-
 function UserDashboard() {
-  const { logout } = useAuth0();
+  const { logout, user, isAuthenticated } = useAuth0();
   const [activeNavItem, setActiveNavItem] = useState(localStorage.getItem('activeNavItem') || 'Profil');
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
-  const [firstName, setFirstName] = useState('Example'); // Placeholder
-  const [level, setLevel] = useState(1); // Placeholder
+  const [firstName, setFirstName] = useState(''); 
+  const [level, setLevel] = useState(0); 
   const date = new Date().toLocaleDateString();
 
+  // Fetch user data from the endpoint
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/digital_medlemsordning/get_member/${user.sub}`
+          );
+          const memberData = response.data.data.member;
+          setFirstName(memberData.first_name);
+          setLevel(memberData.level);
+          setProfileImg(memberData.profile_pic);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [isAuthenticated, user]);
 
   // Update localStorage whenever activeNavItem changes
   useEffect(() => {
@@ -90,7 +110,6 @@ function UserDashboard() {
     }
   };
 
-
   return (
     <div className="dashboard-container">
       <div className="navbar">
@@ -110,52 +129,3 @@ function UserDashboard() {
 }
 
 export default UserDashboard;
-
-
-
-// import React, { useState, useEffect } from "react";
-// import { useAuth0 } from "@auth0/auth0-react";
-// import axios from "axios";
-
-// const UserDashboard = () => {
-//   const { user, isAuthenticated, isLoading } = useAuth0();
-//   const [memberData, setMemberData] = useState(null);
-
-//   useEffect(() => {
-//     const fetchMemberData = async () => {
-//       if (isAuthenticated) {
-//         try {
-//           const response = await axios.get(
-//             `http://localhost:8000/digital_medlemsordning/get_member/${user.sub}`
-//           );
-//           setMemberData(response.data.data.member); // Extracting member data from response
-//         } catch (error) {
-//           console.error("Failed to fetch member data:", error);
-//         }
-//       }
-//     };
-
-//     fetchMemberData();
-//   }, [isAuthenticated, user.sub]);
-
-//   if (isLoading) {
-//     return <div>Loading ...</div>;
-//   }
-
-//   return (
-//     isAuthenticated && (
-//       <div>
-//         {memberData && ( // Checking if memberData is available
-//           <div>
-//             <h3>Bruker:</h3>
-//             <p>First Name: {memberData.first_name}</p>
-//             <p>Level: {memberData.level}</p>
-//             <img src={memberData.profile_pic} alt={memberData.first_name} />
-//           </div>
-//         )}
-//       </div>
-//     )
-//   );
-// };
-
-// export default UserDashboard;
