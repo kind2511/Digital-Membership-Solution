@@ -17,7 +17,7 @@ import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
 from .serializers import LevelSerializer
-from .serializers import MessageSerializer
+from .authurization import authorize_userfrom .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 
 
@@ -69,6 +69,7 @@ def get_all_member_data(request):
             'certificate': member.certificate.url,
             'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
+            'role': member.role,
         }
         member_data.append(member_info)
     
@@ -83,9 +84,15 @@ def get_all_member_data(request):
 
 # Gets certain member data about a specific user
 @api_view(['GET'])
-def get_one_member_data(request, user_id):
+def get_one_member_data(request, auth0_id):
+
+    # Authorization check using validate_access_token function
+    auth_result = authorize_user(auth0_id)
+    if auth_result.status_code != 200:
+        return auth_result  # Return the response from validate_access_token if not authorized
+
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
 
@@ -120,7 +127,8 @@ def get_one_member_data(request, user_id):
         'profile_pic': member.profile_pic.url,
         'certificate': member.certificate.url,
         'banned_from': member.banned_from,  
-        'banned_until': member.banned_until, 
+        'banned_until': member.banned_until,
+        'role': member.role, 
     }
     
     today_date = date.today().strftime("%Y-%m-%d")
@@ -129,7 +137,7 @@ def get_one_member_data(request, user_id):
         'date': today_date,
         'member': member_info
     }
-    return Response(response_data)
+    return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
 
 # Gets activity today
 @api_view(['GET'])
