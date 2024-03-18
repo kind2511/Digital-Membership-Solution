@@ -1,122 +1,155 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .dashboard-container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
-.sidebar {
-  width: 250px;
-  background-color:black;
-  color: white;
-  height: 100%;
-  position: relative;
-}
-
-.sidebar-header {
-  padding: 20px;
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color:black;
+  background-color: black;
+  color: white;
+  padding: 1 20px;
+  width: 100%;
+  font-weight: bold;
 }
 
-.sidebar-item {
-  padding: 10px;
-  border-top: 1px solid #555;
+.navbar-logo {
+  height: 50px;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
   cursor: pointer;
-  background-color:black;
+  text-align: center;
+  flex-grow: 1;
+  padding: 15px 10px;
 }
 
-.sidebar-item:hover {
-  background-color: #ffd700;
+.nav-item:hover, .nav-item.active, .nav-item.active:hover {
+  background-color: #ee0707;
   color: black;
 }
 
 .main-content {
   flex-grow: 1;
   padding: 20px;
-  background-color:  #ffd700;
-}
-
-.sidebar-logo {
-  width: 100px;  
-  margin-left: 38px;
-}
-
-.user-picture {
-  width: 100px; /*  */
-  height: 100px; /*  */
-  border-radius: 50%; /*  */
-  margin-bottom: 20px;
-}
-
-.welcome-message {
-  color: black;  
-  font-size: 24px; /* Larg font size */
-  margin-bottom: 10px;
-}
-
-.current-date {
-  color: black;  
-  font-size: 18px;
-  font-weight: bold;
-}
-/* Level Indicator Container */
-.user-level-indicator {
-  height: 20px;
-  display: flex;
-  width: 100%; 
-  background-color: black; 
-  border-radius: 5px; 
-  overflow: hidden; /* this is just for test */
-}
-
-/* Individual Level Sections */
-.level-section {
-  transition: width 0.5s ease; /* when level change move smothy */
-}
-
-/* colors of the user level*/
-.level-section.noob { background-color: #f44336; }
-.level-section.rookie { background-color: #ff9800; }
-.level-section.pro { background-color: #4caf50; }
-.level-section.legend { background-color: #3f51b5; }
-
-
-/* Active sidebar item */
-.sidebar-item.active, .sidebar-item.active:hover {
+  position: relative;
   background-color: #ffd700;
-  color: black;
+  overflow: auto;
 }
 
-.level-names {
+.date-block {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.registration-status {
+  position: absolute;
+  top: 308px;
+  left: 133px;
   display: flex;
-  justify-content: space-between;
-  margin-top: 5px;  
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-.level-name {
-  width: 25%;
+.register-checkbox {
+  margin-right: 5px;
+}
+
+.profile-img-container {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profile-img-placeholder,
+.profile-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  font-size: 12px;  
 }
 
-/*here colors for the words of the levels under the indicator */
-.noob-name { 
-  color: #f44336;
-  font-weight: bold;
- }
+.profile-img {
+  object-fit: cover;
+}
 
-.rookie-name { 
-  color: #ff9800; 
+.user-info {
+  position: absolute;
+  top: 230px; 
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name, .user-level {
+  font-size: 20px;
+  margin: 5px 0;
+  margin-left: 120px;
   font-weight: bold;
 }
 
-.pro-name { 
-  color: #4caf50;
-  font-weight: bold;
+.activities-title {
+  font-size: 24px;
+  position: absolute;
+  top: auto;
+  bottom: 40%; 
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff; 
 }
 
-.legend-name { 
-  color: #3f51b5; 
-  font-weight: bold;
+.activities-container {
+  width: 50%; 
+  max-width: 1000px; 
+  margin: 40px auto 0; 
+  background: rgb(241, 202, 202); 
+  border-radius: 80px;
+  box-shadow: 0 2px 4px rgba(235, 3, 3, 0.1); 
+  position: absolute;
+  bottom: 10%; 
+  left: 0;
+  right: 0;
+  padding: 100px; 
+  overflow-y: auto; 
+}
+
+.main-content {
+  padding-bottom: 250px; 
 }

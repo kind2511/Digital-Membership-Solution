@@ -3,27 +3,21 @@ import { useAuth0 } from '@auth0/auth0-react';
 import './HomePage.css';
 
 const promoSentences = [
-  "Add your sentence here",
-  "Add your sentence here!",
-  "Add your sentence here!",
-  "Add your sentence here"
+  "Your first promo sentence here",
+  "Your second promo sentence here!",
+  "Your third promo sentence here!",
+  "Your fourth promo sentence here"
 ];
-
 
 const HomePage = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [sentenceIndex, setSentenceIndex] = useState(0);
   const { loginWithRedirect } = useAuth0();
-  // when remove comment from useEffect function below, should put isAuthenticated, user const useAuth0
 
   useEffect(() => {
     let currentTimer;
-    // Prevent back navigation
-    window.history.pushState(null, null, window.location.href);
-    window.onpopstate = () => {
-      window.history.go(1);
-    };
 
+    
     const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
     if (isCompleteSentence) {
       currentTimer = setTimeout(() => {
@@ -43,17 +37,10 @@ const HomePage = () => {
     };
   }, [displayedText, sentenceIndex]);
 
-  //Function to handler user login
-  const handleLogin = () => {
+  // Function to handle user login or registration
+  const handleAuthAction = () => {
     loginWithRedirect();
   };
-
-  // Functoin to handler user regiser
-  const handleRegister = () => {
-    loginWithRedirect({ screen_hint: 'signup' });
-  };
-
-  //Render function 
 
   return (
     <div className="home-page">
@@ -63,10 +50,9 @@ const HomePage = () => {
         </div>
       </div>
       <div className="right">
-        {<div className="nav-logo">Kom i<span> gang</span></div>}
+        <div className="nav-logo">Kom i<span> gang</span></div>
         <div className="navigation-section">
-          <button onClick={handleLogin}>Login</button>
-          <button onClick={handleRegister}>Register</button>
+          <button onClick={handleAuthAction}>Login/Register</button>
           <div className="footer-about">
             <div className="links-container">
               <a href="/terms-of-use">Brukervilkår</a>
@@ -80,6 +66,6 @@ const HomePage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default HomePage;

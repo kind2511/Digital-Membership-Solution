@@ -1,0 +1,77 @@
+.employee-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  .employee-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 0 20px;
+    width: 100%;
+  }
+  
+  .employee-navbar-logo {
+    height: 50px;
+  }
+  
+  .employee-navbar-menu {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around; /* This will space out the nav items evenly */
+    list-style: none;
+    padding: 0;
+    margin-left: 20px;  
+    margin-right: 20px;  
+  }
+  
+  .employee-nav-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    text-align: center;
+    flex-grow: 1; /* This will make each item grow and fill the space */
+  }
+  
+  .employee-nav-item:hover, .employee-nav-item.employee-active {
+    background-color: #ee0707;
+    color: white;
+    border-radius: 4px;
+  }
+  
+  .employee-logout-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: none;
+    color: white;
+    flex-grow: 0; /* Prevent the logout button from growing */
+  }
+  
+  .employee-main-content {
+    flex-grow: 1;
+    background-color: #ffd700;
+    padding: 20px;
+    overflow: auto;
+  }
+  
+  /* Responsive adjustments for mobile devices */
+  @media (max-width: 768px) {
+    .employee-navbar-menu {
+      flex-direction: column;  
+    }
+  
+    .employee-nav-item, .employee-logout-item {
+      text-align: center;
+      padding: 10px;  
+      width: 100%;  
+    }
+  
+    .employee-navbar-menu {
+      margin-left: 0; /* Remove margin for small screens */
+      margin-right: 0; /* Remove margin for small screens */
+    }
+  }
+  
