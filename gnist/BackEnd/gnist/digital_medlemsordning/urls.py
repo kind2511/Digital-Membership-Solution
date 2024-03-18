@@ -31,4 +31,8 @@ urlpatterns = [
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
     path('edit_level/<int:level_id>/', views.edit_level, name='edit_level'),
+    path('Get_sent_messages/<int:sender_id>/', views.Get_sent_messages, name='Get_sent_messages'),
+    path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
+    path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
+    # path('send_message/', views.send_message, name='send_message'),
 ]

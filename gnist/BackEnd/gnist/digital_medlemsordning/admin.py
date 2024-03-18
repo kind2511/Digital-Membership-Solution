@@ -7,6 +7,7 @@ from .models import MemberDates
 from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
+from .models import Message
 
 
 # Register your models here.
@@ -18,3 +19,4 @@ admin.site.register(MemberDates)
 admin.site.register(ActivitySignup)
 admin.site.register(SuggestionBox)
 admin.site.register(Level)
+admin.site.register(Message)

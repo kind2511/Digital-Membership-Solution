@@ -7,6 +7,8 @@ from .models import ActivityDate
 from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
+from .models import Message
+from .models import Employee
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -15,6 +17,9 @@ import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
 from .serializers import LevelSerializer
+from .serializers import MessageSerializer
+from .serializers import ActivitySerializer
+
 
 
 
@@ -126,7 +131,7 @@ def get_one_member_data(request, user_id):
     }
     return Response(response_data)
 
-
+# Gets activity today
 @api_view(['GET'])
 def get_activity(request):
     today_date = date.today()
@@ -136,9 +141,11 @@ def get_activity(request):
 
     activity_data = []
     for activity_date in activity_dates:
+        activity = activity_date.activityID
         activity_info = {
-            'title': activity_date.activityID.title, 
-            'description': activity_date.activityID.description,
+            'title': activity.title, 
+            'description': activity.description,
+            'image': activity.image.url if activity.image else None,
         }
         activity_data.append(activity_info)
 
@@ -148,7 +155,7 @@ def get_activity(request):
     }
     return Response(response_data)
 
-
+#lists all activity
 @api_view(['GET'])
 def get_all_activity(request):
     activities = Activity.objects.all()
@@ -162,7 +169,8 @@ def get_all_activity(request):
             'title': activity.title,
             'description': activity.description,
             'dates': dates_list,
-            'image': activity.image.url
+            'image': activity.image.url,
+            'sign_up': activity.sign_up
         }
 
         activity_data.append(activity_info)
@@ -172,7 +180,36 @@ def get_all_activity(request):
     }
     return Response(response_data)
 
+#signs up for an activity
+@api_view(['POST'])
+def sign_up_activity(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        activity_id = data.get('activity_id')
 
+        try:
+            user = Members.objects.get(userID=user_id)
+            activity = Activity.objects.get(activityID=activity_id)
+        except (Members.DoesNotExist, Activity.DoesNotExist):
+            return Response({'error': 'User or Activity does not exist'}, status=404)
+
+        if ActivitySignup.objects.filter(userID=user, activityID=activity).exists():
+            return Response({'message': 'User already signed up for this activity'}, status=400)
+
+        signup = ActivitySignup(userID=user, activityID=activity)
+        signup.save()
+
+        activity_serializer = ActivitySerializer(activity)
+
+        return Response({
+            'message': 'User signed up for the activity successfully',
+            'activity': activity_serializer.data  
+        }, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
+
+# Get activity a specific member has signed up for
 @api_view(['GET'])
 def get_member_activity(request, user_id):
     try:
@@ -180,14 +217,17 @@ def get_member_activity(request, user_id):
 
         activity_data = []
         for signup in activity_signups:
-            activity_dates = signup.activityID.activitydate_set.all()
-            dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
-
             activity_info = {
                 'title': signup.activityID.title, 
                 'description': signup.activityID.description,
-                'dates': dates_list
+                'dates': [],  
             }
+
+            activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
+
+            for date in activity_dates:
+                activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
+
             activity_data.append(activity_info)
 
         response_data = {
@@ -196,7 +236,38 @@ def get_member_activity(request, user_id):
         return Response(response_data)
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
+    
+# Get signed up members for a specific activity
+@api_view(['GET'])
+def get_signed_up_members(request, activity_id):
+    try:
+      
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({'error': 'Activity does not exist'}, status=404)
 
+    sign_up_entries = ActivitySignup.objects.filter(activityID=activity)
+
+    member_data = []
+    for entry in sign_up_entries:
+        member_info = {
+            'user_id': entry.userID.userID,
+            'first_name': entry.userID.first_name,
+            'last_name': entry.userID.last_name,
+            'birthdate': entry.userID.birthdate,
+            'profile_pic': entry.userID.profile_pic.url if entry.userID.profile_pic else None,
+          
+        }
+        member_data.append(member_info)
+
+   
+    response_data = {
+        'activity_id': activity_id,
+        'activity_title': activity.title,
+        'sign_up_members': member_data
+    }
+
+    return Response(response_data)
 
 @api_view(['GET'])
 def add_day(request, user_id):
@@ -337,7 +408,7 @@ def get_ban_expiry(request, user_id):
     else:
         return Response({'error': 'member not banned'})
     
-    
+# adds a new activity  
 @api_view(['POST'])
 @csrf_exempt
 def add_activity(request):
@@ -348,9 +419,9 @@ def add_activity(request):
         title = data['title']
         description = data['description']
         date = data['date'] 
+        image = image['image']
 
-
-        new_activity  = Activity(activityID=activityid, title=title, description=description)
+        new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
         new_activity .save()
 
         new_activity_date = ActivityDate(activityID=new_activity, date=date)
@@ -560,3 +631,14 @@ def edit_level(request, level_id):
             return Response({'message': 'Level updated successfully'}, status=200)
         return Response(serializer.errors, status=400)
     
+# get messages sent from a specific employee
+@api_view(['GET'])
+def Get_sent_messages(request, sender_id):
+    try:
+        sent_messages = Message.objects.filter(sender_id=sender_id)
+        serializer = MessageSerializer(sent_messages, many=True)
+        return Response(serializer.data)
+    except Message.DoesNotExist:
+        return Response({'error': 'No messages found for the sender'}, status=404)
+
+

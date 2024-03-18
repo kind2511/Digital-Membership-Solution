@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -8,6 +9,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
+    sign_up = models.BooleanField(default=False)
 
 
 # The dates of the various activieties
@@ -21,6 +23,7 @@ class ActivityDate(models.Model):
 class Employee(models.Model):
     employeeID = models.AutoField(primary_key=True, unique=True)
     employee_Name = models.CharField(max_length=100)
+   
 
 
 # Members
@@ -89,3 +92,11 @@ class Level(models.Model):
     name = models.CharField(max_length=45)
     points = models.IntegerField()
 
+
+class Message(models.Model):
+    sender = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='sent_messages')
+    recipient = models.ForeignKey(Members, on_delete=models.CASCADE, related_name='received_messages')
+    subject = models.CharField(max_length=100)
+    body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
