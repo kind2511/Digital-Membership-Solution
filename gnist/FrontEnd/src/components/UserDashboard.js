@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import axios from 'axios'; 
+import axios from 'axios';
 import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
@@ -10,11 +10,10 @@ function UserDashboard() {
   const [activeNavItem, setActiveNavItem] = useState(localStorage.getItem('activeNavItem') || 'Profil');
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
-  const [firstName, setFirstName] = useState(''); 
-  const [level, setLevel] = useState(0); 
+  const [firstName, setFirstName] = useState('');
+  const [level, setLevel] = useState(0);
   const date = new Date().toLocaleDateString();
 
-  // Fetch user data from the endpoint
   useEffect(() => {
     const fetchUserData = async () => {
       if (isAuthenticated && user) {
@@ -26,6 +25,7 @@ function UserDashboard() {
           setFirstName(memberData.first_name);
           setLevel(memberData.level);
           setProfileImg(memberData.profile_pic);
+          localStorage.setItem('profileImg', memberData.profile_pic);
         } catch (error) {
           console.error("Failed to fetch user data:", error);
         }
@@ -34,15 +34,6 @@ function UserDashboard() {
 
     fetchUserData();
   }, [isAuthenticated, user]);
-
-  // Update localStorage whenever activeNavItem changes
-  useEffect(() => {
-    localStorage.setItem('activeNavItem', activeNavItem);
-  }, [activeNavItem]);
-
-  useEffect(() => {
-    localStorage.setItem('profileImg', profileImg);
-  }, [profileImg]);
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
@@ -58,6 +49,7 @@ function UserDashboard() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImg(reader.result);
+        localStorage.setItem('profileImg', reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -93,11 +85,8 @@ function UserDashboard() {
               />
             </div>
             <div className="user-info">
-              <div className="user-name">Name: {firstName.toUpperCase()}</div>
-              <div className="user-level">Level: {level}</div>
-            </div>
-            <h2 className="activities-title">Dette skjer idag</h2>
-            <div className="activities-container">
+              <div className="user-name">Navn: {firstName.toUpperCase()}</div>
+              <div className="user-level">Nivå: {level}</div>
             </div>
           </div>
         );
@@ -106,7 +95,7 @@ function UserDashboard() {
       case 'Meldinger':
         return <MeldingerComponent />;
       default:
-        return <div>Select a nav item</div>;
+        return <div>Vennligst velg en element fra navigasjonen</div>;
     }
   };
 
@@ -118,7 +107,7 @@ function UserDashboard() {
           <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
           <div className={`nav-item ${activeNavItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveNavItem('Meldinger')}>Meldinger</div>
-          <div className="nav-item logout-item" onClick={handleLogout}>LoggUt</div>
+          <div className="nav-item logout-item" onClick={handleLogout}>Logg ut</div>
         </div>
       </div>
       <div className="main-content">

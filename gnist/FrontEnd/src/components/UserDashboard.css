@@ -135,20 +135,7 @@ html, body {
   color: #fff; 
 }
 
-.activities-container {
-  width: 50%; 
-  max-width: 1000px; 
-  margin: 40px auto 0; 
-  background: rgb(241, 202, 202); 
-  border-radius: 80px;
-  box-shadow: 0 2px 4px rgba(235, 3, 3, 0.1); 
-  position: absolute;
-  bottom: 10%; 
-  left: 0;
-  right: 0;
-  padding: 100px; 
-  overflow-y: auto; 
-}
+
 
 .main-content {
   padding-bottom: 250px; 
