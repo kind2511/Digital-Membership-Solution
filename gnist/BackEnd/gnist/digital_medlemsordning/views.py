@@ -142,7 +142,7 @@ def get_one_member_data(request, auth0_id):
 
 # Gets activity today
 @api_view(['GET'])
-def get_activity(request):
+def get_activity_today(request):
     today_date = date.today()
 
     # Filter activity dates happening on the same day
@@ -217,6 +217,49 @@ def sign_up_activity(request):
         }, status=201)
     else:
         return Response({'error': 'Invalid request method'})
+
+#signs up for an activity
+@api_view(['POST'])
+def sign_up_activity(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        activity_id = data.get('activity_id')
+
+        try:
+            user = Members.objects.get(userID=user_id)
+            activity = Activity.objects.get(activityID=activity_id)
+        except (Members.DoesNotExist, Activity.DoesNotExist):
+            return Response({'error': 'User or Activity does not exist'}, status=404)
+
+        if ActivitySignup.objects.filter(userID=user, activityID=activity).exists():
+            return Response({'message': 'User already signed up for this activity'}, status=400)
+
+        signup = ActivitySignup(userID=user, activityID=activity)
+        signup.save()
+
+
+        activity_serializer = ActivitySerializer(activity)
+
+        return Response({
+            'message': 'User signed up for the activity successfully',
+            'activity': activity_serializer.data  
+        }, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
+
+@api_view(['GET'])
+def get_activity_details(request, activity_id):
+    try:
+       
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+      
+        return Response({'error': 'Activity not found'}, status=404)
+    
+    serializer = ActivitySerializer(activity)
+    
+    return Response(serializer.data)
 
 # Get activity a specific member has signed up for
 @api_view(['GET'])
@@ -642,12 +685,11 @@ def edit_level(request, level_id):
     
 # get messages sent from a specific employee
 @api_view(['GET'])
-def Get_sent_messages(request, sender_id):
+def get_sent_messages(request, sender_id):
     try:
         sent_messages = Message.objects.filter(sender_id=sender_id)
         serializer = MessageSerializer(sent_messages, many=True)
         return Response(serializer.data)
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
-
 
