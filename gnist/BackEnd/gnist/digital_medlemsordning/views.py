@@ -279,11 +279,11 @@ def get_signed_up_members(request, activity_id):
     return Response(response_data)
 
 @api_view(['GET'])
-def add_day(request, user_id):
+def add_day(request, auth0_id):
     today = datetime.today()
 
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
     
