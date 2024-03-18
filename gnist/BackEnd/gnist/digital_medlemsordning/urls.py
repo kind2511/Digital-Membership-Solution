@@ -35,5 +35,5 @@ urlpatterns = [
     path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
     path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
-    path('send_message/', views.send_message, name='send_message'),
+    # path('send_message/', views.send_message, name='send_message'),
 ]
