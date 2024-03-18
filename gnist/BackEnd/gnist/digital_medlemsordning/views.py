@@ -693,38 +693,3 @@ def get_sent_messages(request, sender_id):
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
 
-@api_view(['POST'])
-def send_message(request):
-    if request.method == 'POST':
-       
-        data = request.data
-        sender_id = data.get('sender_id')
-        recipient_id = data.get('recipient_id')
-        subject = data.get('subject')
-        body = data.get('body')
-
-        try:
-           
-            sender = Employee.objects.get(employeeID=sender_id)
-            recipient = Members.objects.get(userID=recipient_id)
-        except (Employee.DoesNotExist, Members.DoesNotExist):
-            return Response({'error': 'Sender or recipient does not exist'}, status=404)
-
-       
-        message = Message.objects.create(
-            sender=sender,
-            recipient=recipient,
-            subject=subject,
-            body=body
-        )
-
-       
-        serializer = MessageSerializer(message)
-
-        return Response(serializer.data, status=201)
-    else:
-        return Response({'error': 'Invalid request method'})
-
-        
-
-
