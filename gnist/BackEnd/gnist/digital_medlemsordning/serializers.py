@@ -29,11 +29,6 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = ['activityID', 'title', 'description', 'image', 'sign_up']     
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = serializers.IntegerField()
-    recipient = serializers.IntegerField()
-    subject = serializers.CharField()
-    body = serializers.CharField()
-    is_read = serializers.BooleanField()
     class Meta:
         model = Message
-        fields = ['sender', 'recipient', 'subject', 'body', 'is_read']
+        fields = ['id','sender', 'recipient', 'subject', 'body', 'is_read']
