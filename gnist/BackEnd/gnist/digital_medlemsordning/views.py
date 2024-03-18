@@ -194,11 +194,11 @@ def get_all_activity(request):
 def sign_up_activity(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        user_id = data.get('user_id')
+        auth0_id = data.get('auth0_id')
         activity_id = data.get('activity_id')
 
         try:
-            user = Members.objects.get(userID=user_id)
+            user = Members.objects.get(auth0ID=auth0_id)
             activity = Activity.objects.get(activityID=activity_id)
         except (Members.DoesNotExist, Activity.DoesNotExist):
             return Response({'error': 'User or Activity does not exist'}, status=404)
