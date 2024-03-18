@@ -17,7 +17,8 @@ import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
 from .serializers import LevelSerializer
-from .authurization import authorize_userfrom .serializers import MessageSerializer
+from .authurization import authorize_user
+from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 
 
