@@ -701,8 +701,8 @@ def get_sent_messages(request, sender_id):
 
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
-    
-# Creare one or multiple answers for a question
+
+# Create one or multiple answers for a question
 @api_view(['POST'])
 def create_question_with_answers(request):
     serializer = PollQuestionSerializer(data=request.data)
