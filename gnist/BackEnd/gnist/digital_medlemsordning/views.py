@@ -708,8 +708,8 @@ def create_question(request):
     serializer = PollQuestionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+        return Response({"message": "Question successfully created."}, status=201)
+    return Response({"message": "Not able to create question."}, status=404)
 
 
 # Creare one or multiple answers for a question
