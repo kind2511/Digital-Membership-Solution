@@ -9,6 +9,9 @@ from .models import SuggestionBox
 from .models import Level
 from .models import Message
 from .models import Employee
+from .models import PollQuestion
+from .models import PollAnswer
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -20,7 +23,8 @@ from .serializers import LevelSerializer
 from .authurization import authorize_user
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
-
+from .serializers import PollQuestionSerializer
+from .serializers import PollAnswerSerializer
 
 
 
@@ -683,6 +687,7 @@ def edit_level(request, level_id):
             return Response({'message': 'Level updated successfully'}, status=200)
         return Response(serializer.errors, status=400)
     
+
 # get messages sent from a specific employee
 @api_view(['GET'])
 def get_sent_messages(request, sender_id):
@@ -692,4 +697,27 @@ def get_sent_messages(request, sender_id):
         return Response(serializer.data)
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
+
+
+#-------------------------------------------------------------------------------------------------------------------------------
+# Handling Polls
+
+# Create a new question
+@api_view(['POST'])
+def create_question(request):
+    serializer = PollQuestionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+# Creare multiple answers for a question
+@api_view(['POST'])
+def create_answers(request):
+    serializer = PollAnswerSerializer(data=request.data, many=True) # many makes it possible to create multiple anwsers at once
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
 
