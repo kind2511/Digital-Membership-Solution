@@ -712,7 +712,7 @@ def create_question(request):
     return Response(serializer.errors, status=400)
 
 
-# Creare multiple answers for a question
+# Creare one or multiple answers for a question
 @api_view(['POST'])
 def create_answers(request):
     serializer = PollAnswerSerializer(data=request.data, many=True) # many makes it possible to create multiple anwsers at once
