@@ -38,15 +38,26 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ['id','sender', 'recipient', 'subject', 'body', 'is_read']
 
 
+
+
+
+
 class PollAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollAnswer
         fields = ['answer']
 
-
 class PollQuestionSerializer(serializers.ModelSerializer):
-    answers = PollAnswerSerializer(many=True, read_only=True)
+    answers = PollAnswerSerializer(many=True)
 
     class Meta:
         model = PollQuestion
         fields = ['question', 'answers']
+
+    def create(self, validated_data):
+        answers_data = validated_data.pop('answers')
+        question = PollQuestion.objects.create(**validated_data)
+        for answer_data in answers_data:
+            PollAnswer.objects.create(question=question, **answer_data)
+        return question
+    

@@ -701,23 +701,13 @@ def get_sent_messages(request, sender_id):
 
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
-
-# Create a new question
+    
+# Creare one or multiple answers for a question
 @api_view(['POST'])
-def create_question(request):
+def create_question_with_answers(request):
     serializer = PollQuestionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": "Question successfully created."}, status=201)
-    return Response({"message": "Not able to create question."}, status=404)
-
-
-# Creare one or multiple answers for a question
-@api_view(['POST'])
-def create_answers(request):
-    serializer = PollAnswerSerializer(data=request.data, many=True) # many makes it possible to create multiple anwsers at once
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+        return Response({"message": "Question and answers successfully created.", "data": serializer.data}, status=201)
+    return Response({"message": "Could not create question."}, status=400)
 

@@ -37,5 +37,5 @@ urlpatterns = [
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
     # path('send_message/', views.send_message, name='send_message'),
 
-    path('create_question/', views.create_question, name='create_question'),
+    path('create_question/', views.create_question_with_answers, name='create_question'),
 ]
