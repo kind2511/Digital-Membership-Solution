@@ -101,3 +101,24 @@ class Message(models.Model):
     body = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+
+
+
+
+
+# Questions for employees to ask a user
+class PollQuestion(models.Model):
+    question = models.CharField(max_length=100, null=False)
+
+# Possible anwsers to the PollQuestions
+class PollAnswer(models.Model):
+    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE, related_name='answers')
+    answer = models.CharField(max_length=100, null=False)
+    
+# Connects a member and a question
+class Questionnaire(models.Model):
+    member = models.ForeignKey(Members, on_delete=models.CASCADE)
+    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE)
+    chosen_answer = models.OneToOneField(PollAnswer, on_delete=models.CASCADE, related_name='chosen_in_questionnaires')
+
