@@ -116,8 +116,8 @@ class PollAnswer(models.Model):
     question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE, related_name='answers')
     
 
+# Answer of a Member
 class MemberAnswer(models.Model):
     member = models.ForeignKey(Members, on_delete=models.CASCADE)
     question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE)
     answer = models.ForeignKey(PollAnswer, on_delete=models.CASCADE)
-

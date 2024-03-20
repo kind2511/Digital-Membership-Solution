@@ -636,6 +636,8 @@ def upload_user_certificate(request, user_id):
         
 #-------------------------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------------------------
+# Levels
 
 # Get all user levels
 @api_view(['GET'])
@@ -686,6 +688,7 @@ def edit_level(request, level_id):
             return Response({'message': 'Level updated successfully'}, status=200)
         return Response(serializer.errors, status=400)
     
+#-------------------------------------------------------------------------------------------------------------------------------
 
 # get messages sent from a specific employee
 @api_view(['GET'])
@@ -701,7 +704,7 @@ def get_sent_messages(request, sender_id):
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
 
-# Create one or multiple answers for a question
+# Create a question and corresponding possible answers
 @api_view(['POST'])
 def create_question_with_answers(request):
     serializer = PollQuestionSerializer(data=request.data)
@@ -711,7 +714,7 @@ def create_question_with_answers(request):
     return Response({"message": "Could not create question."}, status=400)
 
 
-# Create the ability for a member to anwser a question
+# Create the ability for a member to answer a question
 @api_view(['POST'])
 def submit_user_response(request, auth0_id):
     try:
@@ -723,7 +726,11 @@ def submit_user_response(request, auth0_id):
     question_id = request.data.get('question')
     answer_id = request.data.get('answer')
 
-    # Create MemberAnswer object manually
+    # Check if the user has already answered the question
+    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
+        return Response({"error": "User has already answered this question"}, status=400)
+
+    # Create MemberAnswer object
     member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
     member_answer.save()
 
@@ -733,8 +740,23 @@ def submit_user_response(request, auth0_id):
     return Response({"message": "User response submitted successfully.", "data": serializer.data}, status=201)
 
 
+# Gets all anwesers and correspoinding answer alternatives
 @api_view(['GET'])
-def answer_counts_for_question(request, question_id):
+def get_all_questions_with_answers(request):
+    questions = PollQuestion.objects.all()
+    serialized_data = []
+
+    for question in questions:
+        serialized_question = PollQuestionSerializer(question).data
+        serialized_question['answers'] = [answer.answer for answer in question.answers.all()]
+        serialized_data.append(serialized_question)
+
+    return Response(serialized_data, status=200)
+
+
+# Gets the number of answers for each alternative answer for a specific question
+@api_view(['GET'])
+def get_answer_counts_for_question(request, question_id):
     try:
         question = PollQuestion.objects.get(questionID=question_id)
     except PollQuestion.DoesNotExist:
@@ -746,4 +768,24 @@ def answer_counts_for_question(request, question_id):
         count = answer.memberanswer_set.count()
         answer_counts[answer.answer] = count
 
-    return Response({"message": "Answer counts retrieved successfully", "answer_counts": answer_counts}, status=200)
+    # Return response with serialized question and answer counts
+    return Response({
+        "message": "Answer counts retrieved successfully",
+        "question": question.question,  # Manually serialize the question
+        "answer_counts": answer_counts
+    }, status=200)
+
+
+# Deletes a specific question
+@api_view(['DELETE'])
+def delete_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Delete the question
+    question.delete()
+
+    return Response({"message": "Question deleted successfully"}, status=204)
+
