@@ -37,6 +37,7 @@ urlpatterns = [
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
     # path('send_message/', views.send_message, name='send_message'),
 
+    # Polls
     path('create_question/', views.create_question_with_answers, name='create_question'),
     path('submit_response/<str:auth0_id>/', views.submit_user_response, name='submit_response'),
     path('get_question_responses/<int:question_id>/', views.get_answer_counts_for_question, name='answer_counts_for_question'),
