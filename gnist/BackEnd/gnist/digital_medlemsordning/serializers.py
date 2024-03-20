@@ -57,4 +57,4 @@ class PollQuestionSerializer(serializers.ModelSerializer):
         for answer_data in answers_data:
             PollAnswer.objects.create(question=question, **answer_data)
         return question
-    
+

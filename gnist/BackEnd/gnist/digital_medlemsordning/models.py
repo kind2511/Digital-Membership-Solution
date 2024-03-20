@@ -108,15 +108,10 @@ class PollQuestion(models.Model):
     questionID = models.AutoField(primary_key=True, unique=True)
     question = models.CharField(max_length=100, null=False)
 
+
 # Possible anwsers to the PollQuestions
 class PollAnswer(models.Model):
-    anwserID = models.AutoField(primary_key=True, unique=True)
-    anwser = models.CharField(max_length=100, null=False)
+    answerID = models.AutoField(primary_key=True, unique=True)
+    answer = models.CharField(max_length=100, null=False)
     question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE, related_name='answers')
     
-# Connects a member and a question
-class Questionnaire(models.Model):
-    member = models.ForeignKey(Members, on_delete=models.CASCADE)
-    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE)
-    chosen_answer = models.OneToOneField(PollAnswer, on_delete=models.CASCADE, related_name='chosen_in_questionnaires')
-

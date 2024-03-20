@@ -8,10 +8,6 @@ from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
 from .models import Message
-from .models import Employee
-from .models import PollQuestion
-from .models import PollAnswer
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +20,7 @@ from .authurization import authorize_user
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
-from .serializers import PollAnswerSerializer
+
 
 
 
