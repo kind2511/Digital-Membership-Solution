@@ -8,6 +8,8 @@ from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
 from .models import Message
+from .models import MemberAnswer
+from .models import PollQuestion
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -20,6 +22,7 @@ from .authurization import authorize_user
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
+from .serializers import MemberAnswerSerializer
 
 
 
@@ -707,3 +710,40 @@ def create_question_with_answers(request):
         return Response({"message": "Question and answers successfully created.", "data": serializer.data}, status=201)
     return Response({"message": "Could not create question."}, status=400)
 
+
+# Create the ability for a member to anwser a question
+@api_view(['POST'])
+def submit_user_response(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+
+    # Extract question and answer from request data
+    question_id = request.data.get('question')
+    answer_id = request.data.get('answer')
+
+    # Create MemberAnswer object manually
+    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
+    member_answer.save()
+
+    # Serialize the data
+    serializer = MemberAnswerSerializer(member_answer)
+
+    return Response({"message": "User response submitted successfully.", "data": serializer.data}, status=201)
+
+
+@api_view(['GET'])
+def answer_counts_for_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Retrieve all answers for the given question along with their counts
+    answer_counts = {}
+    for answer in question.answers.all():
+        count = answer.memberanswer_set.count()
+        answer_counts[answer.answer] = count
+
+    return Response({"message": "Answer counts retrieved successfully", "answer_counts": answer_counts}, status=200)

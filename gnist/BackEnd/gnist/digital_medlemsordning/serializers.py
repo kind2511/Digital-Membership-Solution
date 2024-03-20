@@ -6,6 +6,7 @@ from .models import Message
 from .models import Activity
 from .models import PollQuestion 
 from .models import PollAnswer
+from .models import MemberAnswer
 
 
 class MembersSerializer(serializers.ModelSerializer):
@@ -43,6 +44,7 @@ class PollAnswerSerializer(serializers.ModelSerializer):
         model = PollAnswer
         fields = ['answer']
 
+
 class PollQuestionSerializer(serializers.ModelSerializer):
     answers = PollAnswerSerializer(many=True)
 
@@ -57,4 +59,10 @@ class PollQuestionSerializer(serializers.ModelSerializer):
         for answer_data in answers_data:
             PollAnswer.objects.create(question=question, **answer_data)
         return question
+
+
+class MemberAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberAnswer
+        fields = ['question', 'answer']
 

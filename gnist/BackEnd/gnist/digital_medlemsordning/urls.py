@@ -38,4 +38,6 @@ urlpatterns = [
     # path('send_message/', views.send_message, name='send_message'),
 
     path('create_question/', views.create_question_with_answers, name='create_question'),
+    path('submit_response/<str:auth0_id>/', views.submit_user_response, name='submit_response'),
+    path('get_question_responses/<int:question_id>/', views.answer_counts_for_question, name='answer_counts_for_question'),
 ]
