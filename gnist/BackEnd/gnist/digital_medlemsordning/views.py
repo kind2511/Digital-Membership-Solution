@@ -220,37 +220,9 @@ def sign_up_activity(request):
         }, status=201)
     else:
         return Response({'error': 'Invalid request method'})
+    
 
-#signs up for an activity
-@api_view(['POST'])
-def sign_up_activity(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        user_id = data.get('user_id')
-        activity_id = data.get('activity_id')
-
-        try:
-            user = Members.objects.get(userID=user_id)
-            activity = Activity.objects.get(activityID=activity_id)
-        except (Members.DoesNotExist, Activity.DoesNotExist):
-            return Response({'error': 'User or Activity does not exist'}, status=404)
-
-        if ActivitySignup.objects.filter(userID=user, activityID=activity).exists():
-            return Response({'message': 'User already signed up for this activity'}, status=400)
-
-        signup = ActivitySignup(userID=user, activityID=activity)
-        signup.save()
-
-
-        activity_serializer = ActivitySerializer(activity)
-
-        return Response({
-            'message': 'User signed up for the activity successfully',
-            'activity': activity_serializer.data  
-        }, status=201)
-    else:
-        return Response({'error': 'Invalid request method'})
-
+# Get one specific activity
 @api_view(['GET'])
 def get_activity_details(request, activity_id):
     try:
@@ -418,6 +390,7 @@ def register_user(request):
     else:
         return Response({'error': 'Invalid request method'})
     
+    
 @api_view(['GET'])
 def get_members_today(request):
     today = datetime.today()
@@ -432,6 +405,7 @@ def get_members_today(request):
     
     return Response(members_present)
 
+
 @api_view(['GET'])
 def get_members_for_date(request, one_date):
     try:
@@ -445,6 +419,7 @@ def get_members_for_date(request, one_date):
     
     return Response(members_present)
 
+
 @api_view(['GET'])
 def get_visit_numbers(request):
     try:
@@ -453,6 +428,7 @@ def get_visit_numbers(request):
         return Response({'error':'No dates exist'}, status=404)
     
     return Response(dates)
+
 
 @api_view(['GET'])
 def get_ban_expiry(request, user_id):
@@ -463,6 +439,7 @@ def get_ban_expiry(request, user_id):
     else:
         return Response({'error': 'member not banned'})
     
+
 # adds a new activity  
 @api_view(['POST'])
 @csrf_exempt
@@ -533,14 +510,12 @@ def adjust_member_points_total(request, user_id):
     return Response(serializer.data)
 
 
+#------------------------------------------------------------------------------------------------------
+# Suggestions
+
 # Lets a user create a new suggestion
 @api_view(['POST'])
-def create_suggestion(request, user_id):
-    try:
-        member = Members.objects.get(userID=user_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
+def create_suggestion(request):
     if request.method == 'POST':
         serializer = SuggestionBoxSerializer(data=request.data)
         
@@ -570,15 +545,17 @@ def delete_suggestion(request, suggestion_id):
     except SuggestionBox.DoesNotExist:
         return Response({"error": "Suggestion not found"}, status=404)
 
-    
+#------------------------------------------------------------------------------------------------------
+
+
 # Duplicate Code
 #-------------------------------------------------------------------------------------------------------
 
 # Upload member profile picture
 @api_view(['PATCH'])
-def upload_member_profile_pic(request, user_id):
+def upload_member_profile_pic(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -788,4 +765,6 @@ def delete_question(request, question_id):
     question.delete()
 
     return Response({"message": "Question deleted successfully"}, status=204)
+
+#-------------------------------------------------------------------------------------------------------------------------------
 
