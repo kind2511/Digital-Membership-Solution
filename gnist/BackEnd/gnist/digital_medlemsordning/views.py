@@ -390,7 +390,7 @@ def register_user(request):
     else:
         return Response({'error': 'Invalid request method'})
     
-    
+
 @api_view(['GET'])
 def get_members_today(request):
     today = datetime.today()
@@ -768,3 +768,29 @@ def delete_question(request, question_id):
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
+# Checks if the user is fully registered
+@api_view(['GET'])
+def check_user_registration_status(request):
+    if request.method == 'GET':
+        sub = request.GET.get('sub')  # Sub passed as a query param (registration_status/?sub=your_sub_value)
+        
+        if not sub:
+            return Response({'error': 'Auth0 ID (sub) not provided'}, status=400)
+        
+        try:
+            # Query the database to get the user by Auth0 ID (sub)
+            user = Members.objects.get(auth0ID=sub)
+            
+            # Check if any required field is null
+            if (not user.first_name or not user.last_name or not user.birthdate or
+                not user.phone_number or not user.gender):
+                return Response({'registered': False}, status=200)
+            
+            # All required fields are present and age is valid
+            return Response({'registered': True}, status=200)
+        
+        except Members.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+    
+    else:
+        return Response({'error': 'Method not allowed'}, status=405)

@@ -23,7 +23,6 @@ class ActivityDate(models.Model):
 class Employee(models.Model):
     employeeID = models.AutoField(primary_key=True, unique=True)
     employee_Name = models.CharField(max_length=100)
-   
 
 
 # Members

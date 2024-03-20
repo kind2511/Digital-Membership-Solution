@@ -43,4 +43,8 @@ urlpatterns = [
     path('get_question_responses/<int:question_id>/', views.get_answer_counts_for_question, name='answer_counts_for_question'),
     path('get_all_questions/', views.get_all_questions_with_answers, name='get_all_questions'),
     path('delete_question/<int:question_id>/', views.delete_question, name='delete_question'),
+
+    #Check Registration status
+    path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status')
 ]
+
