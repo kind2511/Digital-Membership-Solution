@@ -23,7 +23,6 @@ class ActivityDate(models.Model):
 class Employee(models.Model):
     employeeID = models.AutoField(primary_key=True, unique=True)
     employee_Name = models.CharField(max_length=100)
-   
 
 
 # Members
@@ -101,3 +100,23 @@ class Message(models.Model):
     body = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+
+# Questions for employees to ask a user
+class PollQuestion(models.Model):
+    questionID = models.AutoField(primary_key=True, unique=True)
+    question = models.CharField(max_length=100, null=False)
+
+
+# Possible anwsers to the PollQuestions
+class PollAnswer(models.Model):
+    answerID = models.AutoField(primary_key=True, unique=True)
+    answer = models.CharField(max_length=100, null=False)
+    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE, related_name='answers')
+    
+
+# Answer of a Member
+class MemberAnswer(models.Model):
+    member = models.ForeignKey(Members, on_delete=models.CASCADE)
+    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE)
+    answer = models.ForeignKey(PollAnswer, on_delete=models.CASCADE)
