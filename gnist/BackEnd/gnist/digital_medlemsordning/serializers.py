@@ -42,7 +42,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class PollAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollAnswer
-        fields = ['answer']
+        fields = ['answerID', 'answer']
 
 
 class PollQuestionSerializer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class PollQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PollQuestion
-        fields = ['question', 'answers']
+        fields = ['questionID', 'question', 'answers']
 
     # Creates Poll Question instance and one or multiple Poll answer instances
     def create(self, validated_data):
