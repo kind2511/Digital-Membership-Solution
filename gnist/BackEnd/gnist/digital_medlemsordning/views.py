@@ -429,6 +429,78 @@ def get_visit_numbers(request):
     
     return Response(dates)
 
+@api_view(['GET'])
+def get_visit_by_gender(request):
+    try:
+        dates = MemberDates.objects.all()
+    except:
+        return Response({'error':'No dates exist'}, status=404)
+    
+
+    response_data = []
+
+    for date in dates:
+        male = 0
+        female = 0
+        non_binary = 0
+        pref_not_say = 0
+
+        gender = date.userID.gender
+
+        match gender:
+            case 'gutt':
+                male += 1
+            case 'jente':
+                female += 1
+            case 'ikke-binær':
+                non_binary += 1
+            case 'vil ikke si':
+                pref_not_say += 1
+
+        gender_data = {
+            'date':date.date,
+            'gutter':male,
+            'jenter':female,
+            'ikke-binære':non_binary,
+            'vil ikke si':pref_not_say
+        }
+        response_data.append(gender_data)
+    
+    return Response(response_data)
+
+@api_view(['GET'])
+def get_visit_by_gender_one_day(request, one_date):
+    try:
+        current_date = MemberDates.objects.filter(date=one_date)
+    except:
+        return Response({'error':'No dates exist'},status=404)
+    
+    male = 0
+    female = 0
+    non_binary = 0
+    pref_not_say = 0
+
+    for users in current_date:
+        gender = users.userID.gender
+
+        match gender:
+            case 'gutt':
+                male += 1
+            case 'jente':
+                female += 1
+            case 'ikke-binær':
+                non_binary += 1
+            case 'vil ikke si':
+                pref_not_say += 1
+
+    gender_data = {
+        'gutter':male,
+        'jenter':female,
+        'ikke-binære':non_binary,
+        'vil ikke si':pref_not_say
+    }
+    
+    return Response(gender_data)
 
 @api_view(['GET'])
 def get_ban_expiry(request, user_id):
