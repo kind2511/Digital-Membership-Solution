@@ -37,7 +37,6 @@ urlpatterns = [
     path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
     path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
-    # path('send_message/', views.send_message, name='send_message'),
 
     # Polls
     path('create_question/', views.create_question_with_answers, name='create_question'),
@@ -47,6 +46,6 @@ urlpatterns = [
     path('delete_question/<int:question_id>/', views.delete_question, name='delete_question'),
 
     #Check Registration status
-    path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status')
+    path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status'),
+    path('send_message/', views.send_message, name='send_message'),
 ]
-
