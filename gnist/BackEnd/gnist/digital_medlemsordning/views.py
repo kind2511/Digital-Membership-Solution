@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from datetime import date, datetime, timedelta
 from .models import Members
+from .models import Employee
 from .models import MemberDates
 from .models import Activity
 from .models import ActivityDate
@@ -8,7 +9,8 @@ from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
 from .models import Message
-from .models import Employee
+from .models import MemberAnswer
+from .models import PollQuestion
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -20,6 +22,8 @@ from .serializers import LevelSerializer
 from .authurization import authorize_user
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
+from .serializers import PollQuestionSerializer
+from .serializers import MemberAnswerSerializer
 
 
 
@@ -195,11 +199,11 @@ def get_all_activity(request):
 def sign_up_activity(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        user_id = data.get('user_id')
+        auth0_id = data.get('auth0_id')
         activity_id = data.get('activity_id')
 
         try:
-            user = Members.objects.get(userID=user_id)
+            user = Members.objects.get(auth0ID=auth0_id)
             activity = Activity.objects.get(activityID=activity_id)
         except (Members.DoesNotExist, Activity.DoesNotExist):
             return Response({'error': 'User or Activity does not exist'}, status=404)
@@ -218,37 +222,9 @@ def sign_up_activity(request):
         }, status=201)
     else:
         return Response({'error': 'Invalid request method'})
+    
 
-#signs up for an activity
-@api_view(['POST'])
-def sign_up_activity(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        user_id = data.get('user_id')
-        activity_id = data.get('activity_id')
-
-        try:
-            user = Members.objects.get(userID=user_id)
-            activity = Activity.objects.get(activityID=activity_id)
-        except (Members.DoesNotExist, Activity.DoesNotExist):
-            return Response({'error': 'User or Activity does not exist'}, status=404)
-
-        if ActivitySignup.objects.filter(userID=user, activityID=activity).exists():
-            return Response({'message': 'User already signed up for this activity'}, status=400)
-
-        signup = ActivitySignup(userID=user, activityID=activity)
-        signup.save()
-
-
-        activity_serializer = ActivitySerializer(activity)
-
-        return Response({
-            'message': 'User signed up for the activity successfully',
-            'activity': activity_serializer.data  
-        }, status=201)
-    else:
-        return Response({'error': 'Invalid request method'})
-
+# Get one specific activity
 @api_view(['GET'])
 def get_activity_details(request, activity_id):
     try:
@@ -416,6 +392,7 @@ def register_user(request):
     else:
         return Response({'error': 'Invalid request method'})
     
+
 @api_view(['GET'])
 def get_members_today(request):
     today = datetime.today()
@@ -430,6 +407,7 @@ def get_members_today(request):
     
     return Response(members_present)
 
+
 @api_view(['GET'])
 def get_members_for_date(request, one_date):
     try:
@@ -443,6 +421,7 @@ def get_members_for_date(request, one_date):
     
     return Response(members_present)
 
+
 @api_view(['GET'])
 def get_visit_numbers(request):
     try:
@@ -451,6 +430,7 @@ def get_visit_numbers(request):
         return Response({'error':'No dates exist'}, status=404)
     
     return Response(dates)
+
 
 @api_view(['GET'])
 def get_ban_expiry(request, user_id):
@@ -461,6 +441,7 @@ def get_ban_expiry(request, user_id):
     else:
         return Response({'error': 'member not banned'})
     
+
 # adds a new activity  
 @api_view(['POST'])
 @csrf_exempt
@@ -531,14 +512,12 @@ def adjust_member_points_total(request, user_id):
     return Response(serializer.data)
 
 
+#------------------------------------------------------------------------------------------------------
+# Suggestions
+
 # Lets a user create a new suggestion
 @api_view(['POST'])
-def create_suggestion(request, user_id):
-    try:
-        member = Members.objects.get(userID=user_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
+def create_suggestion(request):
     if request.method == 'POST':
         serializer = SuggestionBoxSerializer(data=request.data)
         
@@ -568,15 +547,17 @@ def delete_suggestion(request, suggestion_id):
     except SuggestionBox.DoesNotExist:
         return Response({"error": "Suggestion not found"}, status=404)
 
-    
+#------------------------------------------------------------------------------------------------------
+
+
 # Duplicate Code
 #-------------------------------------------------------------------------------------------------------
 
 # Upload member profile picture
 @api_view(['PATCH'])
-def upload_member_profile_pic(request, user_id):
+def upload_member_profile_pic(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -634,6 +615,8 @@ def upload_user_certificate(request, user_id):
         
 #-------------------------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------------------------
+# Levels
 
 # Get all user levels
 @api_view(['GET'])
@@ -684,6 +667,8 @@ def edit_level(request, level_id):
             return Response({'message': 'Level updated successfully'}, status=200)
         return Response(serializer.errors, status=400)
     
+#-------------------------------------------------------------------------------------------------------------------------------
+
 # get messages sent from a specific employee
 @api_view(['GET'])
 def get_sent_messages(request, sender_id):
@@ -695,6 +680,122 @@ def get_sent_messages(request, sender_id):
         return Response({'error': 'No messages found for the sender'}, status=404)
     
 
+#-------------------------------------------------------------------------------------------------------------------------------
+# Handling Polls
+
+# Create a question and corresponding possible answers
+@api_view(['POST'])
+def create_question_with_answers(request):
+    serializer = PollQuestionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Question and answers successfully created.", "data": serializer.data}, status=201)
+    return Response({"message": "Could not create question."}, status=400)
+
+
+# Create the ability for a member to answer a question
+@api_view(['POST'])
+def submit_user_response(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+
+    # Extract question and answer from request data
+    question_id = request.data.get('question')
+    answer_id = request.data.get('answer')
+
+    # Check if the user has already answered the question
+    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
+        return Response({"error": "User has already answered this question"}, status=400)
+
+    # Create MemberAnswer object
+    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
+    member_answer.save()
+
+    # Serialize the data
+    serializer = MemberAnswerSerializer(member_answer)
+
+    return Response({"message": "User response submitted successfully.", "data": serializer.data}, status=201)
+
+
+# Gets all anwesers and correspoinding answer alternatives
+@api_view(['GET'])
+def get_all_questions_with_answers(request):
+    questions = PollQuestion.objects.all()
+    serialized_data = []
+
+    for question in questions:
+        serialized_question = PollQuestionSerializer(question).data
+        serialized_question['answers'] = [answer.answer for answer in question.answers.all()]
+        serialized_data.append(serialized_question)
+
+    return Response(serialized_data, status=200)
+
+
+# Gets the number of answers for each alternative answer for a specific question
+@api_view(['GET'])
+def get_answer_counts_for_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Retrieve all answers for the given question along with their counts
+    answer_counts = {}
+    for answer in question.answers.all():
+        count = answer.memberanswer_set.count()
+        answer_counts[answer.answer] = count
+
+    # Return response with serialized question and answer counts
+    return Response({
+        "message": "Answer counts retrieved successfully",
+        "question": question.question,  # Manually serialize the question
+        "answer_counts": answer_counts
+    }, status=200)
+
+
+# Deletes a specific question
+@api_view(['DELETE'])
+def delete_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Delete the question
+    question.delete()
+
+    return Response({"message": "Question deleted successfully"}, status=204)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+
+# Checks if the user is fully registered
+@api_view(['GET'])
+def check_user_registration_status(request):
+    if request.method == 'GET':
+        sub = request.GET.get('sub')  # Sub passed as a query param (registration_status/?sub=your_sub_value)
+        
+        if not sub:
+            return Response({'error': 'Auth0 ID (sub) not provided'}, status=400)
+        
+        try:
+            # Query the database to get the user by Auth0 ID (sub)
+            user = Members.objects.get(auth0ID=sub)
+            
+            # Check if any required field is null
+            if (not user.first_name or not user.last_name or not user.birthdate or
+                not user.phone_number or not user.gender):
+                return Response({'registered': False}, status=200)
+            
+            # All required fields are present and age is valid
+            return Response({'registered': True}, status=200)
+        
+        except Members.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+    
+    else:
+        return Response({'error': 'Method not allowed'}, status=405)
 @api_view(['POST'])
 def send_message(request):
     if request.method == 'POST':
