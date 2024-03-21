@@ -175,6 +175,7 @@ def get_all_activity(request):
         dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
 
         activity_info = {
+            'activity_id': activity.activityID,
             'title': activity.title,
             'description': activity.description,
             'dates': dates_list,
@@ -692,4 +693,36 @@ def get_sent_messages(request, sender_id):
         return Response(serializer.data)
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
+    
 
+@api_view(['POST'])
+def send_message(request):
+    if request.method == 'POST':
+      
+        data = request.data
+        sender_id = data.get('sender_id')
+        recipient_id = data.get('recipient_id')
+        subject = data.get('subject')
+        body = data.get('body')
+
+        try:
+         
+            sender = Employee.objects.get(employeeID=sender_id)
+            recipient = Members.objects.get(userID=recipient_id)
+        except (Employee.DoesNotExist, Members.DoesNotExist):
+            return Response({'error': 'Sender or recipient does not exist'}, status=404)
+
+       
+        message = Message.objects.create(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            body=body
+        )
+
+        # Serialize the message data
+        serializer = MessageSerializer(message)
+
+        return Response(serializer.data, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
