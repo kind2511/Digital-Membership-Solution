@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from datetime import date, datetime, timedelta
 from .models import Members
+from .models import Employee
 from .models import MemberDates
 from .models import Activity
 from .models import ActivityDate
@@ -178,6 +179,7 @@ def get_all_activity(request):
         dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
 
         activity_info = {
+            'activity_id': activity.activityID,
             'title': activity.title,
             'description': activity.description,
             'dates': dates_list,
@@ -429,6 +431,78 @@ def get_visit_numbers(request):
     
     return Response(dates)
 
+@api_view(['GET'])
+def get_visit_by_gender(request):
+    try:
+        dates = MemberDates.objects.all()
+    except:
+        return Response({'error':'No dates exist'}, status=404)
+    
+
+    response_data = []
+
+    for date in dates:
+        male = 0
+        female = 0
+        non_binary = 0
+        pref_not_say = 0
+
+        gender = date.userID.gender
+
+        match gender:
+            case 'gutt':
+                male += 1
+            case 'jente':
+                female += 1
+            case 'ikke-binær':
+                non_binary += 1
+            case 'vil ikke si':
+                pref_not_say += 1
+
+        gender_data = {
+            'date':date.date,
+            'gutter':male,
+            'jenter':female,
+            'ikke-binære':non_binary,
+            'vil ikke si':pref_not_say
+        }
+        response_data.append(gender_data)
+    
+    return Response(response_data)
+
+@api_view(['GET'])
+def get_visit_by_gender_one_day(request, one_date):
+    try:
+        current_date = MemberDates.objects.filter(date=one_date)
+    except:
+        return Response({'error':'No dates exist'},status=404)
+    
+    male = 0
+    female = 0
+    non_binary = 0
+    pref_not_say = 0
+
+    for users in current_date:
+        gender = users.userID.gender
+
+        match gender:
+            case 'gutt':
+                male += 1
+            case 'jente':
+                female += 1
+            case 'ikke-binær':
+                non_binary += 1
+            case 'vil ikke si':
+                pref_not_say += 1
+
+    gender_data = {
+        'gutter':male,
+        'jenter':female,
+        'ikke-binære':non_binary,
+        'vil ikke si':pref_not_say
+    }
+    
+    return Response(gender_data)
 
 @api_view(['GET'])
 def get_ban_expiry(request, user_id):
@@ -676,7 +750,7 @@ def get_sent_messages(request, sender_id):
         return Response(serializer.data)
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
-
+    
 
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
@@ -804,3 +878,34 @@ def check_user_registration_status(request):
     
     else:
         return Response({'error': 'Method not allowed'}, status=405)
+@api_view(['POST'])
+def send_message(request):
+    if request.method == 'POST':
+      
+        data = request.data
+        sender_id = data.get('sender_id')
+        recipient_id = data.get('recipient_id')
+        subject = data.get('subject')
+        body = data.get('body')
+
+        try:
+         
+            sender = Employee.objects.get(employeeID=sender_id)
+            recipient = Members.objects.get(userID=recipient_id)
+        except (Employee.DoesNotExist, Members.DoesNotExist):
+            return Response({'error': 'Sender or recipient does not exist'}, status=404)
+
+       
+        message = Message.objects.create(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            body=body
+        )
+
+        # Serialize the message data
+        serializer = MessageSerializer(message)
+
+        return Response(serializer.data, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
