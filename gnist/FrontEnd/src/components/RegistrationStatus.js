@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 
 function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
   const baseApiUrl = 'http://localhost:8000';
+
+  useEffect(() => {
+    // Fetch the registration status from localStorage on component mount
+    const storedRegistrationStatus = localStorage.getItem('isRegistered') === 'true';
+    setIsRegistered(storedRegistrationStatus);
+  }, [setIsRegistered]);
 
   const toggleRegistration = async () => {
     // Ask for confirmation before toggling registration status
@@ -11,17 +17,15 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
       : "Er du sikker på at du vil registrere deg?";
 
     if (window.confirm(confirmMessage)) {
-      const newIsRegistered = !isRegistered;
-      setIsRegistered(newIsRegistered);
-
       const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
 
       try {
-        await axios.get(endpoint);
-        console.log(newIsRegistered ? 'User registered.' : 'User unregistered.');
+        await axios.get(endpoint); 
+        setIsRegistered(!isRegistered);
+        localStorage.setItem('isRegistered', !isRegistered);
+        console.log(!isRegistered ? 'User registered.' : 'User unregistered.');
       } catch (error) {
         console.error("Error toggling registration:", error.response || error);
-        setIsRegistered(isRegistered);
       }
     }
   };
@@ -38,4 +42,5 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
     </div>
   );
 }
+
 export default RegistrationStatus;
