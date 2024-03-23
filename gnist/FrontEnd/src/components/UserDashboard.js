@@ -53,15 +53,7 @@ function UserDashboard() {
         return (
           <div className="profile-content">
             <div className="date-block">Dato: {date}</div>
-            <div className="registration-status" onClick={toggleRegistration}>
-              <input
-                type="checkbox"
-                checked={isRegistered}
-                onChange={toggleRegistration}
-                className="register-checkbox"
-              />
-              Registrer
-            </div>
+            <RegistrationStatus isRegistered={isRegistered} toggleRegistration={toggleRegistration} />
             <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
             <div className="user-info">
               <div className="user-name">Navn: {firstName.toUpperCase()}</div>
@@ -77,7 +69,7 @@ function UserDashboard() {
         return <div>Vennligst velg en element fra navigasjonen</div>;
     }
   };
-
+  
   return (
     <div className="dashboard-container">
       <div className="navbar">
@@ -93,6 +85,7 @@ function UserDashboard() {
       </div>
     </div>
   );
+  
 }
 
 export default UserDashboard;
