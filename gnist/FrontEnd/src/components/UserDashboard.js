@@ -4,7 +4,7 @@ import axios from 'axios';
 import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
-import UserProfilePicture from './UserProfilePicture'; 
+import UserProfilePicture from './UserProfilePicture';
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
@@ -13,28 +13,30 @@ function UserDashboard() {
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
   const [firstName, setFirstName] = useState('');
   const [level, setLevel] = useState(0);
+  const baseApiUrl = 'http://localhost:8000'; // TEST new approach
   const date = new Date().toLocaleDateString();
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (isAuthenticated && user) {
         try {
-          const response = await axios.get(
-            `http://localhost:8000/digital_medlemsordning/get_member/${user.sub}`
-          );
+          const response = await axios.get(`${baseApiUrl}/digital_medlemsordning/get_member/${user.sub}`);
           const memberData = response.data.data.member;
           setFirstName(memberData.first_name);
           setLevel(memberData.level);
-          setProfileImg(memberData.profile_pic);
-          localStorage.setItem('profileImg', memberData.profile_pic);
+          const fullProfilePicUrl = memberData.profile_pic.startsWith('http')
+            ? memberData.profile_pic
+            : `${baseApiUrl}${memberData.profile_pic}`;
+          setProfileImg(fullProfilePicUrl);
+          localStorage.setItem('profileImg', fullProfilePicUrl);
         } catch (error) {
-          console.error("Failed to fetch user data:", error);
+          console.error("Failed to fetch user data:", error.response || error);
         }
       }
     };
-
     fetchUserData();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, baseApiUrl]);
+  
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
