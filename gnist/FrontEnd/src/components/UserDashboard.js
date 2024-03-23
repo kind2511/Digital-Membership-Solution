@@ -43,17 +43,13 @@ function UserDashboard() {
     logout({ returnTo: window.location.origin });
   };
 
-  const toggleRegistration = () => {
-    setIsRegistered(!isRegistered);
-  };
-
-  const renderContent = () => {
+   const renderContent = () => {
     switch (activeNavItem) {
       case 'Profil':
         return (
           <div className="profile-content">
             <div className="date-block">Dato: {date}</div>
-            <RegistrationStatus isRegistered={isRegistered} toggleRegistration={toggleRegistration} />
+            <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
             <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
             <div className="user-info">
               <div className="user-name">Navn: {firstName.toUpperCase()}</div>
