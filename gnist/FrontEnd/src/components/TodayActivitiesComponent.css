@@ -1,0 +1,100 @@
+.today-activities-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  .today-activities-list {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  
+  .today-activity-entry {
+    background-color: #f9f9f9;
+    border: 1px solid #2af506;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 80px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 90%;
+  }
+  
+  .today-activity-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .today-activity-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .today-activity-title {
+    font-weight: bold;
+  }
+  
+  .today-activity-text {
+    font-size: 0.8rem;
+  }
+  
+  .today-details-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+  
+  .today-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: black;
+    border: 1px solid #2af506;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .today-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .today-modal-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: black;
+    color: yellow;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .today-modal-button:hover {
+    background: #ffd700;
+    color: black;
+  }
+  

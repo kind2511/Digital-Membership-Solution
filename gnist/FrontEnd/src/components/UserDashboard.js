@@ -1,4 +1,3 @@
-// UserDashboard.js
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
@@ -7,6 +6,7 @@ import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
 import UserProfilePicture from './UserProfilePicture';
 import RegistrationStatus from './RegistrationStatus';
+import TodayActivitiesComponent from './TodayActivitiesComponent';
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
@@ -47,17 +47,18 @@ function UserDashboard() {
    const renderContent = () => {
     switch (activeNavItem) {
       case 'Profil':
-        return (
-          <div className="profile-content">
-            <div className="date-block">Dato: {date}</div>
-            <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
-            <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
-            <div className="user-info">
-              <div className="user-name">Navn: {firstName.toUpperCase()}</div>
-              <div className="user-level">Nivå: {level}</div>
-            </div>
+      return (
+        <div className="profile-content">
+          <div className="date-block">Dato: {date}</div>
+          <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
+          <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
+          <div className="user-info">
+            <div className="user-name">Navn: {firstName.toUpperCase()}</div>
+            <div className="user-level">Nivå: {level}</div>
           </div>
-        );
+          <TodayActivitiesComponent /> 
+        </div>
+      );
       case 'Program':
         return <ProgramComponent />;
       case 'Meldinger':
