@@ -5,6 +5,7 @@ import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
 import UserProfilePicture from './UserProfilePicture';
+import RegistrationStatus from './RegistrationStatus';
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
