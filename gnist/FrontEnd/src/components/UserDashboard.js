@@ -4,6 +4,7 @@ import axios from 'axios';
 import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
 import MeldingerComponent from './MeldingerComponent';
+import UserProfilePicture from './UserProfilePicture'; 
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
@@ -43,18 +44,6 @@ function UserDashboard() {
     setIsRegistered(!isRegistered);
   };
 
-  const handleProfileImgChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImg(reader.result);
-        localStorage.setItem('profileImg', reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const renderContent = () => {
     switch (activeNavItem) {
       case 'Profil':
@@ -70,20 +59,7 @@ function UserDashboard() {
               />
               Registrer
             </div>
-            <div className="profile-img-container" onClick={() => document.getElementById('profileImgInput').click()}>
-              {profileImg ? (
-                <img src={profileImg} alt="Profile" className="profile-img" />
-              ) : (
-                <div className="profile-img-placeholder">Legg til bilde</div>
-              )}
-              <input
-                id="profileImgInput"
-                type="file"
-                accept="image/*"
-                onChange={handleProfileImgChange}
-                style={{ display: 'none' }}
-              />
-            </div>
+            <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
             <div className="user-info">
               <div className="user-name">Navn: {firstName.toUpperCase()}</div>
               <div className="user-level">Nivå: {level}</div>
