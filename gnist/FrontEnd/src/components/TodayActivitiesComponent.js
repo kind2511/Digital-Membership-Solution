@@ -8,6 +8,7 @@ function TodayActivitiesComponent() {
     const [selectedActivity, setSelectedActivity] = useState(null);
     const [displayedText, setDisplayedText] = useState('');
     const [sentenceIndex, setSentenceIndex] = useState(0);
+    const [todayDate, setTodayDate] = useState(null);
     const baseApiUrl = 'http://127.0.0.1:8000';
 
     useEffect(() => {
@@ -16,6 +17,7 @@ function TodayActivitiesComponent() {
                 const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
                 const data = await response.json();
                 setActivities(data.activities);
+                setTodayDate(data.date);
             } catch (error) {
                 console.error("Failed to fetch today's activities:", error);
             }
@@ -65,7 +67,7 @@ function TodayActivitiesComponent() {
                         <img src={activity.image ? `${baseApiUrl}${activity.image}` : "https://via.placeholder.com/60"} alt={activity.title} className="today-activity-image" />
                         <div className="today-activity-details">
                             <div className="today-activity-title">{activity.title}</div>
-                            <div className="today-activity-date">{activity.date ? `Dato: ${activity.date}` : 'Ingen dato oppgitt'}</div>
+                            <div className="today-activity-date">{todayDate ? `Dato: ${todayDate}` : 'Ingen dato oppgitt'}</div>
                         </div>
                     </div>
                 ))}
