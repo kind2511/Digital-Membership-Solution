@@ -103,3 +103,25 @@
     color: black;
   }
   
+  .promo-sentence-container {
+    height: 50px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevents content from spilling out */
+  }
+  
+  .promo-sentence {
+    font-size: 24px;
+    font-weight: bold;
+    color: black; 
+    margin-bottom: 20px; 
+    opacity: 0;
+    transition: opacity 5s ease-in-out;
+    font-family:fantasy;    
+  }
+  
+  .promo-sentence.visible {
+    opacity: 2;
+  }
+  
