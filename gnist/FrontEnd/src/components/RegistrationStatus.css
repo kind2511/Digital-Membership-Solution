@@ -29,23 +29,39 @@
   border-radius: 10px;
   width: 300px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .registration-modal-content button {
-  padding: 8px 16px;
-  margin: 0 8px;
+  padding: 10px 20px;
   cursor: pointer;
-  background-color: #4caf50;
-  color: white;
+  background-color: black;
+  color: yellow;
   border: none;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .registration-modal-content button:nth-child(2) {
-  background-color: #f44336;
+  background-color: black;
 }
 
 .registration-modal-content button:hover {
   opacity: 0.9;
+}
+.confirmation-message {
+  padding: 5px;
+  margin-top: 10px;
+  background-color: #07940c;  
+  color: white;
+  border-radius: 5px;
+  display: inline-block;  
+  animation: fadein 0.5s ease-in-out;  
+  font-size: 13px;
+}
+
+/* Animation to fade in the confirmation message */
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

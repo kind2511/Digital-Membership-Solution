@@ -4,11 +4,13 @@ import './RegistrationStatus.css';
 
 function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const baseApiUrl = 'http://localhost:8000';
 
   useEffect(() => {
     const storedRegistrationStatus = localStorage.getItem('isRegistered') === 'true';
     setIsRegistered(storedRegistrationStatus);
+    setConfirmationMessage(storedRegistrationStatus ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
   }, [setIsRegistered]);
 
   const handleCheckboxClick = () => {
@@ -19,15 +21,15 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
     if (confirm) {
       const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
       try {
-        await axios.get(endpoint); 
-        setIsRegistered(!isRegistered);
-        localStorage.setItem('isRegistered', !isRegistered);
-        console.log(!isRegistered ? 'User registered.' : 'User unregistered.');
+        await axios.get(endpoint);
+        const newRegistrationStatus = !isRegistered;
+        setIsRegistered(newRegistrationStatus);
+        localStorage.setItem('isRegistered', newRegistrationStatus);
+        setConfirmationMessage(newRegistrationStatus ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
       } catch (error) {
         console.error("Error toggling registration:", error.response || error);
       }
     }
-    
     setShowConfirmModal(false);
   };
 
@@ -49,6 +51,9 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
             <button onClick={() => handleRegistrationChange(false)}>Nei</button>
           </div>
         </div>
+      )}
+      {confirmationMessage && (
+        <div className="confirmation-message">{confirmationMessage}</div>
       )}
     </div>
   );
