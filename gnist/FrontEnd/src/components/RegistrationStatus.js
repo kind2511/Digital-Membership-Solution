@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './RegistrationStatus.css';
 
 function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const baseApiUrl = 'http://localhost:8000';
 
   useEffect(() => {
@@ -9,28 +11,45 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
     setIsRegistered(storedRegistrationStatus);
   }, [setIsRegistered]);
 
-  const toggleRegistration = async () => {
-    const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
+  const handleCheckboxClick = () => {
+    setShowConfirmModal(true);
+  };
 
-    try {
-      await axios.get(endpoint); 
-      setIsRegistered(!isRegistered);
-      localStorage.setItem('isRegistered', !isRegistered);
-      console.log(!isRegistered ? 'User registered.' : 'User unregistered.');
-    } catch (error) {
-      console.error("Error toggling registration:", error.response || error);
+  const handleRegistrationChange = async (confirm) => {
+    if (confirm) {
+      const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
+      try {
+        await axios.get(endpoint); 
+        setIsRegistered(!isRegistered);
+        localStorage.setItem('isRegistered', !isRegistered);
+        console.log(!isRegistered ? 'User registered.' : 'User unregistered.');
+      } catch (error) {
+        console.error("Error toggling registration:", error.response || error);
+      }
     }
+    
+    setShowConfirmModal(false);
   };
 
   return (
-    <div className="registration-status" onClick={toggleRegistration}>
+    <div className="registration-status">
       <input
         type="checkbox"
         checked={isRegistered}
-        onChange={toggleRegistration}
+        onChange={() => {}} 
+        onClick={handleCheckboxClick}
         className="register-checkbox"
       />
       Registrer
+      {showConfirmModal && (
+        <div className="registration-modal-overlay">
+          <div className="registration-modal-content">
+            <p>{isRegistered ? 'Er du sikker på at du vil avregistrere deg?' : 'Er du sikker på at du vil registrere deg?'}</p>
+            <button onClick={() => handleRegistrationChange(true)}>Ja</button>
+            <button onClick={() => handleRegistrationChange(false)}>Nei</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
