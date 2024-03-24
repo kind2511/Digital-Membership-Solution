@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: 400px; 
+  
 }
   
 .today-activities-list {
@@ -11,6 +12,9 @@
   display: flex;
   flex-direction: column;
   align-items: center; 
+  background-color:rgb(212, 149, 3);
+  padding-top: 30px;
+  border-radius: 20px;
 }
 
   
