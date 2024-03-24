@@ -30,32 +30,33 @@ function TodayActivitiesComponent() {
 
     return (
         <div className="today-activities-container">
-            <div className="today-activities-list">
-                {activities.map((activity, index) => (
-                    <div key={index} className="today-activity-entry" onClick={() => handleActivityClick(activity)}>
-                        <img src={activity.image ? `${baseApiUrl}${activity.image}` : "https://via.placeholder.com/60"} alt="Activity" className="today-activity-image" />
-                        <div className="today-activity-details">
-                            <div className="today-activity-title">{activity.title}</div>
-                            <div className="today-activity-date">Dato: {activity.date}</div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {selectedActivity && (
-                <div className="today-details-modal" onClick={handleCloseDetails}>
-                    <div className="today-modal-content" onClick={e => e.stopPropagation()}>
-                        <h2>{selectedActivity.title}</h2>
-                        <p>{selectedActivity.description}</p>
-                        <div className="today-modal-buttons">
-                            <button className="today-modal-button" onClick={handleCloseDetails}>Close</button>
-                            <button className="today-modal-button">Meld på</button>
-                        </div>
-                    </div>
+          <div className="today-activities-list">
+            {activities.map((activity, index) => (
+              <div key={index} className="today-activity-entry" onClick={() => handleActivityClick(activity)}>
+                <img src={activity.image ? `${baseApiUrl}${activity.image}` : "https://via.placeholder.com/60"} alt={activity.title} className="today-activity-image" />
+                <div className="today-activity-details">
+                  <div className="today-activity-title">{activity.title}</div>
+                  <div className="today-activity-date">{activity.date ? `Dato: ${activity.date}` : 'Ingen dato oppgitt'}</div>
                 </div>
-            )}
+              </div>
+            ))}
+          </div>
+      
+          {selectedActivity && (
+            <div className="today-details-modal" onClick={handleCloseDetails}>
+              <div className="today-modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2>{selectedActivity.title}</h2>
+                <p>{selectedActivity.description}</p>
+                <div className="today-modal-buttons">
+                  <button className="today-modal-button" onClick={handleCloseDetails}>Lukk</button>
+                  <button className="today-modal-button">Meld på</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-    );
+      );
+      
 }
 
 export default TodayActivitiesComponent;

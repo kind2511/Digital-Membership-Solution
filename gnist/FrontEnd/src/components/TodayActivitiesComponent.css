@@ -1,29 +1,30 @@
 .today-activities-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 400px; 
+}
   
-  .today-activities-list {
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: -60px;
-  }
+.today-activities-list {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
   
-  .today-activity-entry {
-    background-color: #f9f9f9;
-    border: 1px solid #2af506;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 80px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    width: 90%;
-  }
+.today-activity-entry {
+  background-color: #f9f9f9;
+  border: 1px solid #2af506;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 80px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 90%; 
+}
   
   .today-activity-image {
     width: 60px;
