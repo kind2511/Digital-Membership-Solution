@@ -1,20 +1,52 @@
 .minMening-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;  
-    height: 100vh;  
-  }
-  
-  .divider {
-    width: 90%;
-    border-top: 2px solid #ed1010;  
-    margin-bottom: 20px;  
-  }
-  
-  .title {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 1px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  
+  height: 100vh;
+  padding-top: 100px; 
+}
+
+.divider {
+  width: 90%;
+  border-top: 2px solid #ed1010;
+  margin: 20px 0; 
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px; 
+}
+
+.forslag-form {
+  display: flex;
+  flex-direction: column;
+  width: 80%; 
+  max-width: 500px; 
+}
+
+.forslag-input, .forslag-textarea {
+  margin-bottom: 20px; 
+  padding: 10px; 
+  border-radius: 5px; 
+  border: 1px solid #ccc; 
+}
+
+.forslag-textarea {
+  height: 100px; 
+  resize: vertical; 
+}
+
+.forslag-submit {
+  padding: 10px 20px;
+  background-color: #ed1010;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.forslag-submit:hover {
+  background-color: #d00f0f; 
+}
