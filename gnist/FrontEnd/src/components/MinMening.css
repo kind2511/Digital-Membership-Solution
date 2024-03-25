@@ -39,14 +39,17 @@
 }
 
 .forslag-submit {
-  padding: 10px 20px;
-  background-color: #ed1010;
-  color: white;
+  background-color: black;
+  color: #ffd700;
   border: none;
-  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px;
   cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .forslag-submit:hover {
-  background-color: #d00f0f; 
+  background-color: #efe8bb; 
+  color: black;
 }
