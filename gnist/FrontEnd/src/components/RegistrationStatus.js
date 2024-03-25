@@ -8,10 +8,14 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
   const baseApiUrl = 'http://localhost:8000';
 
   useEffect(() => {
-    const storedRegistrationStatus = localStorage.getItem('isRegistered') === 'true';
-    setIsRegistered(storedRegistrationStatus);
-    setConfirmationMessage(storedRegistrationStatus ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
-  }, [setIsRegistered]);
+    if (userSub) {
+      const storedRegistrationStatus = localStorage.getItem('isRegistered');
+      const isUserRegistered = storedRegistrationStatus ? storedRegistrationStatus === 'true' : false;
+      setIsRegistered(isUserRegistered);
+      setConfirmationMessage(isUserRegistered ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
+    }
+  }, [userSub, setIsRegistered]);
+
 
   const handleCheckboxClick = () => {
     setShowConfirmModal(true);
@@ -38,7 +42,7 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
       <input
         type="checkbox"
         checked={isRegistered}
-        onChange={() => {}} 
+        onChange={() => { }}
         onClick={handleCheckboxClick}
         className="register-checkbox"
       />

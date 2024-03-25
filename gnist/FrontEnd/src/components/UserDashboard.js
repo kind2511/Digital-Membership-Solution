@@ -38,27 +38,30 @@ function UserDashboard() {
     };
     fetchUserData();
   }, [isAuthenticated, user, baseApiUrl]);
-  
+
 
   const handleLogout = () => {
+    localStorage.removeItem('isRegistered');
+    //localStorage.removeItem('profileImg');
+    //localStorage.removeItem('activeNavItem');
     logout({ returnTo: window.location.origin });
   };
 
-   const renderContent = () => {
+  const renderContent = () => {
     switch (activeNavItem) {
       case 'Profil':
-      return (
-        <div className="profile-content">
-          <div className="date-block">Dato: {date}</div>
-          <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
-          <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
-          <div className="user-info">
-            <div className="user-name">Navn: {firstName.toUpperCase()}</div>
-            <div className="user-level">Nivå: {level}</div>
+        return (
+          <div className="profile-content">
+            <div className="date-block">Dato: {date}</div>
+            <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
+            <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
+            <div className="user-info">
+              <div className="user-name">Navn: {firstName.toUpperCase()}</div>
+              <div className="user-level">Nivå: {level}</div>
+            </div>
+            <TodayActivitiesComponent />
           </div>
-          <TodayActivitiesComponent /> 
-        </div>
-      );
+        );
       case 'Program':
         return <ProgramComponent />;
       case 'Meldinger':
@@ -67,7 +70,7 @@ function UserDashboard() {
         return <div>Vennligst velg en element fra navigasjonen</div>;
     }
   };
-  
+
   return (
     <div className="dashboard-container">
       <div className="navbar">
