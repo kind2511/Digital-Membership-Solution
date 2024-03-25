@@ -52,6 +52,13 @@ function TodayActivitiesComponent() {
         };
     }, [displayedText, sentenceIndex]);
 
+    useEffect(() => {
+        if (signupStatus) {
+            console.log(signupStatus);
+        }
+    }, [signupStatus]);
+    
+
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
     };
@@ -79,9 +86,11 @@ function TodayActivitiesComponent() {
         
             if (response.status === 200 || response.status === 201) {
                 setSignupStatus('Du er registrert nå.');
+                console.log(signupStatus)
                 setTimeout(() => {
                     setSignupStatus('');
                     setSelectedActivity(null);
+                    console.log(signupStatus);
                 }, 3000);
             }
         } catch (error) {
