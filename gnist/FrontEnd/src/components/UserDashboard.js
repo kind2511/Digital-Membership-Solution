@@ -72,7 +72,8 @@ function UserDashboard() {
           <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
           <div className={`nav-item ${activeNavItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveNavItem('Meldinger')}>Meldinger</div>
-          <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Logg ut</div>
+          <div className={`nav-item ${activeNavItem === 'MinMening' ? 'active' : ''}`} onClick={() => setActiveNavItem('MinMening')}>Min Mening</div>
+          <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Log Ut</div>
         </div>
       </div>
       <div className="main-content">
