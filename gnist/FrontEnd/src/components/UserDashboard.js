@@ -17,33 +17,27 @@ function UserDashboard() {
   const [level, setLevel] = useState(0);
   const baseApiUrl = 'http://localhost:8000'; // TEST new approach
   const date = new Date().toLocaleDateString();
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // State for controlling the visibility of logout modal
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (isAuthenticated && user) {
-        try {
-          const response = await axios.get(`${baseApiUrl}/digital_medlemsordning/get_member/${user.sub}`);
+    if (isAuthenticated && user) {
+      axios.get(`${baseApiUrl}/digital_medlemsordning/get_member/${user.sub}`)
+        .then(response => {
           const memberData = response.data.data.member;
           setFirstName(memberData.first_name);
           setLevel(memberData.level);
-          const fullProfilePicUrl = memberData.profile_pic.startsWith('http')
-            ? memberData.profile_pic
-            : `${baseApiUrl}${memberData.profile_pic}`;
+          const fullProfilePicUrl = memberData.profile_pic.startsWith('http') ? memberData.profile_pic : `${baseApiUrl}${memberData.profile_pic}`;
           setProfileImg(fullProfilePicUrl);
           localStorage.setItem('profileImg', fullProfilePicUrl);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error.response || error);
-        }
-      }
-    };
-    fetchUserData();
+        })
+        .catch(error => {
+          console.error("Failed to fetch user data:", error);
+        });
+    }
   }, [isAuthenticated, user, baseApiUrl]);
 
-
-  const handleLogout = () => {
+  const handleLogoutConfirmation = () => {
     localStorage.removeItem('isRegistered');
-    //localStorage.removeItem('profileImg');
-    //localStorage.removeItem('activeNavItem');
     logout({ returnTo: window.location.origin });
   };
 
@@ -78,12 +72,23 @@ function UserDashboard() {
           <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
           <div className={`nav-item ${activeNavItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveNavItem('Meldinger')}>Meldinger</div>
-          <div className="nav-item logout-item" onClick={handleLogout}>Logg ut</div>
+          <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Logg ut</div>
         </div>
       </div>
       <div className="main-content">
         {renderContent()}
       </div>
+      {showLogoutModal && (
+        <div className="logout-modal">
+          <div className="logout-modal-content">
+            <p>Er du sikker på at du vil logge ut?</p>
+            <div className="logout-modal-buttons">
+              <button className="logout-confirm-button" onClick={handleLogoutConfirmation}>Ja</button>
+              <button className="logout-confirm-button" onClick={() => setShowLogoutModal(false)}>Nei</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
