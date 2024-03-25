@@ -7,6 +7,7 @@ import MeldingerComponent from './MeldingerComponent';
 import UserProfilePicture from './UserProfilePicture';
 import RegistrationStatus from './RegistrationStatus';
 import TodayActivitiesComponent from './TodayActivitiesComponent';
+import MinMening from './MinMening';
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
@@ -60,6 +61,8 @@ function UserDashboard() {
         return <ProgramComponent />;
       case 'Meldinger':
         return <MeldingerComponent />;
+      case 'MinMening':
+        return <MinMening />;
       default:
         return <div>Vennligst velg en element fra navigasjonen</div>;
     }
