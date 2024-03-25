@@ -55,21 +55,28 @@ function TodayActivitiesComponent() {
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
     };
-
-    const handleSignUp = async (activityId) => {
+    
+    const handleSignUp = async () => {
         if (!isAuthenticated) {
             console.log('User is not authenticated');
             setSignupStatus('Du må være logget inn for å melde på.');
             setTimeout(() => setSignupStatus(''), 3000);
             return;
         }
+        
+        // Check if a selected activity is available
+        if (!selectedActivity) {
+            setSignupStatus('Ingen aktivitet er valgt.');
+            setTimeout(() => setSignupStatus(''), 3000);
+            return;
+        }
     
         try {
-            const response = await axios.post(`${baseApiUrl}/sign_up_activity/`, {
+            const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
                 auth0_id: user.sub, 
-                activity_id: activityId,
+                activity_id: selectedActivity.activity_id, 
             });
-    
+        
             if (response.status === 200 || response.status === 201) {
                 setSignupStatus('Du er registrert nå.');
                 setTimeout(() => {
@@ -85,6 +92,7 @@ function TodayActivitiesComponent() {
             console.error('Failed to sign up for the activity:', error);
         }
     };
+    
     
 
     const handleCloseDetails = () => {

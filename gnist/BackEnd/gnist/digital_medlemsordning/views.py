@@ -156,6 +156,7 @@ def get_activity_today(request):
     for activity_date in activity_dates:
         activity = activity_date.activityID
         activity_info = {
+            'activity_id': activity.activityID,  # I added this :)
             'title': activity.title, 
             'description': activity.description,
             'image': activity.image.url if activity.image else None,
