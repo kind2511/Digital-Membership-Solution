@@ -22,6 +22,11 @@ function ProgramComponent() {
       }
       const data = await response.json();
       setPrograms(data.activities);
+
+      // Save activity IDs to local storage
+    const activityIDs = data.activities.map(activity => activity.activity_id);
+    localStorage.setItem('activityIDs', JSON.stringify(activityIDs));
+    
     } catch (error) {
       console.error(error);
     }
