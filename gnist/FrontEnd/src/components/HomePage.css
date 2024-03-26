@@ -45,12 +45,12 @@
 
 .home-page .right button {
     margin: 10px 20px;
-    padding: 15px 30px;
+    padding: 10px 20px; 
     font-size: 16px;
     border: 2px solid #005A9E;  
     cursor: pointer;
     background-color: #FFFFFF;  
-    width: 200px;
+    width: 180px; 
     text-align: center;
     transition: all 0.3s;  
     color: #005A9E; 
