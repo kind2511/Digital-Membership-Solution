@@ -15,32 +15,33 @@ html, body {
 
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
   align-items: center;
   background-color: #005A9E;
   color: white;
-  padding: 1 20px;
-  width: 100%;
-  font-weight: bold;
+  padding: 10px; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
 
 .navbar-menu {
   display: flex;
   flex-grow: 1;
-  justify-content: space-around;
+  justify-content: space-around; 
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0; 
 }
+
 
 .nav-item {
   cursor: pointer;
   text-align: center;
-  flex-grow: 1;
-  padding: 15px 10px;
+  padding: 10px; 
+  transition: background-color 0.3s;
 }
 
-.nav-item:hover, .nav-item.active, .nav-item.active:hover {
+.nav-item:hover, .nav-item.active {
   background-color: #004080;
   color: #FFFFFF;
 }
@@ -161,4 +162,26 @@ html, body {
 
 .logout-confirm-button:hover {
   background-color: #004080; 
+}
+
+
+
+/* mobile devices */
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: center; 
+  }
+  
+  .navbar-menu {
+    flex-direction: column; 
+  }
+  
+  .nav-item {
+    width: 100%; 
+    padding: 10px 18px; 
+  }
+  
+  .logout-item {
+    padding-top: 15px; 
+  }
 }
