@@ -1,78 +1,73 @@
 .home-page {
     display: flex;
-    height: 100vh; /* Full height */
+    height: 100vh;  
 }
 
-/* Style for the left side of the home page */
 .home-page .left {
     width: 50%;
-    background-color: #ffd700;
+    background-color: #005A9E;  
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Style for the right side of the home page */
 .home-page .right {
     width: 50%;
-    background-color: white;
+    background-color: #FAFAFA;  
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/* Paragraph styling for the sliding sentences */
 .sentence-section p {
     font-size: 25px;
-    color: black;
+    color: #FFFFFF; 
     text-align: center;
-    font-weight: none;
+    font-weight: normal; 
 }
 
 .nav-logo {
     font-family: 'Fredoka One', cursive;
     font-weight: 700;
-    font-size: 29px;
+    font-size: 20px;
     letter-spacing: -2px;
-    color: black;
+    color: #005A9E;
     text-transform: uppercase;
     text-decoration: none;
     display: inline-block;
 }
 
 .nav-logo span {
-    color: #ffd700;
-    text-shadow: 3px 3px 6px rgba(226, 8, 8, 0.2);
+    color: #005A9E;
+    text-shadow: 3px 3px 6px #FFFFFF;
 }
 
 .home-page .right button {
     margin: 10px 20px;
     padding: 15px 30px;
     font-size: 16px;
-    border: none;
+    border: 2px solid #005A9E;  
     cursor: pointer;
-    background-color: black;
+    background-color: #FFFFFF;  
     width: 200px;
     text-align: center;
-    transition: background-color 0.3s;
-    color: #ffd700;
+    transition: all 0.3s;  
+    color: #005A9E; 
 }
 
 .home-page .right button:hover {
-    background-color: #ffd700;
-    color: black;
+    background-color: #005A9E; 
+    color: #FFFFFF; 
 }
 
 .home-page .right button a {
     text-decoration: none;
-    color: #ffd700;
+    color: #005A9E;
 }
 
 .home-page .right button a:hover {
-    text-decoration: none;
-    color: #333;
-    
+    color: #FFFFFF;
 }
 
 .home-page .right .footer-about {
@@ -102,6 +97,5 @@
     margin-left: 26px;
     text-decoration: underline;
     font-size: 12px;
-    opacity: 0.9;
-    
+    opacity: 0.9; 
 }
