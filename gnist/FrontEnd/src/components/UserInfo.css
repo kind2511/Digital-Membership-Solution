@@ -3,19 +3,20 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #111110;
+  background-color: #F4F4F4; 
 }
 
 .userinfo-container {
-  background: #ffd700;
+  background: #FAFAFA; 
   padding: 2em;
   border-radius: 10px;
-  box-shadow: 0 0 15px #ffd700; /* Yellow shadow */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); 
   width: 100%;
   max-width: 300px;
 }
 
 .userinfo-container h2 {
+  color: #005A9E; 
   text-align: center;
   margin-bottom: 18px;
 }
@@ -30,32 +31,32 @@
 .userinfo-container .checkbox-container input {
   margin-bottom: 15px;
   padding: 10px;
-  border: 2px solid #999;
+  border: 1px solid #D9E3F0; 
   border-radius: 4px;
 }
 
 .error-message {
-  color: red; 
+  color: #FF4D4F; 
   margin-bottom: 15px; 
   font-weight: bold;
 }
 
 .userinfo-container .submit-button {
   padding: 10px;
-  background-color: #000; /* Black background */
-  color: #ffd700; /* Yellow text */
+  background-color: #005A9E; 
+  color: #FFFFFF; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
- 
 }
 
 .userinfo-container .submit-button:hover {
-  background-color: #333; /* Darker background on hover */
+  background-color: #004080; 
 }
 
 .userinfo-container input::placeholder,
 .userinfo-container select::placeholder {
+  color: #8898AA; 
   font-weight: bold;
 }
 
@@ -63,10 +64,10 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #ffd700; 
-  color: black; 
+  background-color: #005A9E; 
+  color: #FFFFFF; 
   font-weight: bold;
-  cursor: pointer; 
+  cursor: pointer;
   width: 100px;
   transition: background-color 0.3s;
   padding: 15px 20px;
@@ -74,7 +75,7 @@
 }
 
 .logout-button:hover {
-  background-color: #ebdd91; 
+  background-color: #004080; 
 }
 
 .checkbox-container {
