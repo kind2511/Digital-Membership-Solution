@@ -15,35 +15,54 @@ html, body {
 
 .navbar {
   display: flex;
-  justify-content: space-between; 
+  justify-content: center; 
   align-items: center;
   background-color: #005A9E;
-  color: white;
-  padding: 10px; 
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #FFFFFF;
+  padding: 20px 0; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
 
 .navbar-menu {
   display: flex;
-  flex-grow: 1;
   justify-content: space-around; 
+  align-items: center; 
   list-style: none;
   padding: 0;
-  margin: 0; 
+  margin: 0;
+  width: 100%; 
+  max-width: 1200px; 
 }
-
 
 .nav-item {
   cursor: pointer;
   text-align: center;
-  padding: 10px; 
-  transition: background-color 0.3s;
+  padding: 10px 20px; 
+  transition: color 0.3s; 
+  position: relative; 
 }
 
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #FFFFFF;
+  transition: width 0.3s;
+}
+
+
 .nav-item:hover, .nav-item.active {
-  background-color: #004080;
-  color: #FFFFFF;
+  color: #D9E3F0; 
+}
+
+.nav-item:hover::after, .nav-item.active::after {
+  width: 100%; 
 }
 
 .main-content {
@@ -165,6 +184,14 @@ html, body {
 }
 
 
+.logout-modal.active + .navbar .nav-item {
+  opacity: 0.5;
+}
+
+.logout-modal.active + .navbar .nav-item:hover {
+  color: #FFFFFF;
+  opacity: 1;
+}
 
 /* mobile devices */
 @media (max-width: 768px) {
