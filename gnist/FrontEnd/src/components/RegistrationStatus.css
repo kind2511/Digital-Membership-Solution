@@ -24,41 +24,43 @@
 }
 
 .registration-modal-content {
-  background-color: #ffffff;
+  background-color:  #FFFFFF;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   text-align: center;
   font-weight: bold;
   width: 300px;
+  border: 1px solid #D9E3F0;
 }
 
 .registration-modal-content button {
-  background-color: black;
-  color: #ffd700;
+  background-color: #005A9E;
+  color:  #FFFFFF;
   border: none;
   padding: 10px 20px;
   margin: 10px;
   cursor: pointer;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .registration-modal-content button:nth-child(2) {
-  background-color: black;
+  background-color:  #005A9E;
 }
 
 .registration-modal-content button:hover {
-  background-color: #ffd700; 
+  background-color: #004080;  
+  color: #FFFFFF;
 }
 .confirmation-message {
   padding: 5px;
   margin-top: 10px;
   background-color: #52C41A;  
-  color: white;
+  color:  #FFFFFF;
   border-radius: 5px;
   display: inline-block;  
-  animation: fadein 0.5s ease-in-out;  
+  animation: fadein 0.5s ease-in-out; 
   font-size: 13px;
 }
 
