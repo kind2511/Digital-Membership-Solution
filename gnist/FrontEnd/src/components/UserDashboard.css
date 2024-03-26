@@ -17,7 +17,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: black;
+  background-color: #005A9E;
   color: white;
   padding: 1 20px;
   width: 100%;
@@ -41,15 +41,15 @@ html, body {
 }
 
 .nav-item:hover, .nav-item.active, .nav-item.active:hover {
-  background-color: #ee0707;
-  color: black;
+  background-color: #004080;
+  color: #FFFFFF;
 }
 
 .main-content {
   flex-grow: 1;
   padding: 20px;
   position: relative;
-  background-color: #ffd700;
+  background-color: #FAFAFA;
   overflow: auto;
 }
 
@@ -134,7 +134,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0,0,0,0.5);
+  background-color: #FFFFFF;
   z-index: 2000; 
 }
 
@@ -149,8 +149,8 @@ html, body {
 }
 
 .logout-confirm-button {
-  background-color: black;
-  color: #ffd700;
+  background-color: #005A9E;
+  color: #FFFFFF;
   border: none;
   padding: 10px 20px;
   margin: 10px;
@@ -160,6 +160,5 @@ html, body {
 }
 
 .logout-confirm-button:hover {
-  background-color: #ffd700; 
-  color: black;
+  background-color: #004080; 
 }
