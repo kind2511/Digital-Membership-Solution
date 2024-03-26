@@ -31,6 +31,7 @@
   align-items: center;
   cursor: pointer;
   width: 90%; 
+  color: #32325D;
 }
   
   .today-activity-image {
@@ -68,7 +69,7 @@
   }
   
   .today-modal-content {
-    background: #fff;
+    background: #FFFFFF;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -76,8 +77,8 @@
     max-width: 500px;
     max-height: 80vh;
     overflow-y: auto;
-    color: black;
-    border: 1px solid #2af506;
+    color: #32325D;
+    border: 1px solid #D9E3F0;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -94,16 +95,16 @@
   .today-modal-button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: black;
-    color: yellow;
+    background-color: #005A9E;
+    color: #FFFFFF;
     border: none;
     border-radius: 5px;
     margin-right: 10px;
   }
   
   .today-modal-button:hover {
-    background: #ffd700;
-    color: black;
+    background: #004080;
+    color: #FFFFFF;
   }
   
   .promo-sentence-container {
@@ -112,6 +113,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden; /* Prevents content from spilling out */
+    color:#32325D;
   }
   
   .promo-sentence {

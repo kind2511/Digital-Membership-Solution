@@ -47,12 +47,12 @@ function UserDashboard() {
       case 'Profil':
         return (
           <div className="profile-content">
-            <div className="date-block">Dato: {date}</div>
+            <div className="date-block">{date}</div>
             <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
             <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
             <div className="user-info">
-              <div className="user-name">Navn: {firstName.toUpperCase()}</div>
-              <div className="user-level">Nivå: {level}</div>
+              <div className="user-name">{firstName.toUpperCase()}</div>
+              <div className="user-level">{level}</div>
             </div>
             <TodayActivitiesComponent />
           </div>
