@@ -1,41 +1,49 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; 
+}
+
 .minMening-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;  
-  height: 100vh;
-  padding-top: 100px; 
+  justify-content: center; 
+  padding: 20px 0;
+  height: 50vh; 
 }
 
 .divider {
   width: 90%;
   border-top: 1px solid #D9E3F0;
-  margin: 20px 0; 
+  margin: 20px 0;
+  margin-top: 500px;
 }
 
 .title {
   text-align: center;
   font-size: 18px;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .forslag-form {
+  margin-top: 60px; 
   display: flex;
   flex-direction: column;
-  width: 80%; 
-  max-width: 500px; 
+  width: 80%;
+  max-width: 500px;
 }
 
 .forslag-input, .forslag-textarea {
-  margin-bottom: 20px; 
-  padding: 10px; 
-  border-radius: 5px; 
-  border: 1px solid #ccc; 
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .forslag-textarea {
-  height: 100px; 
-  resize: vertical; 
+  height: 100px;
+  resize: vertical;
 }
 
 .forslag-submit {
@@ -50,6 +58,6 @@
 }
 
 .forslag-submit:hover {
-  background-color: #004080;  
-  color: #FFFFFF;  
+  background-color: #004080;
+  color: #FFFFFF;
 }
