@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AnswerQuestions from "./AnswerQuestions";
 import './MinMening.css';
 
 function MinMening() {
@@ -13,7 +14,7 @@ function MinMening() {
       try {
         const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions');
         const data = await response.json();
-        setQuestions(data.questions); 
+        setQuestions(data.questions);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -51,7 +52,7 @@ function MinMening() {
         console.error("Error sending suggestion:", error);
       }
     }
-    setShowConfirmModal(false); 
+    setShowConfirmModal(false);
   };
 
   return (
@@ -102,8 +103,10 @@ function MinMening() {
         />
         <button type="button" className="forslag-submit" onClick={() => setShowConfirmModal(true)}>Send</button>
       </form>
+      <AnswerQuestions />
     </div>
   );
+
 }
 
 export default MinMening;
