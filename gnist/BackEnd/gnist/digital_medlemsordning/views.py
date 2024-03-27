@@ -1021,3 +1021,10 @@ def send_message(request):
         return Response(serializer.data, status=201)
     else:
         return Response({'error': 'Invalid request method'})
+    
+
+@api_view(['GET'])
+def get_all_unverified_members(request):
+    unverified_members = Members.objects.filter(verified=False)
+    serializer = MembersSerializer(unverified_members, many=True)
+    return Response(serializer.data)

@@ -56,13 +56,22 @@ urlpatterns = [
     # Unbans a member
     path('unban_member/<str:auth0_id>/', views.unban_member, name='unban_member'),
 
+
     path('alter_member_info/<int:user_id>/', views.alter_member_info, name='alter_member_info'),
     path('adjust_member_points_total/<int:user_id>/', views.adjust_member_points_total, name='adjust_member_points_total'),
+
+
+    # Lets a user upload a profile picture
+    path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
+
+    # Lets a member create and send in a suggestion
     path('create_suggestion/', views.create_suggestion, name='create_suggestion'),
+
     path('get_all_suggestions/', views.get_all_suggestions, name='get_all_suggestions'),
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
-    path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
+
     path('add_user_certificate/<str:auth0_id>/', views.upload_user_certificate, name="add_user_certificate"),
+
     path('create_level/', views.create_level, name='create_level'),
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
@@ -88,4 +97,9 @@ urlpatterns = [
     # Messages
     path('send_message/', views.send_message, name='send_message'),
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
+
+    
+
+    # Get all unverified members
+    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members')
 ]
