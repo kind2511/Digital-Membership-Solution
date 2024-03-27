@@ -4,7 +4,7 @@ import './MinMening.css';
 function MinMening() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [questions, setQuestions] = useState([]); 
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -20,9 +20,33 @@ function MinMening() {
     fetchQuestions();
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ title, description });
+    const requestBody = {
+      title: title,
+      description: description
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/create_suggestion/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Suggestion sent successfully:', data);
+      setTitle('');
+      setDescription('');
+
+    } catch (error) {
+      console.error("Error sending suggestion:", error);
+    }
   };
 
   return (
