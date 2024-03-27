@@ -1087,3 +1087,18 @@ def add_member_info(request, auth0_id):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     
+
+# Register an employee
+@api_view(['POST'])
+def register_employee(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        auth0id = data['auth0id']
+        employeeName = data['employeeName']
+
+        new_employee = Employee(auth0ID=auth0id, employee_Name=employeeName)  
+        new_employee.save()
+        return Response({'message': 'Added new employee'})
+    else:
+        return Response({'error': 'Invalid request method'})

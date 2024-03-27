@@ -112,7 +112,8 @@ urlpatterns = [
     path('send_message/', views.send_message, name='send_message'),
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 
-
+    # Register a new employee
+    path('register_employee/', views.register_employee, name='register_employee'),
 
     # Get all unverified members
     path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members'),
