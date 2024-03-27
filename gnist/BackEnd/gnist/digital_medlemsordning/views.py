@@ -1023,8 +1023,25 @@ def send_message(request):
         return Response({'error': 'Invalid request method'})
     
 
+# Retrieves all unverfieid members
 @api_view(['GET'])
 def get_all_unverified_members(request):
     unverified_members = Members.objects.filter(verified=False)
     serializer = MembersSerializer(unverified_members, many=True)
     return Response(serializer.data)
+
+
+# Verifies a member
+@api_view(['PUT'])
+def verify_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(verified=True)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

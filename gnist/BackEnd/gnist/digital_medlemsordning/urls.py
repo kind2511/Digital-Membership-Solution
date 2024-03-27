@@ -67,14 +67,24 @@ urlpatterns = [
     # Lets a member create and send in a suggestion
     path('create_suggestion/', views.create_suggestion, name='create_suggestion'),
 
+    # Gets all the suggestions
     path('get_all_suggestions/', views.get_all_suggestions, name='get_all_suggestions'),
+
+    # Deletes a spescific suggestion
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
 
     path('add_user_certificate/<str:auth0_id>/', views.upload_user_certificate, name="add_user_certificate"),
 
+    # Creates a new level
     path('create_level/', views.create_level, name='create_level'),
+
+    # Gets all existing levels (names and points)
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
+
+    # Deletes a level
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
+
+    #Edits a level
     path('edit_level/<int:level_id>/', views.edit_level, name='edit_level'),
     
     
@@ -98,8 +108,9 @@ urlpatterns = [
     path('send_message/', views.send_message, name='send_message'),
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 
-    
+
 
     # Get all unverified members
-    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members')
+    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members'),
+    path('verify_member/<str:auth0_id>/', views.verify_member, name='verify_member')
 ]
