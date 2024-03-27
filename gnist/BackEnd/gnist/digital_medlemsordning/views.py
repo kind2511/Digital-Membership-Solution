@@ -1045,3 +1045,28 @@ def verify_member(request, auth0_id):
             serializer.save(verified=True)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+
+# Get all members with specific info
+@api_view(['GET'])
+def members_with_info(request):
+    members_with_info = Members.objects.exclude(info="")
+    serializer = MembersSerializer(members_with_info, many=True)
+    return Response(serializer.data)
+
+
+# Removes specific info from a user
+@api_view(['PUT'])
+def remove_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['info'] = ""
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
