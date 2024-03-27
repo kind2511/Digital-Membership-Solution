@@ -147,54 +147,54 @@ def get_one_member_data(request, auth0_id):
     }
     return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
 
-# Gets activity today
-@api_view(['GET'])
-def get_activity_today(request):
-    today_date = date.today()
+# # Gets activity today
+# @api_view(['GET'])
+# def get_activity_today(request):
+#     today_date = date.today()
 
-    # Filter activity dates happening on the same day
-    activity_dates = ActivityDate.objects.filter(date=today_date)
+#     # Filter activity dates happening on the same day
+#     activity_dates = ActivityDate.objects.filter(date=today_date)
 
-    activity_data = []
-    for activity_date in activity_dates:
-        activity = activity_date.activityID
-        activity_info = {
-            'title': activity.title, 
-            'description': activity.description,
-            'image': activity.image.url if activity.image else None,
-        }
-        activity_data.append(activity_info)
+#     activity_data = []
+#     for activity_date in activity_dates:
+#         activity = activity_date.activityID
+#         activity_info = {
+#             'title': activity.title, 
+#             'description': activity.description,
+#             'image': activity.image.url if activity.image else None,
+#         }
+#         activity_data.append(activity_info)
 
-    response_data = {
-        'date': today_date.strftime("%Y-%m-%d"),
-        'activities': activity_data
-    }
-    return Response(response_data)
+#     response_data = {
+#         'date': today_date.strftime("%Y-%m-%d"),
+#         'activities': activity_data
+#     }
+#     return Response(response_data)
 
 #lists all activity
-@api_view(['GET'])
-def get_all_activity(request):
-    activities = Activity.objects.all()
+# @api_view(['GET'])
+# def get_all_activity(request):
+#     activities = Activity.objects.all()
 
-    activity_data = []
-    for activity in activities:
-        activity_dates = ActivityDate.objects.filter(activityID=activity)
-        dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
+#     activity_data = []
+#     for activity in activities:
+#         activity_dates = ActivityDate.objects.filter(activityID=activity)
+#         dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
 
-        activity_info = {
-            'activity_id': activity.activityID,
-            'title': activity.title,
-            'description': activity.description,
-            'dates': dates_list,
-            'image': activity.image.url,
-        }
+#         activity_info = {
+#             'activity_id': activity.activityID,
+#             'title': activity.title,
+#             'description': activity.description,
+#             'dates': dates_list,
+#             'image': activity.image.url,
+#         }
 
-        activity_data.append(activity_info)
+#         activity_data.append(activity_info)
 
-    response_data = {
-        'activities': activity_data
-    }
-    return Response(response_data)
+#     response_data = {
+#         'activities': activity_data
+#     }
+#     return Response(response_data)
 
 #signs up for an activity
 @api_view(['POST'])
@@ -241,32 +241,32 @@ def get_activity_details(request, activity_id):
     return Response(serializer.data)
 
 # Get activity a specific member has signed up for
-@api_view(['GET'])
-def get_member_activity(request, user_id):
-    try:
-        activity_signups = ActivitySignup.objects.filter(userID=user_id)
+# @api_view(['GET'])
+# def get_member_activity(request, user_id):
+#     try:
+#         activity_signups = ActivitySignup.objects.filter(userID=user_id)
 
-        activity_data = []
-        for signup in activity_signups:
-            activity_info = {
-                'title': signup.activityID.title, 
-                'description': signup.activityID.description,
-                'dates': [],  
-            }
+#         activity_data = []
+#         for signup in activity_signups:
+#             activity_info = {
+#                 'title': signup.activityID.title, 
+#                 'description': signup.activityID.description,
+#                 'dates': [],  
+#             }
 
-            activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
+#             activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
 
-            for date in activity_dates:
-                activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
+#             for date in activity_dates:
+#                 activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
 
-            activity_data.append(activity_info)
+#             activity_data.append(activity_info)
 
-        response_data = {
-            'activities': activity_data
-        }
-        return Response(response_data)
-    except Members.DoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
+#         response_data = {
+#             'activities': activity_data
+#         }
+#         return Response(response_data)
+#     except Members.DoesNotExist:
+#         return Response({'error': 'User does not exist'}, status=404)
     
 
 # Get signed up members for a specific activity
@@ -564,28 +564,89 @@ def get_visit_by_gender_one_day(request, one_date):
 
 
 # adds a new activity  
+# @api_view(['POST'])
+# @csrf_exempt
+# def create_activity(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+        
+#         activityid = data['activityID'] 
+#         title = data['title']
+#         description = data['description']
+#         date = data['date'] 
+#         image = image['image']
+
+#         new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
+#         new_activity .save()
+
+#         new_activity_date = ActivityDate(activityID=new_activity, date=date)
+#         new_activity_date.save()
+
+#         return Response({'message': 'Activity added successfully'})
+#     else:
+#         return Response({'error': 'Invalid request method'})
+
+
+# Creates a new activity 
 @api_view(['POST'])
-@csrf_exempt
 def create_activity(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        
-        activityid = data['activityID'] 
-        title = data['title']
-        description = data['description']
-        date = data['date'] 
-        image = image['image']
-
-        new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
-        new_activity .save()
-
-        new_activity_date = ActivityDate(activityID=new_activity, date=date)
-        new_activity_date.save()
-
-        return Response({'message': 'Activity added successfully'})
+        serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Activity added successfully'}, status=201)
+        return Response(serializer.errors, status=400)
     else:
-        return Response({'error': 'Invalid request method'})
-    
+        return Response({'error': 'Invalid request method'}, status=405)
+
+
+# Gets all activities
+@api_view(['GET'])
+def get_all_activity(request):
+    if request.method == 'GET':
+        activities = Activity.objects.all()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+
+# Gets todays activity
+@api_view(['GET'])
+def get_activity_today(request):
+    if request.method == 'GET':
+        today = date.today()
+        activities = Activity.objects.filter(date=today)
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+
+# Delete an activity
+@api_view(['DELETE'])
+def delete_activity(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({'error': 'Activity not found'}, status=404)
+
+    if request.method == 'DELETE':
+        activity.delete()
+        return Response({'message': 'Activity deleted successfully'}, status=204)
+
+
+# Get all activities a specific member is signed up to
+@api_view(['GET'])
+def get_member_activities(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            member = Members.objects.get(auth0ID=auth0_id)
+            member_activities = ActivitySignup.objects.filter(userID=member)
+            activity_ids = member_activities.values_list('activityID', flat=True)
+            activities = Activity.objects.filter(activityID__in=activity_ids)
+            serializer = ActivitySerializer(activities, many=True)
+            return Response(serializer.data)
+        except Members.DoesNotExist:
+            return Response({'error': 'Member not found'}, status=404)
+
+
 
 # Gets all info about all members
 @api_view(['GET'])

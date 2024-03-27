@@ -30,7 +30,7 @@ class LevelSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['activityID', 'title', 'description', 'image']     
+        fields = ['activityID', 'title', 'description', 'image', 'date']     
 
 
 class MessageSerializer(serializers.ModelSerializer):
