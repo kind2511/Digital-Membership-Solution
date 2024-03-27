@@ -4,21 +4,34 @@ from django.conf import settings
 
 urlpatterns = [
     path("", views.index, name="index"),
+
+    # Get member data for dashboard for one specific or all members
     path('get_all_members/', views.get_all_member_data, name='all_member_data'),
     path('get_member/<str:auth0_id>/', views.get_one_member_data, name='member_data'),
-    path('ban_member/<int:user_id>/', views.ban_member, name='ban_member'),
-    path('unban_member/<int:user_id>/', views.unban_member, name='unban_member'),
+
     path('get_activity_today/', views.get_activity_today, name='get_activity_today'),
     path('get_all_activity/', views.get_all_activity, name='get_all_activity'),
     path('get_member_activity/<int:user_id>/', views.get_member_activity, name='get_member_activity'),
     path('add_day/<str:auth0_id>/', views.add_day, name='add_day'),
     path('register_user/', views.register_user, name='register_user'),
-    path('get_members_today/', views.get_members_today, name='get_member_today'),
-    path('get_members_for_date/<str:one_date>/', views.get_members_for_date, name='get_members_for_date'),
+
+    # Gets all members who registered their attendance on a specific date
+    path('get_member_attendance/', views.get_member_attendance, name='get_member_today'),
+
+
+
     path('get_visit_numbers/', views.get_visit_numbers, name='get_visit_numbers'),
     path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
     path('get_visit_by_gender_one_day/<str:one_date>/',views.get_visit_by_gender_one_day, name='get_visit_by_gender_one_day'),
-    path('get_ban_expiry/<int:user_id>/', views.get_ban_expiry, name='get_ban_expiry'),
+
+
+    # Gets period of a banned member
+    path('get_ban_period/<str:auth0_id>/', views.get_ban_period, name='get_ban_period'),
+    # Bans a member
+    path('ban_member/<int:user_id>/', views.ban_member, name='ban_member'),
+    # Unbans a member
+    path('unban_member/<str:auth0_id>/', views.unban_member, name='unban_member'),
+
     path('add_activity/', views.add_activity, name='add_activity'),
     path('get_all_members_info/', views.get_all_members_info, name='get_all_members_info'),
     path('alter_member_info/<int:user_id>/', views.alter_member_info, name='alter_member_info'),
