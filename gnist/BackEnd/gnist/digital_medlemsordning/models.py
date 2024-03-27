@@ -9,7 +9,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
-
+    date = models.DateField(null=True)
 
 # The dates of the various activieties
 class ActivityDate(models.Model):
