@@ -53,12 +53,17 @@ urlpatterns = [
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
     
 
-    # Polls
+    # Creates a question and corresponding answers
     path('create_question/', views.create_question_with_answers, name='create_question'),
+    # Lets a member answer a question
     path('submit_response/<str:auth0_id>/', views.submit_user_response, name='submit_response'),
+    # Gets the number of member responses for each answer for a specific question
     path('get_question_responses/<int:question_id>/', views.get_answer_counts_for_question, name='answer_counts_for_question'),
+    # Gets all questions and corresponding anwsers
     path('get_all_questions/', views.get_all_questions_with_answers, name='get_all_questions'),
+    # Deletes a question and all corresponing answers
     path('delete_question/<int:question_id>/', views.delete_question, name='delete_question'),
+
 
     #Check Registration status
     path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status'),
