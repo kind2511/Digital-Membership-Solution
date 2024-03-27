@@ -22,9 +22,9 @@ class ActivityDate(models.Model):
 # Employees
 class Employee(models.Model):
     employeeID = models.AutoField(primary_key=True, unique=True)
-    auth0ID = models.CharField(max_length=45, unique=True, null=True)
+    auth0ID = models.CharField(max_length=45, null=True)
     employee_Name = models.CharField(max_length=100)
-    role = models.CharField(max_length=20, null=False)
+    role = models.CharField(max_length=20, default="employee", null=False)
 
 
 # Members
