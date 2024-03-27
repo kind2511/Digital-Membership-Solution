@@ -22,7 +22,10 @@ urlpatterns = [
     path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
 
+    # Register attendence for member
     path('add_day/<str:auth0_id>/', views.add_day, name='add_day'),
+
+    # Create a new member
     path('register_user/', views.register_user, name='register_user'),
 
     # Gets all members who registered their attendance on a specific date
@@ -45,12 +48,12 @@ urlpatterns = [
     path('get_all_suggestions/', views.get_all_suggestions, name='get_all_suggestions'),
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
     path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
-    path('add_user_certificate/<int:user_id>/', views.upload_user_certificate, name="add_user_certificate"),
+    path('add_user_certificate/<str:auth0_id>/', views.upload_user_certificate, name="add_user_certificate"),
     path('create_level/', views.create_level, name='create_level'),
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
     path('edit_level/<int:level_id>/', views.edit_level, name='edit_level'),
-    path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
+    
     
 
     # Creates a question and corresponding answers
@@ -65,8 +68,10 @@ urlpatterns = [
     path('delete_question/<int:question_id>/', views.delete_question, name='delete_question'),
 
 
-    #Check Registration status
+    # Check Registration status
     path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status'),
 
+    # Messages
     path('send_message/', views.send_message, name='send_message'),
+    path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 ]

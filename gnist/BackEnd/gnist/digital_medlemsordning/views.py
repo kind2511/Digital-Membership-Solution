@@ -716,9 +716,9 @@ def upload_activity_image(request, activity_id):
 
 # Upload member certificate
 @api_view(['PATCH'])
-def upload_user_certificate(request, user_id):
+def upload_user_certificate(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
