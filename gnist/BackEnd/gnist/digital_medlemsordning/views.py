@@ -656,30 +656,30 @@ def get_all_members_info(request):
     return Response(serializer.data)
     
 
-# Lets a member add additional info about a specific memeber
-@api_view(['PUT'])
-def alter_member_info(request, user_id):
-        try:
-            member = Members.objects.get(userID=user_id)
-        except Members.DoesNotExist:
-             return Response({"error": "Member not found"}, status=404)
+# # Lets a member add additional info about a specific memeber
+# @api_view(['PUT'])
+# def alter_member_info(request, user_id):
+#         try:
+#             member = Members.objects.get(userID=user_id)
+#         except Members.DoesNotExist:
+#              return Response({"error": "Member not found"}, status=404)
         
-        new_info = request.data.get("info")
-        if new_info is None:
-            return Response({"error": "Missing 'info' field in request data"}, status=400)
+#         new_info = request.data.get("info")
+#         if new_info is None:
+#             return Response({"error": "Missing 'info' field in request data"}, status=400)
         
-        member.info = new_info
-        member.save()
+#         member.info = new_info
+#         member.save()
 
-        serializer = MembersSerializer(member)
-        return Response(serializer.data)
+#         serializer = MembersSerializer(member)
+#         return Response(serializer.data)
         
 
 # Lets an employee adjust the members points total up or down
 @api_view(['PUT'])
-def adjust_member_points_total(request, user_id):
+def adjust_member_points_total(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -1070,3 +1070,20 @@ def remove_member_info(request, auth0_id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+
+# Add info to a specific user
+@api_view(['PUT'])
+def add_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    

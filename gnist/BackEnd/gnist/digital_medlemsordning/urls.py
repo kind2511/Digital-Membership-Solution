@@ -56,9 +56,10 @@ urlpatterns = [
     # Unbans a member
     path('unban_member/<str:auth0_id>/', views.unban_member, name='unban_member'),
 
+    # Adds info about a specific user
+    path('add_member_info/<str:auth0_id>/', views.add_member_info, name='add_member_info'),
 
-    path('alter_member_info/<int:user_id>/', views.alter_member_info, name='alter_member_info'),
-    path('adjust_member_points_total/<int:user_id>/', views.adjust_member_points_total, name='adjust_member_points_total'),
+    path('adjust_member_points_total/<str:auth0_id>/', views.adjust_member_points_total, name='adjust_member_points_total'),
 
 
     # Lets a user upload a profile picture
@@ -89,7 +90,6 @@ urlpatterns = [
     
     # Gets all members with specific info
     path('get_members_with_info/', views.members_with_info, name='get_members_with_info'),
-
     # Sets specific member info to ""
     path('remove_member_info/<str:auth0_id>/', views.remove_member_info, name='update_member_info'),
 
