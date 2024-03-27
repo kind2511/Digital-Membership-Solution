@@ -378,6 +378,38 @@ def unban_member(request, auth0_id):
     return Response({'message': f'Member unbanned successfully'})
 
 
+# Gets all banned members and their relevant info
+@api_view(['GET'])
+def get_banned_members(request):
+    # Retrieve all members where banned is True
+    banned_members = Members.objects.filter(banned=True)
+
+    # Extracting relevand data about the banned users
+    members_data = []
+    for member in banned_members:
+        member_data = {
+            'full_name': f"{member.first_name} {member.last_name}",
+            'profile_picture': member.profile_pic.url if member.profile_pic else None,
+            'banned_from': member.banned_from,
+            'banned_until': member.banned_until
+        }
+        members_data.append(member_data)
+
+    if members_data:
+        message = "Banned members retrieved successfully."
+        status_code = 200  # OK
+    else:
+        message = "No banned members found."
+        status_code = 404  # Not Found
+
+    response_data = {
+        'message': message,
+        'banned_members': members_data
+    }
+
+    return Response(response_data, status=status_code)
+
+
 # Registering a new user
 @api_view(['POST'])
 @csrf_exempt
@@ -403,46 +435,6 @@ def register_user(request):
         return Response({'message': 'Added new user'})
     else:
         return Response({'error': 'Invalid request method'})
-
-
-# # Gets all members the attendend on a specific date. If no date is provided todays date is the one used
-# @api_view(['GET'])
-# def get_member_attendance(request, date_str=None):
-#     # Looks for provided date
-#     if date_str:
-#         try:
-#             selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-#         except ValueError:
-#             return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
-#     else:
-#         # If no date is provided set date to be today
-#         selected_date = date.today()
-
-#     try:
-#         # Extract all members that registered on selected date
-#         datelist = MemberDates.objects.filter(date=selected_date)
-#     except MemberDates.DoesNotExist:
-#         return Response({'message': 'No one has registered for the specified date.'}, status=404)
-    
-#     # Gets the full anme and profile picture of the users
-#     members_present = []
-#     for member_date in datelist:
-#         member = member_date.userID
-#         member_info = {
-#             'name': f"{member.first_name} {member.last_name}",
-#             'profile_pic': member.profile_pic.url if member.profile_pic else None
-#         }
-#         members_present.append(member_info)
-    
-#     # Returns the members if there are any
-#     if members_present:
-#         response_data = {
-#             'message': f'Member attendance for {selected_date} retrieved successfully.',
-#             'members_present': members_present
-#         }
-#         return Response(response_data)
-#     else:
-#         return Response({'message': 'No members attended on this date.'}, status=200)
 
 
 # Gets all members the attendend on a specific date. If no date is provided todays date is the one used
@@ -570,23 +562,6 @@ def get_visit_by_gender_one_day(request, one_date):
     
     return Response(gender_data)
 
-
-@api_view(['GET'])
-def get_ban_period(request, auth0_id):
-    try:
-        banned_member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({'error': 'member not found'}, status=404)
-
-    if banned_member.banned:
-        response_data = {
-            'banned_until': banned_member.banned_until,
-            'banned_from': banned_member.banned_from
-        }
-        return Response(response_data)
-    else:
-        return Response({'error': 'member not banned'}, status=404)
-    
 
 # adds a new activity  
 @api_view(['POST'])

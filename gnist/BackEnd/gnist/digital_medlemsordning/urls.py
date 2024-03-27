@@ -5,8 +5,9 @@ from django.conf import settings
 urlpatterns = [
     path("", views.index, name="index"),
 
-    # Get member data for dashboard for one specific or all members
+    # Get member data for dashboard for all members
     path('get_all_members/', views.get_all_member_data, name='all_member_data'),
+    # Get member data for dashboard for one specific member
     path('get_member/<str:auth0_id>/', views.get_one_member_data, name='member_data'),
 
     path('get_activity_today/', views.get_activity_today, name='get_activity_today'),
@@ -22,8 +23,8 @@ urlpatterns = [
     path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
     path('get_visit_by_gender_one_day/<str:one_date>/',views.get_visit_by_gender_one_day, name='get_visit_by_gender_one_day'),
 
-    # Gets period of a banned member
-    path('get_ban_period/<str:auth0_id>/', views.get_ban_period, name='get_ban_period'),
+    # Gets all bannes members
+    path('get_banned_members/', views.get_banned_members, name='get_banned_members'),
     # Bans a member
     path('ban_member/<str:auth0_id>/', views.ban_member, name='ban_member'),
     # Unbans a member
@@ -57,5 +58,6 @@ urlpatterns = [
 
     #Check Registration status
     path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status'),
+
     path('send_message/', views.send_message, name='send_message'),
 ]
