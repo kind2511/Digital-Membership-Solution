@@ -12,15 +12,27 @@ urlpatterns = [
     # Gets all info about a member
     path('get_all_members_info/', views.get_all_members_info, name='get_all_members_info'),
 
+
     # Activities
+
+    # Create a new activity
+    path('create_activity/', views.create_activity, name='create_activity'),
+    # Get all activites of today
     path('get_activity_today/', views.get_activity_today, name='get_activity_today'),
+    # Get all activities
     path('get_all_activity/', views.get_all_activity, name='get_all_activity'),
-    path('add_activity/', views.add_activity, name='add_activity'),
-    path('get_member_activity/<int:user_id>/', views.get_member_activity, name='get_member_activity'),
-    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
+    # Lets member sign up for activity
     path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
-    path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
+    # Gets details about a specific activity
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
+    # Gets all members signed up for a specific activity
+    path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
+    # Gets all the activities that a specific member has signed up for
+    path('get_member_activity/<int:user_id>/', views.get_member_activity, name='get_member_activity'),
+    # Uploade activity image
+    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
+
+
 
     # Register attendence for member
     path('add_day/<str:auth0_id>/', views.add_day, name='add_day'),

@@ -9,7 +9,6 @@ class Activity(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
-    sign_up = models.BooleanField(default=False)
 
 
 # The dates of the various activieties

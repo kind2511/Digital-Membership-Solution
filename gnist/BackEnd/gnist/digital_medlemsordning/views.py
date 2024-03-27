@@ -187,7 +187,6 @@ def get_all_activity(request):
             'description': activity.description,
             'dates': dates_list,
             'image': activity.image.url,
-            'sign_up': activity.sign_up
         }
 
         activity_data.append(activity_info)
@@ -269,6 +268,7 @@ def get_member_activity(request, user_id):
     except Members.DoesNotExist:
         return Response({'error': 'User does not exist'}, status=404)
     
+
 # Get signed up members for a specific activity
 @api_view(['GET'])
 def get_signed_up_members(request, activity_id):
@@ -566,11 +566,11 @@ def get_visit_by_gender_one_day(request, one_date):
 # adds a new activity  
 @api_view(['POST'])
 @csrf_exempt
-def add_activity(request):
+def create_activity(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         
-        activityid = data['activityID'] # not nessasarry 
+        activityid = data['activityID'] 
         title = data['title']
         description = data['description']
         date = data['date'] 
