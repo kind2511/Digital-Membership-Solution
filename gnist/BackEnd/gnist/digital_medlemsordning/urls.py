@@ -18,17 +18,14 @@ urlpatterns = [
     # Gets all members who registered their attendance on a specific date
     path('get_member_attendance/', views.get_member_attendance, name='get_member_today'),
 
-
-
     path('get_visit_numbers/', views.get_visit_numbers, name='get_visit_numbers'),
     path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
     path('get_visit_by_gender_one_day/<str:one_date>/',views.get_visit_by_gender_one_day, name='get_visit_by_gender_one_day'),
 
-
     # Gets period of a banned member
     path('get_ban_period/<str:auth0_id>/', views.get_ban_period, name='get_ban_period'),
     # Bans a member
-    path('ban_member/<int:user_id>/', views.ban_member, name='ban_member'),
+    path('ban_member/<str:auth0_id>/', views.ban_member, name='ban_member'),
     # Unbans a member
     path('unban_member/<str:auth0_id>/', views.unban_member, name='unban_member'),
 
