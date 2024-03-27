@@ -9,10 +9,19 @@ urlpatterns = [
     path('get_all_members/', views.get_all_member_data, name='all_member_data'),
     # Get member data for dashboard for one specific member
     path('get_member/<str:auth0_id>/', views.get_one_member_data, name='member_data'),
+    # Gets all info about a member
+    path('get_all_members_info/', views.get_all_members_info, name='get_all_members_info'),
 
+    # Activities
     path('get_activity_today/', views.get_activity_today, name='get_activity_today'),
     path('get_all_activity/', views.get_all_activity, name='get_all_activity'),
+    path('add_activity/', views.add_activity, name='add_activity'),
     path('get_member_activity/<int:user_id>/', views.get_member_activity, name='get_member_activity'),
+    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
+    path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
+    path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
+    path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
+
     path('add_day/<str:auth0_id>/', views.add_day, name='add_day'),
     path('register_user/', views.register_user, name='register_user'),
 
@@ -30,24 +39,19 @@ urlpatterns = [
     # Unbans a member
     path('unban_member/<str:auth0_id>/', views.unban_member, name='unban_member'),
 
-    path('add_activity/', views.add_activity, name='add_activity'),
-    path('get_all_members_info/', views.get_all_members_info, name='get_all_members_info'),
     path('alter_member_info/<int:user_id>/', views.alter_member_info, name='alter_member_info'),
     path('adjust_member_points_total/<int:user_id>/', views.adjust_member_points_total, name='adjust_member_points_total'),
     path('create_suggestion/', views.create_suggestion, name='create_suggestion'),
     path('get_all_suggestions/', views.get_all_suggestions, name='get_all_suggestions'),
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
     path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
-    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
     path('add_user_certificate/<int:user_id>/', views.upload_user_certificate, name="add_user_certificate"),
     path('create_level/', views.create_level, name='create_level'),
     path('get_all_levels/', views.get_all_levels, name='get_all_levels'),
     path('delete_level/<int:level_id>/', views.delete_level, name='delete_level'),
     path('edit_level/<int:level_id>/', views.edit_level, name='edit_level'),
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
-    path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
-    path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
-    path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
+    
 
     # Polls
     path('create_question/', views.create_question_with_answers, name='create_question'),
