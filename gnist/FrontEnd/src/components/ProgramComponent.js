@@ -21,16 +21,15 @@ function ProgramComponent() {
         throw new Error('Failed to fetch activities');
       }
       const data = await response.json();
-      setPrograms(data.activities);
-
-      // Save activity IDs to local storage
-    const activityIDs = data.activities.map(activity => activity.activity_id);
-    localStorage.setItem('activityIDs', JSON.stringify(activityIDs));
-    
+      setPrograms(Array.isArray(data.activities) ? data.activities : []);
+      const activityIDs = (data.activities || []).map(activity => activity.activity_id);
+      localStorage.setItem('activityIDs', JSON.stringify(activityIDs));
     } catch (error) {
       console.error(error);
+      setPrograms([]);
     }
   };
+  
 
   const handleTitleClick = (program) => {
     setSelectedProgram(program);

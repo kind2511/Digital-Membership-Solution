@@ -6,13 +6,13 @@ import './TodayActivitiesComponent.css';
 const promoSentences = ["Dette skjer idag.."];
 
 function TodayActivitiesComponent() {
-    const { user, isAuthenticated } = useAuth0(); 
+    const { user, isAuthenticated } = useAuth0();
     const [activities, setActivities] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState(null);
     const [displayedText, setDisplayedText] = useState('');
     const [sentenceIndex, setSentenceIndex] = useState(0);
     const [todayDate, setTodayDate] = useState(null);
-    const [signupStatus, setSignupStatus] = useState(''); 
+    const [signupStatus, setSignupStatus] = useState('');
     const baseApiUrl = 'http://127.0.0.1:8000';
 
     useEffect(() => {
@@ -20,15 +20,17 @@ function TodayActivitiesComponent() {
             try {
                 const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
                 const data = await response.json();
-                setActivities(data.activities);
+                setActivities(data.activities || []);
                 setTodayDate(data.date);
             } catch (error) {
                 console.error("Failed to fetch today's activities:", error);
+                setActivities([]);
             }
         };
 
         fetchTodayActivities();
     }, []);
+
 
     useEffect(() => {
         let currentTimer;
@@ -57,12 +59,12 @@ function TodayActivitiesComponent() {
             console.log(signupStatus);
         }
     }, [signupStatus]);
-    
+
 
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
     };
-    
+
     const handleSignUp = async () => {
         if (!isAuthenticated) {
             console.log('User is not authenticated');
@@ -70,20 +72,20 @@ function TodayActivitiesComponent() {
             setTimeout(() => setSignupStatus(''), 3000);
             return;
         }
-        
-        // Check if a selected activity is available
+
+       
         if (!selectedActivity) {
             setSignupStatus('Ingen aktivitet er valgt.');
             setTimeout(() => setSignupStatus(''), 3000);
             return;
         }
-    
+
         try {
             const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
-                auth0_id: user.sub, 
-                activity_id: selectedActivity.activity_id, 
+                auth0_id: user.sub,
+                activity_id: selectedActivity.activity_id,
             });
-        
+
             if (response.status === 200 || response.status === 201) {
                 setSignupStatus('Du er registrert nå.');
                 console.log(signupStatus)
@@ -101,8 +103,8 @@ function TodayActivitiesComponent() {
             console.error('Failed to sign up for the activity:', error);
         }
     };
-    
-    
+
+
 
     const handleCloseDetails = () => {
         setSelectedActivity(null);
@@ -125,7 +127,7 @@ function TodayActivitiesComponent() {
                     </div>
                 ))}
             </div>
-    
+
             {selectedActivity && (
                 <div className="today-details-modal" onClick={handleCloseDetails}>
                     <div className="today-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -143,7 +145,7 @@ function TodayActivitiesComponent() {
             )}
         </div>
     );
-    
+
 }
 
 export default TodayActivitiesComponent;
