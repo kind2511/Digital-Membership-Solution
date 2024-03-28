@@ -1,46 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 import './MinMening.css';
 
 function MinMening() {
+  const { getAccessTokenSilently, user } = useAuth0();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState([]);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions');
-        const data = await response.json();
-        setQuestions(data.questions);
-      } catch (error) {
+    axios.get('http://localhost:8000/digital_medlemsordning/get_all_questions')
+      .then(response => {
+        setQuestions(response.data.questions);
+      })
+      .catch(error => {
         console.error("Error fetching questions:", error);
-      }
-    };
-    fetchQuestions();
+      });
   }, []);
+
 
   const handleSubmissionConfirm = async (confirm) => {
     if (confirm) {
-      const requestBody = {
-        title: title,
-        description: description
-      };
       try {
-        const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/create_suggestion/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Suggestion sent successfully:', data);
+        await axios.post('http://localhost:8000/digital_medlemsordning/create_suggestion/', { title, description });
         setTitle('');
         setDescription('');
         setConfirmationMessage('Takk for ditt forslag');
@@ -51,8 +37,9 @@ function MinMening() {
     }
     setShowConfirmModal(false);
   };
+  
 
-  const handleQuestionSelect = (question) => {
+  const handleQuestionSelect = question => {
     setSelectedQuestion(question);
   };
 
@@ -60,10 +47,44 @@ function MinMening() {
     setSelectedQuestion(null);
   };
 
-  const handleSubmitAnswer = async (selectedAnswer) => {
-    console.log('Submitting answer:', selectedAnswer);
-    setSelectedQuestion(null);
+  const handleSubmitAnswer = async () => {
+    if (!user?.sub) {
+      console.error('User authentication required.');
+      return;
+    }
+    
+    const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
+    if (!selectedAnswerValue) {
+      console.error('No answer selected.');
+      return;
+    }
+    
+    try {
+      const token = await getAccessTokenSilently();
+      const endpoint = `http://localhost:8000/digital_medlemsordning/submit_response/${user.sub}/`;
+      
+      const response = await axios.post(endpoint, {
+        question: selectedQuestion.questionID,
+        answer: selectedAnswerValue
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (response.status === 201) {
+        console.log("Answer submitted successfully.");
+        setSelectedQuestion(null);
+      } else {
+        console.error("Failed to submit answer:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error submitting answer:", error.response ? error.response.data : error);
+    }
   };
+  
+  
+
 
   return (
     <div className="minMening-container">
@@ -132,6 +153,7 @@ function MinMening() {
       </form>
     </div>
   );
+  
 }
 
 export default MinMening;
