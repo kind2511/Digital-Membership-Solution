@@ -7,18 +7,18 @@ function MinMening() {
   const [questions, setQuestions] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions');
         const data = await response.json();
-        setQuestions(data.questions); 
+        setQuestions(data.questions);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
     };
-
     fetchQuestions();
   }, []);
 
@@ -28,7 +28,6 @@ function MinMening() {
         title: title,
         description: description
       };
-
       try {
         const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/create_suggestion/', {
           method: 'POST',
@@ -37,7 +36,6 @@ function MinMening() {
           },
           body: JSON.stringify(requestBody)
         });
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -51,7 +49,20 @@ function MinMening() {
         console.error("Error sending suggestion:", error);
       }
     }
-    setShowConfirmModal(false); 
+    setShowConfirmModal(false);
+  };
+
+  const handleQuestionSelect = (question) => {
+    setSelectedQuestion(question);
+  };
+
+  const handleCancel = () => {
+    setSelectedQuestion(null);
+  };
+
+  const handleSubmitAnswer = async (selectedAnswer) => {
+    console.log('Submitting answer:', selectedAnswer);
+    setSelectedQuestion(null);
   };
 
   return (
@@ -70,18 +81,35 @@ function MinMening() {
       )}
       <div className="questions-container">
         {questions.map((question) => (
-          <div key={question.questionID} className="question-block">
+          <div key={question.questionID} className="question-block" onClick={() => handleQuestionSelect(question)}>
             <h2 className="question-title">{question.question}</h2>
-            <ul className="answers-list">
-              {question.answers.map((answer) => (
-                <li key={answer.answer_id} className="answer">
-                  {answer.answer_text}
-                </li>
-              ))}
-            </ul>
           </div>
         ))}
       </div>
+      {selectedQuestion && (
+        <div className="answers-container">
+          <h3>Answers for: {selectedQuestion.question}</h3>
+          <ul className="answers-list">
+            {selectedQuestion.answers.map((answer) => (
+              <li key={answer.answer_id} className="answer">
+                <label>
+                  <input type="radio" name="selectedAnswer" value={answer.answer_id} />
+                  {answer.answer_text}
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="button-group">
+            <button className="cancel-button" onClick={handleCancel}>Avbryt</button>
+            <button className="answer-button" onClick={() => {
+              const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
+              if (selectedAnswerValue) {
+                handleSubmitAnswer(selectedAnswerValue);
+              }
+            }}>Svar</button>
+          </div>
+        </div>
+      )}
       <hr className="divider" />
       <h1 className="title">Send Inn Forslag</h1>
       <form className="forslag-form" onSubmit={(e) => e.preventDefault()}>
@@ -100,7 +128,7 @@ function MinMening() {
           onChange={(e) => setDescription(e.target.value)}
           required
         />
-        <button type="button" className="forslag-submit" onClick={() => setShowConfirmModal(true)}>Send</button>
+        <button type="button" className="forslag-submit" onClick={() => setShowConfirmModal(true)}>Send Inn</button>
       </form>
     </div>
   );

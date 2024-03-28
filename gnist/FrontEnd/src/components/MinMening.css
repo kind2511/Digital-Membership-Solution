@@ -159,3 +159,20 @@ body, html {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+.cancel-button {
+  background-color: red;
+  color: white;
+
+}
+
+.answer-button {
+  background-color: green;
+  color: white;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
