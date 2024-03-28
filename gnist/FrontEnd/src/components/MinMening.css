@@ -176,3 +176,18 @@ body, html {
   justify-content: space-around;
   margin-top: 10px;
 }
+
+.message.confirmation {
+  padding: 5px;
+  margin-top: 10px;
+  background-color: #52C41A; 
+  color:  #FFFFFF;
+}
+
+.message.error {
+  padding: 5px;
+  margin-top: 10px;
+  background-color: red;
+  font-weight: bold;
+  color:  #FFFFFF;
+}

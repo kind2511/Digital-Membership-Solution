@@ -11,6 +11,7 @@ function MinMening() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [messageType, setMessageType] = useState('confirmation');
 
   useEffect(() => {
     axios.get('http://localhost:8000/digital_medlemsordning/get_all_questions')
@@ -37,7 +38,7 @@ function MinMening() {
     }
     setShowConfirmModal(false);
   };
-  
+
 
   const handleQuestionSelect = question => {
     setSelectedQuestion(question);
@@ -52,17 +53,17 @@ function MinMening() {
       console.error('User authentication required.');
       return;
     }
-    
+
     const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
     if (!selectedAnswerValue) {
       console.error('No answer selected.');
       return;
     }
-    
+
     try {
       const token = await getAccessTokenSilently();
       const endpoint = `http://localhost:8000/digital_medlemsordning/submit_response/${user.sub}/`;
-      
+
       const response = await axios.post(endpoint, {
         question: selectedQuestion.questionID,
         answer: selectedAnswerValue
@@ -71,19 +72,23 @@ function MinMening() {
           Authorization: `Bearer ${token}`
         }
       });
-      
+
       if (response.status === 201) {
-        console.log("Answer submitted successfully.");
+        setConfirmationMessage("Svar ble sendt.");
+        setMessageType('confirmation');
         setSelectedQuestion(null);
-      } else {
-        console.error("Failed to submit answer:", response.data.message);
+        setTimeout(() => setConfirmationMessage(''), 3000);
       }
     } catch (error) {
-      console.error("Error submitting answer:", error.response ? error.response.data : error);
+      if (error.response && error.response.status === 400 && error.response.data.error === "User has already answered this question") {
+        setConfirmationMessage("Spørsmål allerede besvart.");
+        setMessageType('error');
+        setTimeout(() => setConfirmationMessage(''), 3000);
+      } else {
+        console.error("Error submitting answer:", error.response ? error.response.data : error);
+      }
     }
   };
-  
-  
 
 
   return (
@@ -98,7 +103,7 @@ function MinMening() {
         </div>
       )}
       {confirmationMessage && (
-        <div className="confirmation-message">{confirmationMessage}</div>
+        <div className={`message ${messageType === 'confirmation' ? 'confirmation' : 'error'}`}>{confirmationMessage}</div>
       )}
       <div className="questions-container">
         {questions.map((question) => (
@@ -122,12 +127,7 @@ function MinMening() {
           </ul>
           <div className="button-group">
             <button className="cancel-button" onClick={handleCancel}>Avbryt</button>
-            <button className="answer-button" onClick={() => {
-              const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
-              if (selectedAnswerValue) {
-                handleSubmitAnswer(selectedAnswerValue);
-              }
-            }}>Svar</button>
+            <button className="answer-button" onClick={handleSubmitAnswer}>Svar</button>
           </div>
         </div>
       )}
@@ -153,7 +153,6 @@ function MinMening() {
       </form>
     </div>
   );
-  
 }
 
 export default MinMening;
