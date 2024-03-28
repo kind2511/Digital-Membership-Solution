@@ -66,12 +66,15 @@ def get_all_member_data(request):
         elif is_banned == 1:
             profile_color = "red"
 
+        # Check if certificate field is not empty before accessing its URL
+        certificate_url = member.certificate.url if member.certificate else ''
+
         member_info = {
             'first_name': member.first_name.upper(),
             'level': level_name,
             'profile_color': profile_color,
             'profile_pic': member.profile_pic.url,
-            'certificate': member.certificate.url,
+            'certificate': certificate_url,
             'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
             'role': member.role,
@@ -144,55 +147,54 @@ def get_one_member_data(request, auth0_id):
     }
     return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
 
-# Gets activity today
-@api_view(['GET'])
-def get_activity_today(request):
-    today_date = date.today()
+# # Gets activity today
+# @api_view(['GET'])
+# def get_activity_today(request):
+#     today_date = date.today()
 
-    # Filter activity dates happening on the same day
-    activity_dates = ActivityDate.objects.filter(date=today_date)
+#     # Filter activity dates happening on the same day
+#     activity_dates = ActivityDate.objects.filter(date=today_date)
 
-    activity_data = []
-    for activity_date in activity_dates:
-        activity = activity_date.activityID
-        activity_info = {
-            'title': activity.title, 
-            'description': activity.description,
-            'image': activity.image.url if activity.image else None,
-        }
-        activity_data.append(activity_info)
+#     activity_data = []
+#     for activity_date in activity_dates:
+#         activity = activity_date.activityID
+#         activity_info = {
+#             'title': activity.title, 
+#             'description': activity.description,
+#             'image': activity.image.url if activity.image else None,
+#         }
+#         activity_data.append(activity_info)
 
-    response_data = {
-        'date': today_date.strftime("%Y-%m-%d"),
-        'activities': activity_data
-    }
-    return Response(response_data)
+#     response_data = {
+#         'date': today_date.strftime("%Y-%m-%d"),
+#         'activities': activity_data
+#     }
+#     return Response(response_data)
 
 #lists all activity
-@api_view(['GET'])
-def get_all_activity(request):
-    activities = Activity.objects.all()
+# @api_view(['GET'])
+# def get_all_activity(request):
+#     activities = Activity.objects.all()
 
-    activity_data = []
-    for activity in activities:
-        activity_dates = ActivityDate.objects.filter(activityID=activity)
-        dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
+#     activity_data = []
+#     for activity in activities:
+#         activity_dates = ActivityDate.objects.filter(activityID=activity)
+#         dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
 
-        activity_info = {
-            'activity_id': activity.activityID,
-            'title': activity.title,
-            'description': activity.description,
-            'dates': dates_list,
-            'image': activity.image.url,
-            'sign_up': activity.sign_up
-        }
+#         activity_info = {
+#             'activity_id': activity.activityID,
+#             'title': activity.title,
+#             'description': activity.description,
+#             'dates': dates_list,
+#             'image': activity.image.url,
+#         }
 
-        activity_data.append(activity_info)
+#         activity_data.append(activity_info)
 
-    response_data = {
-        'activities': activity_data
-    }
-    return Response(response_data)
+#     response_data = {
+#         'activities': activity_data
+#     }
+#     return Response(response_data)
 
 #signs up for an activity
 @api_view(['POST'])
@@ -239,33 +241,34 @@ def get_activity_details(request, activity_id):
     return Response(serializer.data)
 
 # Get activity a specific member has signed up for
-@api_view(['GET'])
-def get_member_activity(request, user_id):
-    try:
-        activity_signups = ActivitySignup.objects.filter(userID=user_id)
+# @api_view(['GET'])
+# def get_member_activity(request, user_id):
+#     try:
+#         activity_signups = ActivitySignup.objects.filter(userID=user_id)
 
-        activity_data = []
-        for signup in activity_signups:
-            activity_info = {
-                'title': signup.activityID.title, 
-                'description': signup.activityID.description,
-                'dates': [],  
-            }
+#         activity_data = []
+#         for signup in activity_signups:
+#             activity_info = {
+#                 'title': signup.activityID.title, 
+#                 'description': signup.activityID.description,
+#                 'dates': [],  
+#             }
 
-            activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
+#             activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
 
-            for date in activity_dates:
-                activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
+#             for date in activity_dates:
+#                 activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
 
-            activity_data.append(activity_info)
+#             activity_data.append(activity_info)
 
-        response_data = {
-            'activities': activity_data
-        }
-        return Response(response_data)
-    except Members.DoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
+#         response_data = {
+#             'activities': activity_data
+#         }
+#         return Response(response_data)
+#     except Members.DoesNotExist:
+#         return Response({'error': 'User does not exist'}, status=404)
     
+
 # Get signed up members for a specific activity
 @api_view(['GET'])
 def get_signed_up_members(request, activity_id):
@@ -326,34 +329,43 @@ def add_day(request, auth0_id):
 
 # Bans a member
 @api_view(['PUT'])
-def ban_member(request, user_id):
+def ban_member(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
-    ban_duration = request.data.get('ban_duration')
+    banned_from = request.data.get('banned_from')
+    banned_until = request.data.get('banned_until')
+
+    # Check if both banned_from and banned_until are provided
+    if not (banned_from and banned_until):
+        return Response({"error": "Both banned_from and banned_until dates are required"}, status=400)
 
     try:
-        ban_duration = int(ban_duration)
-        if ban_duration <= 0:
-            raise ValueError("Ban duration must be a positive integer")
-    except (ValueError, TypeError):
-        return Response({"error": "Invalid ban duration"}, status=400)
+        banned_from_date = datetime.strptime(banned_from, '%Y-%m-%d').date()
+        banned_until_date = datetime.strptime(banned_until, '%Y-%m-%d').date()
+    except ValueError:
+        return Response({"error": "Invalid date format"}, status=400)
 
+    # Banned from must be earlier than banned unitl
+    if banned_from_date >= banned_until_date:
+        return Response({"error": "banned_from must be earlier than banned_until"}, status=400)
+
+    # Ban the member
     member.banned = True
-    member.banned_from = datetime.now()
-    member.banned_until = datetime.now() + timedelta(days=ban_duration)
+    member.banned_from = banned_from_date
+    member.banned_until = banned_until_date
     member.save()
 
-    return Response({'message': f'Member banned successfully until {member.banned_until}'})
+    return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
 
 
 # Unbanns a memebr
-@api_view(['GET'])
-def unban_member(request, user_id):
+@api_view(['PUT'])
+def unban_member(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -364,6 +376,38 @@ def unban_member(request, user_id):
     member.save()
 
     return Response({'message': f'Member unbanned successfully'})
+
+
+# Gets all banned members and their relevant info
+@api_view(['GET'])
+def get_banned_members(request):
+    # Retrieve all members where banned is True
+    banned_members = Members.objects.filter(banned=True)
+
+    # Extracting relevand data about the banned users
+    members_data = []
+    for member in banned_members:
+        member_data = {
+            'full_name': f"{member.first_name} {member.last_name}",
+            'profile_picture': member.profile_pic.url if member.profile_pic else None,
+            'banned_from': member.banned_from,
+            'banned_until': member.banned_until
+        }
+        members_data.append(member_data)
+
+    if members_data:
+        message = "Banned members retrieved successfully."
+        status_code = 200  # OK
+    else:
+        message = "No banned members found."
+        status_code = 404  # Not Found
+
+    response_data = {
+        'message': message,
+        'banned_members': members_data
+    }
+
+    return Response(response_data, status=status_code)
 
 
 # Registering a new user
@@ -391,35 +435,49 @@ def register_user(request):
         return Response({'message': 'Added new user'})
     else:
         return Response({'error': 'Invalid request method'})
-    
 
+
+# Gets all members the attendend on a specific date. If no date is provided todays date is the one used
 @api_view(['GET'])
-def get_members_today(request):
-    today = datetime.today()
-    try:
-        datelist = MemberDates.objects.filter(date=today)
-    except MemberDates.DoesNotExist:
-        return Response({'message': 'No one has registered today'})
-    
-    members_present = []
-    for member in datelist:
-        members_present.append(member.userID.first_name + " " + member.userID.last_name)
-    
-    return Response(members_present)
+def get_member_attendance(request):
+    # Looks for provided date in the request body
+    date_str = request.data.get('date')
 
+    # If date is provided
+    if date_str:
+        try:
+            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
+    else:
+        # If no date is provided in the request body, set date to today
+        selected_date = date.today()
 
-@api_view(['GET'])
-def get_members_for_date(request, one_date):
     try:
-        datelist = MemberDates.objects.filter(date=one_date)
+        # Extract all members that registered on selected date
+        datelist = MemberDates.objects.filter(date=selected_date)
     except MemberDates.DoesNotExist:
-        return Response({'message': 'No one has registered today'})
+        return Response({'message': 'No one has registered for the specified date.'}, status=404)
     
+    # Gets the full name and profile picture of the users
     members_present = []
-    for member in datelist:
-        members_present.append(member.userID.first_name + " " + member.userID.last_name)
+    for member_date in datelist:
+        member = member_date.userID
+        member_info = {
+            'name': f"{member.first_name} {member.last_name}",
+            'profile_pic': member.profile_pic.url if member.profile_pic else None
+        }
+        members_present.append(member_info)
     
-    return Response(members_present)
+    # Returns the members if there are any
+    if members_present:
+        response_data = {
+            'message': f'Member attendance for {selected_date} retrieved successfully.',
+            'members_present': members_present
+        }
+        return Response(response_data, status=200)
+    else:
+        return Response({'message': 'No members attended on this date.'}, status=200)
 
 
 @api_view(['GET'])
@@ -504,39 +562,91 @@ def get_visit_by_gender_one_day(request, one_date):
     
     return Response(gender_data)
 
-@api_view(['GET'])
-def get_ban_expiry(request, user_id):
-    banned_member = Members.objects.get(userID=user_id)
-
-    if banned_member.banned:
-        return Response(banned_member.banned_until)
-    else:
-        return Response({'error': 'member not banned'})
-    
 
 # adds a new activity  
-@api_view(['POST'])
-@csrf_exempt
-def add_activity(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
+# @api_view(['POST'])
+# @csrf_exempt
+# def create_activity(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
         
-        activityid = data['activityID']
-        title = data['title']
-        description = data['description']
-        date = data['date'] 
-        image = image['image']
+#         activityid = data['activityID'] 
+#         title = data['title']
+#         description = data['description']
+#         date = data['date'] 
+#         image = image['image']
 
-        new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
-        new_activity .save()
+#         new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
+#         new_activity .save()
 
-        new_activity_date = ActivityDate(activityID=new_activity, date=date)
-        new_activity_date.save()
+#         new_activity_date = ActivityDate(activityID=new_activity, date=date)
+#         new_activity_date.save()
 
-        return Response({'message': 'Activity added successfully'})
+#         return Response({'message': 'Activity added successfully'})
+#     else:
+#         return Response({'error': 'Invalid request method'})
+
+
+# Creates a new activity 
+@api_view(['POST'])
+def create_activity(request):
+    if request.method == 'POST':
+        serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Activity added successfully'}, status=201)
+        return Response(serializer.errors, status=400)
     else:
-        return Response({'error': 'Invalid request method'})
-    
+        return Response({'error': 'Invalid request method'}, status=405)
+
+
+# Gets all activities
+@api_view(['GET'])
+def get_all_activity(request):
+    if request.method == 'GET':
+        activities = Activity.objects.all()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+
+# Gets todays activity
+@api_view(['GET'])
+def get_activity_today(request):
+    if request.method == 'GET':
+        today = date.today()
+        activities = Activity.objects.filter(date=today)
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+
+# Delete an activity
+@api_view(['DELETE'])
+def delete_activity(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({'error': 'Activity not found'}, status=404)
+
+    if request.method == 'DELETE':
+        activity.delete()
+        return Response({'message': 'Activity deleted successfully'}, status=204)
+
+
+# Get all activities a specific member is signed up to
+@api_view(['GET'])
+def get_member_activities(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            member = Members.objects.get(auth0ID=auth0_id)
+            member_activities = ActivitySignup.objects.filter(userID=member)
+            activity_ids = member_activities.values_list('activityID', flat=True)
+            activities = Activity.objects.filter(activityID__in=activity_ids)
+            serializer = ActivitySerializer(activities, many=True)
+            return Response(serializer.data)
+        except Members.DoesNotExist:
+            return Response({'error': 'Member not found'}, status=404)
+
+
 
 # Gets all info about all members
 @api_view(['GET'])
@@ -546,30 +656,30 @@ def get_all_members_info(request):
     return Response(serializer.data)
     
 
-# Lets a member add additional info about a specific memeber
-@api_view(['PUT'])
-def alter_member_info(request, user_id):
-        try:
-            member = Members.objects.get(userID=user_id)
-        except Members.DoesNotExist:
-             return Response({"error": "Member not found"}, status=404)
+# # Lets a member add additional info about a specific memeber
+# @api_view(['PUT'])
+# def alter_member_info(request, user_id):
+#         try:
+#             member = Members.objects.get(userID=user_id)
+#         except Members.DoesNotExist:
+#              return Response({"error": "Member not found"}, status=404)
         
-        new_info = request.data.get("info")
-        if new_info is None:
-            return Response({"error": "Missing 'info' field in request data"}, status=400)
+#         new_info = request.data.get("info")
+#         if new_info is None:
+#             return Response({"error": "Missing 'info' field in request data"}, status=400)
         
-        member.info = new_info
-        member.save()
+#         member.info = new_info
+#         member.save()
 
-        serializer = MembersSerializer(member)
-        return Response(serializer.data)
+#         serializer = MembersSerializer(member)
+#         return Response(serializer.data)
         
 
 # Lets an employee adjust the members points total up or down
 @api_view(['PUT'])
-def adjust_member_points_total(request, user_id):
+def adjust_member_points_total(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -667,9 +777,9 @@ def upload_activity_image(request, activity_id):
 
 # Upload member certificate
 @api_view(['PATCH'])
-def upload_user_certificate(request, user_id):
+def upload_user_certificate(request, auth0_id):
     try:
-        member = Members.objects.get(userID=user_id)
+        member = Members.objects.get(auth0ID=auth0_id)
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
@@ -878,6 +988,8 @@ def check_user_registration_status(request):
     
     else:
         return Response({'error': 'Method not allowed'}, status=405)
+    
+
 @api_view(['POST'])
 def send_message(request):
     if request.method == 'POST':
@@ -907,5 +1019,86 @@ def send_message(request):
         serializer = MessageSerializer(message)
 
         return Response(serializer.data, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
+    
+
+# Retrieves all unverfieid members
+@api_view(['GET'])
+def get_all_unverified_members(request):
+    unverified_members = Members.objects.filter(verified=False)
+    serializer = MembersSerializer(unverified_members, many=True)
+    return Response(serializer.data)
+
+
+# Verifies a member
+@api_view(['PUT'])
+def verify_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(verified=True)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+
+# Get all members with specific info
+@api_view(['GET'])
+def members_with_info(request):
+    members_with_info = Members.objects.exclude(info="")
+    serializer = MembersSerializer(members_with_info, many=True)
+    return Response(serializer.data)
+
+
+# Removes specific info from a user
+@api_view(['PUT'])
+def remove_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['info'] = ""
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+
+# Add info to a specific user
+@api_view(['PUT'])
+def add_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+
+# Register an employee
+@api_view(['POST'])
+def register_employee(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        auth0id = data['auth0id']
+        employeeName = data['employeeName']
+
+        new_employee = Employee(auth0ID=auth0id, employee_Name=employeeName)  
+        new_employee.save()
+        return Response({'message': 'Added new employee'})
     else:
         return Response({'error': 'Invalid request method'})

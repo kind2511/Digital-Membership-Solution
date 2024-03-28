@@ -9,8 +9,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
-    sign_up = models.BooleanField(default=False)
-
+    date = models.DateField(null=True)
 
 # The dates of the various activieties
 class ActivityDate(models.Model):
@@ -22,7 +21,9 @@ class ActivityDate(models.Model):
 # Employees
 class Employee(models.Model):
     employeeID = models.AutoField(primary_key=True, unique=True)
+    auth0ID = models.CharField(max_length=45, null=True)
     employee_Name = models.CharField(max_length=100)
+    role = models.CharField(max_length=20, default="employee", null=False)
 
 
 # Members
