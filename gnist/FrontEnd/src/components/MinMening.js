@@ -106,6 +106,7 @@ function MinMening() {
         <div className={`message ${messageType === 'confirmation' ? 'confirmation' : 'error'}`}>{confirmationMessage}</div>
       )}
       <div className="questions-container">
+        <div className="introduction-sentence">Avstemninger</div>
         {questions.map((question) => (
           <div key={question.questionID} className="question-block" onClick={() => handleQuestionSelect(question)}>
             <h2 className="question-title">{question.question}</h2>
