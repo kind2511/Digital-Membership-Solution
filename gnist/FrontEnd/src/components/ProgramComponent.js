@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import './ProgramComponent.css';
 
 function ProgramComponent() {
-  const { user, isAuthenticated } = useAuth0(); 
+  const { user, isAuthenticated } = useAuth0();
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [signupStatus, setSignupStatus] = useState('');
@@ -21,15 +21,12 @@ function ProgramComponent() {
         throw new Error('Failed to fetch activities');
       }
       const data = await response.json();
-      setPrograms(Array.isArray(data.activities) ? data.activities : []);
-      const activityIDs = (data.activities || []).map(activity => activity.activity_id);
-      localStorage.setItem('activityIDs', JSON.stringify(activityIDs));
+      setPrograms(data); 
     } catch (error) {
       console.error(error);
       setPrograms([]);
     }
   };
-  
 
   const handleTitleClick = (program) => {
     setSelectedProgram(program);
@@ -43,7 +40,7 @@ function ProgramComponent() {
 
     try {
       const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
-        auth0_id: user.sub, 
+        auth0_id: user.sub,
         activity_id: activityId,
       });
 
@@ -51,7 +48,7 @@ function ProgramComponent() {
         setSignupStatus('Du er registrert nå.');
         setTimeout(() => {
           setSignupStatus('');
-          setSelectedProgram(null); 
+          setSelectedProgram(null);
         }, 3000);
       }
     } catch (error) {
@@ -65,17 +62,16 @@ function ProgramComponent() {
 
   return (
     <div className="program-list">
-      {programs.map(program => (
-        <div key={program.title} className="program-entry" onClick={() => handleTitleClick(program)}>
-          <img src={program.image ? program.image : "https://via.placeholder.com/60"} alt={program.title} className="program-image" />
+      {programs.map((program, index) => (
+        <div key={index} className="program-entry" onClick={() => handleTitleClick(program)}>
+          <img src={program.image ? `${baseApiUrl}${program.image}` : "https://via.placeholder.com/60"} alt={program.title} className="program-image" />
           <div className="program-details">
             <div className="program-title">{program.title}</div>
-            <div className="program-date">{program.dates.join(", ")}</div>
+            <div className="program-date">{program.date}</div>
           </div>
         </div>
       ))}
 
-      
       {selectedProgram && (
         <div className="program-modal" onClick={() => setSelectedProgram(null)}>
           <div className="program-modal-content" onClick={e => e.stopPropagation()}>
@@ -83,8 +79,8 @@ function ProgramComponent() {
             <p>{selectedProgram.description}</p>
             <div className="modal-buttons">
               <button onClick={() => setSelectedProgram(null)}>Lukk</button>
-              <button onClick={() => handleSignUp(selectedProgram.activity_id)}>
-                {selectedProgram.sign_up ? "Meld av" : "Meld på"}
+              <button onClick={() => handleSignUp(selectedProgram.activityID)}>
+                Meld på
               </button>
             </div>
             {signupStatus && <div className="signup-status">{signupStatus}</div>}
