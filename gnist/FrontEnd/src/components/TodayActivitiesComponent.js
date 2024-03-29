@@ -20,21 +20,23 @@ function TodayActivitiesComponent() {
             try {
                 const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
                 const data = await response.json();
-                setActivities(data.activities || []);
-                setTodayDate(data.date);
+                if (Array.isArray(data)) {
+                    setActivities(data);
+                    setTodayDate(data.length > 0 ? data[0].date : new Date().toISOString().split('T')[0]);
+                } else {
+                    console.error("Unexpected response format:", data);
+                    setActivities([]);
+                }
             } catch (error) {
                 console.error("Failed to fetch today's activities:", error);
                 setActivities([]);
             }
         };
-
         fetchTodayActivities();
     }, []);
 
-
     useEffect(() => {
         let currentTimer;
-
         const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
         if (isCompleteSentence) {
             currentTimer = setTimeout(() => {
@@ -48,10 +50,7 @@ function TodayActivitiesComponent() {
                 setDisplayedText(newText);
             }, 50);
         }
-
-        return () => {
-            clearTimeout(currentTimer);
-        };
+        return () => clearTimeout(currentTimer);
     }, [displayedText, sentenceIndex]);
 
     useEffect(() => {
@@ -59,7 +58,6 @@ function TodayActivitiesComponent() {
             console.log(signupStatus);
         }
     }, [signupStatus]);
-
 
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
@@ -72,39 +70,29 @@ function TodayActivitiesComponent() {
             setTimeout(() => setSignupStatus(''), 3000);
             return;
         }
-
-       
         if (!selectedActivity) {
             setSignupStatus('Ingen aktivitet er valgt.');
             setTimeout(() => setSignupStatus(''), 3000);
             return;
         }
-
         try {
             const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
                 auth0_id: user.sub,
-                activity_id: selectedActivity.activity_id,
+                activity_id: selectedActivity.activityID,
             });
-
             if (response.status === 200 || response.status === 201) {
                 setSignupStatus('Du er registrert nå.');
-                console.log(signupStatus)
                 setTimeout(() => {
                     setSignupStatus('');
                     setSelectedActivity(null);
-                    console.log(signupStatus);
                 }, 3000);
             }
         } catch (error) {
             setSignupStatus('Du kan ikke registrere nå, vennligst vent litt.');
-            setTimeout(() => {
-                setSignupStatus('');
-            }, 3000);
+            setTimeout(() => setSignupStatus(''), 3000);
             console.error('Failed to sign up for the activity:', error);
         }
     };
-
-
 
     const handleCloseDetails = () => {
         setSelectedActivity(null);
@@ -135,9 +123,7 @@ function TodayActivitiesComponent() {
                         <p>{selectedActivity.description}</p>
                         <div className="today-modal-buttons">
                             <button className="today-modal-button" onClick={handleCloseDetails}>Lukk</button>
-                            <button className="today-modal-button" onClick={() => handleSignUp(selectedActivity.activity_id)}>
-                                Meld på
-                            </button>
+                            <button className="today-modal-button" onClick={handleSignUp}>Meld på</button>
                         </div>
                         {signupStatus && <div className="signup-status">{signupStatus}</div>}
                     </div>
@@ -145,7 +131,6 @@ function TodayActivitiesComponent() {
             )}
         </div>
     );
-
 }
 
 export default TodayActivitiesComponent;
