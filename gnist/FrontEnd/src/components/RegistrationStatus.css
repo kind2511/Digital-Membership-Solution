@@ -1,13 +1,62 @@
 .registration-status {
   display: flex;
   align-items: center;
-  cursor: pointer;
   font-weight: bold;
   font-size: 20px;
 }
 
-.register-checkbox {
-  margin-right: 5px;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-right: 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.status-text {
+  display: block;
 }
 
 .registration-modal-overlay {
@@ -20,11 +69,11 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0,0,0,0.5);
-  z-index: 2000; 
+  z-index: 2000;
 }
 
 .registration-modal-content {
-  background-color:  #FFFFFF;
+  background-color: #FFFFFF;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -36,7 +85,7 @@
 
 .registration-modal-content button {
   background-color: #005A9E;
-  color:  #FFFFFF;
+  color: #FFFFFF;
   border: none;
   padding: 10px 20px;
   margin: 10px;
@@ -45,27 +94,7 @@
   border-radius: 4px;
 }
 
-.registration-modal-content button:nth-child(2) {
-  background-color:  #005A9E;
-}
-
 .registration-modal-content button:hover {
-  background-color: #004080;  
+  background-color: #004080;
   color: #FFFFFF;
-}
-.confirmation-message {
-  padding: 5px;
-  margin-top: 10px;
-  background-color: #52C41A;  
-  color:  #FFFFFF;
-  border-radius: 5px;
-  display: inline-block;  
-  animation: fadein 0.5s ease-in-out; 
-  font-size: 13px;
-}
-
-/* Animation to fade in the confirmation message */
-@keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
 }

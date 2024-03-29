@@ -4,7 +4,6 @@ import './RegistrationStatus.css';
 
 function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState('');
   const baseApiUrl = 'http://localhost:8000';
 
   useEffect(() => {
@@ -12,10 +11,8 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
       const storedRegistrationStatus = localStorage.getItem('isRegistered');
       const isUserRegistered = storedRegistrationStatus ? storedRegistrationStatus === 'true' : false;
       setIsRegistered(isUserRegistered);
-      setConfirmationMessage(isUserRegistered ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
     }
   }, [userSub, setIsRegistered]);
-
 
   const handleCheckboxClick = () => {
     setShowConfirmModal(true);
@@ -28,8 +25,7 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
         await axios.get(endpoint);
         const newRegistrationStatus = !isRegistered;
         setIsRegistered(newRegistrationStatus);
-        localStorage.setItem('isRegistered', newRegistrationStatus);
-        setConfirmationMessage(newRegistrationStatus ? 'Du er registrert nå.' : 'Du er ikke registrert nå.');
+        localStorage.setItem('isRegistered', newRegistrationStatus.toString());
       } catch (error) {
         console.error("Error toggling registration:", error.response || error);
       }
@@ -39,14 +35,16 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
 
   return (
     <div className="registration-status">
-      <input
-        type="checkbox"
-        checked={isRegistered}
-        onChange={() => { }}
-        onClick={handleCheckboxClick}
-        className="register-checkbox"
-      />
-      Registrer
+      <label className="switch">
+        <input
+          type="checkbox"
+          checked={isRegistered}
+          onChange={() => { }} 
+          onClick={handleCheckboxClick}
+        />
+        <span className="slider round"></span>
+      </label>
+      <span className="status-text">{isRegistered ? 'Aktiv' : 'Ikke Aktiv'}</span>
       {showConfirmModal && (
         <div className="registration-modal-overlay">
           <div className="registration-modal-content">
@@ -55,9 +53,6 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
             <button onClick={() => handleRegistrationChange(false)}>Nei</button>
           </div>
         </div>
-      )}
-      {confirmationMessage && (
-        <div className="confirmation-message">{confirmationMessage}</div>
       )}
     </div>
   );
