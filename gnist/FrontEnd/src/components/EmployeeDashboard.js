@@ -6,7 +6,6 @@ function EmployeeDashboard() {
   const { logout } = useAuth0();
   const [activeNavItem, setActiveNavItem] = useState('Tilstede');
 
-  // Function to simulate logout with Auth0
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
@@ -14,31 +13,33 @@ function EmployeeDashboard() {
   const renderContent = () => {
     switch (activeNavItem) {
       case 'Tilstede':
-        return <div className="content">Content for Tilstede</div>;
+        return <div className="emp-content">Tilstede</div>;
+      case 'Rød':
+        return <div className="emp-content">Rød</div>;
       case 'Aktiviteter':
-        return <div className="content">Content for Aktiviteter</div>;
-      case 'Undersokelser':
-        return <div className="content">Content for Undersokelser</div>;
-      case 'Kommunikasjon':
-        return <div className="content">Content for Kommunikasjon</div>;
+        return <div className="emp-content">Aktiviteter</div>;
+      case 'Undersøkelser':
+        return <div className="emp-content">Undersøkelser</div>;
+      case 'Medleminfo':
+        return <div className="emp-content">Medleminfo</div>;
       default:
-        return <div className="content">Please select an item from the navbar.</div>;
+        return <div className="emp-content">Please select an item from the navbar.</div>;
     }
   };
 
   return (
-    <div className="employee-dashboard-container">
-      <div className="employee-navbar">
-        <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" className="employee-navbar-logo" />
-        <div className="employee-navbar-menu">
-          <div className={`employee-nav-item ${activeNavItem === 'Tilstede' ? 'employee-active' : ''}`} onClick={() => setActiveNavItem('Tilstede')}>Tilstede</div>
-          <div className={`employee-nav-item ${activeNavItem === 'Aktiviteter' ? 'employee-active' : ''}`} onClick={() => setActiveNavItem('Aktiviteter')}>Aktiviteter</div>
-          <div className={`employee-nav-item ${activeNavItem === 'Undersokelser' ? 'employee-active' : ''}`} onClick={() => setActiveNavItem('Undersokelser')}>Undersokelser</div>
-          <div className={`employee-nav-item ${activeNavItem === 'Kommunikasjon' ? 'employee-active' : ''}`} onClick={() => setActiveNavItem('Kommunikasjon')}>Kommunikasjon</div>
-          <div className="employee-nav-item logout-item" onClick={handleLogout}>Logg Ut</div>
+    <div className="emp-dashboard-container">
+      <div className="emp-navbar">
+        <div className="emp-navbar-menu">
+          <div className={`emp-nav-item ${activeNavItem === 'Tilstede' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Tilstede')}>Tilstede</div>
+          <div className={`emp-nav-item ${activeNavItem === 'Rød' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Rød')}>Rød</div>
+          <div className={`emp-nav-item ${activeNavItem === 'Aktiviteter' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Aktiviteter')}>Aktiviteter</div>
+          <div className={`emp-nav-item ${activeNavItem === 'Undersøkelser' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Undersøkelser')}>Undersøkelser</div>
+          <div className={`emp-nav-item ${activeNavItem === 'Medleminfo' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Medleminfo')}>Medleminfo</div>
+          <div className="emp-nav-item emp-logout-item" onClick={handleLogout}>Logg Ut</div>
         </div>
       </div>
-      <div className="employee-main-content">
+      <div className="emp-main-content">
         {renderContent()}
       </div>
     </div>

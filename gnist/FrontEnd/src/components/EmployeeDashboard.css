@@ -1,77 +1,80 @@
-.employee-dashboard-container {
-    display: flex;
+.emp-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.emp-navbar {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  background-color: #005A9E; 
+  color: #FFFFFF;
+  padding: 20px 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.emp-navbar-menu {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.emp-nav-item {
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.emp-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #FFFFFF; 
+  transition: width 0.3s;
+}
+
+.emp-nav-item:hover, .emp-nav-item.emp-active {
+  color: #D9E3F0;
+}
+
+.emp-nav-item:hover::after, .emp-nav-item.emp-active::after {
+  width: 100%;
+}
+
+.emp-main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #FAFAFA; 
+  overflow: auto;
+}
+
+.emp-logout-item {
+  color: #FF4136; 
+}
+
+@media (max-width: 768px) {
+  .emp-navbar-menu {
     flex-direction: column;
-    min-height: 100vh;
-    overflow: hidden;
   }
   
-  .employee-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: black;
-    color: white;
-    padding: 0 20px;
+  .emp-nav-item {
     width: 100%;
+    padding: 10px;
   }
   
-  .employee-navbar-logo {
-    height: 50px;
+  .emp-logout-item {
+    padding-top: 15px;
   }
-  
-  .employee-navbar-menu {
-    display: flex;
-    flex-grow: 1;
-    justify-content: space-around; /* This will space out the nav items evenly */
-    list-style: none;
-    padding: 0;
-    margin-left: 20px;  
-    margin-right: 20px;  
-  }
-  
-  .employee-nav-item {
-    cursor: pointer;
-    padding: 10px 15px;
-    text-align: center;
-    flex-grow: 1; /* This will make each item grow and fill the space */
-  }
-  
-  .employee-nav-item:hover, .employee-nav-item.employee-active {
-    background-color: #ee0707;
-    color: white;
-    border-radius: 4px;
-  }
-  
-  .employee-logout-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    background: none;
-    color: white;
-    flex-grow: 0; /* Prevent the logout button from growing */
-  }
-  
-  .employee-main-content {
-    flex-grow: 1;
-    background-color: #ffd700;
-    padding: 20px;
-    overflow: auto;
-  }
-  
-  /* Responsive adjustments for mobile devices */
-  @media (max-width: 768px) {
-    .employee-navbar-menu {
-      flex-direction: column;  
-    }
-  
-    .employee-nav-item, .employee-logout-item {
-      text-align: center;
-      padding: 10px;  
-      width: 100%;  
-    }
-  
-    .employee-navbar-menu {
-      margin-left: 0; /* Remove margin for small screens */
-      margin-right: 0; /* Remove margin for small screens */
-    }
-  }
-  
+}
