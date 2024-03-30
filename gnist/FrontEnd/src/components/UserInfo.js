@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
 
 function UserInfo() {
-  const { user, getAccessTokenSilently, logout } = useAuth0();
+  const { user, logout } = useAuth0();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,7 +21,7 @@ function UserInfo() {
 
   useEffect(() => {
     if (user) {
-      setFormData({ ...formData, email: user.email });
+      setFormData(formData => ({ ...formData, email: user.email }));
     }
   }, [user]);
 
@@ -53,23 +54,23 @@ function UserInfo() {
   };
 
   //--------------------------------------------------------------------------------
-   // just for testing
+  // just for testing
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (calculateAge(formData.dateOfBirth) < 13) {
       setAgeError('Du må være minst 13 år gammel for å registrere deg.');
       return;
     }
-  
+
     if (!formData.agreesToTerms) {
       alert('Du må samtykke til behandling av personopplysninger for å fullføre registreringen.');
       return;
     }
-  
+
     const endpoint = 'http://127.0.0.1:8000/digital_medlemsordning/register_user/';
-    
+
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -88,7 +89,7 @@ function UserInfo() {
           guardian_phone: formData.guardianPhone,
         }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         navigate('/user-dashboard'); // after register the user will be directed to dashboard (temp)
@@ -102,10 +103,15 @@ function UserInfo() {
 
   //---------------------------------------------------------------------------------------
   const handleLogout = () => {
-    const confirmLogout = window.confirm('Er du sikker på at du vil logge ut?');
-    if (confirmLogout) {
-      logout({ returnTo: window.location.origin });
-    }
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    logout({ returnTo: window.location.origin });
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
   };
 
   const showGuardianFields = formData.dateOfBirth && calculateAge(formData.dateOfBirth) < 16;
@@ -194,8 +200,20 @@ function UserInfo() {
           {ageError && <div className="error-message">{ageError}</div>}
         </form>
       </div>
+      {showLogoutModal && (
+        <div className="logout-modal">
+          <div className="logout-modal-content">
+            <p>Er du sikker på at du vil logge ut?</p>
+            <div className="logout-modal-buttons">
+              <button className="logout-confirm-button" onClick={confirmLogout}>Ja</button>
+              <button className="logout-confirm-button" onClick={cancelLogout}>Nei</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+  
 }
 
 export default UserInfo;
