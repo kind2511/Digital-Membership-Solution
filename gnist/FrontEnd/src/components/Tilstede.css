@@ -1,5 +1,68 @@
+.tilstede-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px; /* Adds space between sections */
+  height: calc(100vh - 60px); 
+  overflow: hidden;
+}
 
-.tilstede {
-    font-weight: bold;
+.section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.registrerte-medlemmer, .statistikk {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px; 
+}
+
+.date-filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.date-filter-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.date-filter-input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.members-list {
+  overflow-y: auto;
+}
+
+.member-item {
+  margin-bottom: 15px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+
+@media (max-width: 768px) {
+  .tilstede-container {
+    flex-direction: column;
   }
   
+  .section {
+    margin-bottom: 20px;
+  }
+}
