@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import Tilstede from './Tilstede'; 
+import Tilstede from './Tilstede';
 import Aktiviteter from './Aktiviteter';
+import Undersøkelser from './Undersøkelser';
 import './EmployeeDashboard.css';
 
 function EmployeeDashboard() {
@@ -15,13 +16,13 @@ function EmployeeDashboard() {
   const renderContent = () => {
     switch (activeNavItem) {
       case 'Tilstede':
-        return <Tilstede />; // Render the Tilstede component
+        return <Tilstede />;     // Render the Tilstede component
       case 'Rød':
         return <div className="emp-content">Rød</div>;
       case 'Aktiviteter':
-        return <Aktiviteter/>; // Render the Aktiviteter component
+        return <Aktiviteter />;   // Render the Aktiviteter component
       case 'Undersøkelser':
-        return <div className="emp-content">Undersøkelser</div>;
+        return <Undersøkelser />; // Render the Undersøkelser component
       case 'Medleminfo':
         return <div className="emp-content">Medleminfo</div>;
       default:
