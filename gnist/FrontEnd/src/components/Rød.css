@@ -1,5 +1,37 @@
+.rød-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  max-height: calc(100vh - 60px); 
+  overflow: auto;
+}
 
-.rød {
-    font-weight: bold;
+.section {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.section input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+@media (max-width: 768px) {
+  .rød-container {
+    gap: 15px;
   }
-  
+}
