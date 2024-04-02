@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import Tilstede from './Tilstede'; 
+import Aktiviteter from './Aktiviteter';
 import './EmployeeDashboard.css';
 
 function EmployeeDashboard() {
@@ -18,7 +19,7 @@ function EmployeeDashboard() {
       case 'Rød':
         return <div className="emp-content">Rød</div>;
       case 'Aktiviteter':
-        return <div className="emp-content">Aktiviteter</div>;
+        return <Aktiviteter/>; // Render the Aktiviteter component
       case 'Undersøkelser':
         return <div className="emp-content">Undersøkelser</div>;
       case 'Medleminfo':
