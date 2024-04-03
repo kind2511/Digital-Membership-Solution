@@ -9,7 +9,7 @@
   
   .section {
     flex: 1;
-    padding: 20px;
+    padding: 22px;
     border-radius: 5px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     background-color: #fff;
@@ -25,7 +25,7 @@
   .activity-form input[type="date"],
   .activity-form textarea {
     width: 100%;
-    padding: 8px;
+    padding: 3px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -47,7 +47,40 @@
   .activity-form button:hover {
     background-color: #004080;
   }
+
+  .activity-success-message {
+    transition: opacity 0.5s ease-in-out;
+    color: #FFFFFF;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #52C41A; 
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .section-lag-ny-aktivitet {
+    flex-grow: 4;  
+  }
   
+  
+  .section {
+    flex-grow: 2;
+    
+  }
+
+  .lag-ny-aktivitet {
+    min-height: 330px; /* Set a minimum height for the section */
+  }
+  
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  
+  /*----------------------------------------------------------------*/
 
   @media (max-width: 768px) {
     .aktiviteter-container {

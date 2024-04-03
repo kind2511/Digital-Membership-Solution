@@ -9,6 +9,8 @@ function Aktiviteter() {
     bilde: null,
     beskrivelse: '',
   });
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -28,13 +30,26 @@ function Aktiviteter() {
     formData.append('date', activity.dato);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
+      await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
-      console.log(response.data); 
+      // Show success message 
+      setSuccessMessage('Aktivitetet ble lagret');
+      setShowSuccess(true);
+
+      // Clear success message after 5 seconds and clear form data
+      setTimeout(() => {
+        setShowSuccess(false);
+        setActivity({
+          dato: '',
+          tittel: '',
+          bilde: null,
+          beskrivelse: '',
+        });
+      }, 5000);
+
     } catch (error) {
       console.error("Error creating activity:", error);
     }
@@ -42,6 +57,9 @@ function Aktiviteter() {
 
   return (
     <div className="aktiviteter-container">
+      <div className="activity-success-message" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
+        {successMessage}
+      </div>
       {/* Lag Ny Aktivitet Section */}
       <div className="section lag-ny-aktivitet">
         <h2 className="section-title">Lag Ny Aktivitet</h2>
@@ -76,14 +94,13 @@ function Aktiviteter() {
           <button type="submit">Lagre Aktivitet</button>
         </form>
       </div>
-
       {/* Alle Aktiviteter Section */}
       <div className="section fremtidig-design">
         <h2 className="section-title">Alle Aktiviteter</h2>
-        {/* Alle Aktiviteter content goes here */}
       </div>
     </div>
   );
+
 }
 
 export default Aktiviteter;
