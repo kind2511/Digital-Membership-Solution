@@ -4,6 +4,7 @@ import Tilstede from './Tilstede';
 import Aktiviteter from './Aktiviteter';
 import Undersøkelser from './Undersøkelser';
 import Rød from './Rød';
+import Medleminfo from './Medleminfo'; 
 import './EmployeeDashboard.css';
 
 function EmployeeDashboard() {
@@ -17,15 +18,15 @@ function EmployeeDashboard() {
   const renderContent = () => {
     switch (activeNavItem) {
       case 'Tilstede':
-        return <Tilstede />;     // Render the Tilstede component
+        return <Tilstede />;
       case 'Rød':
-        return <Rød />;          // Render the Rød component
+        return <Rød />;
       case 'Aktiviteter':
-        return <Aktiviteter />;   // Render the Aktiviteter component
+        return <Aktiviteter />;
       case 'Undersøkelser':
-        return <Undersøkelser />; // Render the Undersøkelser component
-     
-
+        return <Undersøkelser />;
+      case 'Medleminfo': 
+        return <Medleminfo />;
       default:
         return <div className="emp-content">Please select an item from the navbar.</div>;
     }
@@ -35,12 +36,42 @@ function EmployeeDashboard() {
     <div className="emp-dashboard-container">
       <div className="emp-navbar">
         <div className="emp-navbar-menu">
-          <div className={`emp-nav-item ${activeNavItem === 'Tilstede' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Tilstede')}>Tilstede</div>
-          <div className={`emp-nav-item ${activeNavItem === 'Rød' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Rød')}>Rød</div>
-          <div className={`emp-nav-item ${activeNavItem === 'Aktiviteter' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Aktiviteter')}>Aktiviteter</div>
-          <div className={`emp-nav-item ${activeNavItem === 'Undersøkelser' ? 'emp-active' : ''}`} onClick={() => setActiveNavItem('Undersøkelser')}>Undersøkelser</div>
-          
-          <div className="emp-nav-item emp-logout-item" onClick={handleLogout}>Logg Ut</div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'Tilstede' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('Tilstede')}
+          >
+            Tilstede
+          </div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'Rød' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('Rød')}
+          >
+            Rød
+          </div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'Aktiviteter' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('Aktiviteter')}
+          >
+            Aktiviteter
+          </div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'Undersøkelser' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('Undersøkelser')}
+          >
+            Undersøkelser
+          </div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'Medleminfo' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('Medleminfo')}
+          >
+            Medleminfo
+          </div>
+          <div 
+            className="emp-nav-item emp-logout-item" 
+            onClick={handleLogout}
+          >
+            Logg Ut
+          </div>
         </div>
       </div>
       <div className="emp-main-content">
