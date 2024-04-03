@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Tilstede.css';
 
-const DEFAULT_PROFILE_IMAGE = 'Default_Profile_Picture.jpg'; 
+const DEFAULT_PROFILE_IMAGE = 'Default_Profile_Picture.jpg';
 
 function Tilstede() {
   const [filterDate, setFilterDate] = useState('');
@@ -14,7 +14,7 @@ function Tilstede() {
       setMessage('Velg en dato for å se aktive brukere');
       return;
     }
-    
+
     const fetchMembersByDate = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/digital_medlemsordning/get_member_attendance/?date=${filterDate}`);
@@ -37,6 +37,25 @@ function Tilstede() {
     setFilterDate(event.target.value);
   };
 
+  // This effect runs once on mount and retrieves any saved filter date and members from local storage
+  useEffect(() => {
+    const savedFilterDate = localStorage.getItem('filterDate');
+    const savedMembers = JSON.parse(localStorage.getItem('registeredMembers'));
+
+    if (savedFilterDate) {
+      setFilterDate(savedFilterDate);
+    }
+    if (savedMembers) {
+      setRegisteredMembers(savedMembers);
+    }
+  }, []);
+
+  // This effect runs every time the filterDate or registeredMembers change and saves them to local storage
+  useEffect(() => {
+    localStorage.setItem('filterDate', filterDate);
+    localStorage.setItem('registeredMembers', JSON.stringify(registeredMembers));
+  }, [filterDate, registeredMembers]);
+
   const clearData = () => {
     setFilterDate('');
     setRegisteredMembers([]);
@@ -53,12 +72,12 @@ function Tilstede() {
         <h2 className="section-title">Registrerte Medlemmer</h2>
         <div className="date-filter-container">
           <label htmlFor="dateFilter" className="date-filter-label">Filtrer etter dato:</label>
-          <input 
+          <input
             id="dateFilter"
             type="date"
             className="date-filter-input"
             value={filterDate}
-            onChange={handleDateFilterChange} 
+            onChange={handleDateFilterChange}
           />
           <button onClick={clearData} className="button-clear">Tøm</button>
         </div>
