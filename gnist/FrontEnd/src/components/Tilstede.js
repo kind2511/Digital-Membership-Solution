@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import './Tilstede.css'; 
+import axios from 'axios';
+import './Tilstede.css';
+
+const DEFAULT_PROFILE_IMAGE = 'Default_Profile_Picture.jpg'; 
 
 function Tilstede() {
   const [filterDate, setFilterDate] = useState('');
- // const [registeredMembers, setRegisteredMembers] = useState([]);
-  const [registeredMembers] = useState([]);
+  const [registeredMembers, setRegisteredMembers] = useState([]);
 
-  //TODO
   useEffect(() => {
-    // Fetch logic here :)
-  }, []);
+    if (filterDate) {
+      const fetchMembersByDate = async () => {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/digital_medlemsordning/get_member_attendance/', { params: { date: filterDate } });
+          setRegisteredMembers(response.data.members_present || []);
+        } catch (error) {
+          console.error("Error fetching members by date:", error);
+        }
+      };
+
+      fetchMembersByDate();
+    }
+  }, [filterDate]);
 
   const handleDateFilterChange = (event) => {
     setFilterDate(event.target.value);
+  };
+
+  const getProfileImage = (imagePath) => {
+    return imagePath ? `http://127.0.0.1:8000${imagePath}` : DEFAULT_PROFILE_IMAGE;
   };
 
   return (
@@ -34,8 +50,8 @@ function Tilstede() {
           {registeredMembers.length > 0 ? (
             registeredMembers.map((member, index) => (
               <div key={index} className="member-item">
-                {/* Display logic for each member */}
-                {member.firstName} {member.lastName}
+                <img src={getProfileImage(member.profile_pic)} alt={`${member.name}`} className="member-photo" />
+                <span className="member-name">{member.name}</span>
               </div>
             ))
           ) : (
