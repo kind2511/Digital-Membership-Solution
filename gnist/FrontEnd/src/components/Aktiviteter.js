@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './Aktiviteter.css';
 
 function Aktiviteter() {
@@ -11,17 +12,32 @@ function Aktiviteter() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'bilde') {
-      setActivity(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      setActivity(prev => ({ ...prev, [name]: value }));
-    }
+    setActivity(prev => ({
+      ...prev,
+      [name]: name === 'bilde' ? files[0] : value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // logic here :)
-    console.log(activity);
+
+    const formData = new FormData();
+    formData.append('image', activity.bilde);
+    formData.append('title', activity.tittel);
+    formData.append('description', activity.beskrivelse);
+    formData.append('date', activity.dato);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      console.log(response.data); 
+    } catch (error) {
+      console.error("Error creating activity:", error);
+    }
   };
 
   return (
