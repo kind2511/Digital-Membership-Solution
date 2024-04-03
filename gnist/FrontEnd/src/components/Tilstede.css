@@ -44,6 +44,20 @@
   border: 1px solid #ccc;
 }
 
+.button-clear {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button-clear:hover {
+  background-color: darkred;
+}
+
 .members-list {
   overflow-y: auto;
   max-height: 400px; 
@@ -71,6 +85,10 @@
   font-weight: bold;
 }
 
+.no-members-message {
+  text-align: center;
+  color: #555;
+}
 
 @media (max-width: 768px) {
   .tilstede-container {
