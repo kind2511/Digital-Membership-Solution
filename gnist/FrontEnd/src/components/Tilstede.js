@@ -3,7 +3,8 @@ import './Tilstede.css';
 
 function Tilstede() {
   const [filterDate, setFilterDate] = useState('');
-  const [registeredMembers, setRegisteredMembers] = useState([]);
+ // const [registeredMembers, setRegisteredMembers] = useState([]);
+  const [registeredMembers] = useState([]);
 
   //TODO
   useEffect(() => {
