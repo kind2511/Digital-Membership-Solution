@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Aktiviteter.css';
 
 function Aktiviteter() {
+  const [activities, setActivities] = useState([]);
   const [activity, setActivity] = useState({
     dato: '',
     tittel: '',
@@ -11,6 +12,19 @@ function Aktiviteter() {
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/digital_medlemsordning/get_all_activity/');
+        setActivities(response.data);
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+      }
+    };
+
+    fetchActivities();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -95,12 +109,23 @@ function Aktiviteter() {
         </form>
       </div>
       {/* Alle Aktiviteter Section */}
-      <div className="section fremtidig-design">
+      <div className="section alle-aktiviteter">
         <h2 className="section-title">Alle Aktiviteter</h2>
+        <div className="activities-list">
+          {activities.map((activity) => (
+            <div className="activity-item" key={activity.activityID}>
+              <img src={activity.image} alt={activity.title} />
+              <div className="activity-info">
+                <h3>{activity.title}</h3>
+                <p className="activity-date">{activity.date}</p>
+                <p className="activity-description">{activity.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-
 }
 
 export default Aktiviteter;
