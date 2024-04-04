@@ -6,6 +6,9 @@ function Undersøkelser() {
     question: '',
     answers: ['', '', '']
   });
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
 
   const handleChangeQuestion = (e) => {
     setNewQuestion(prev => ({ ...prev, question: e.target.value }));
@@ -32,21 +35,26 @@ function Undersøkelser() {
       },
       body: JSON.stringify(payload),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      // Clear the form after 4 seconds
-      setTimeout(() => {
-        setNewQuestion({ question: '', answers: ['', '', ''] });
-      }, 4000);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        setSuccessMessage('Spørsmålet ble lagret');
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+          setNewQuestion({ question: '', answers: ['', '', ''] });
+          setShowSuccessMessage(false);
+        }, 4000);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   return (
     <div className="undersøkelser-container">
+      {showSuccessMessage && (
+        <div className="undersokelse-success-message">{successMessage}</div>
+      )}
       {/* Nytt Spørsmål Section */}
       <div className="section nytt-spørsmål">
         <h2 className="section-title">Nytt Spørsmål</h2>
@@ -71,7 +79,6 @@ function Undersøkelser() {
           <button type="submit">Lagre Spørsmål</button>
         </form>
       </div>
-
       {/* Alle Spørsmål Section */}
       <div className="section alle-spørsmål">
         <h2 className="section-title">Alle Spørsmål</h2>

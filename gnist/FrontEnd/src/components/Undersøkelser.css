@@ -1,55 +1,70 @@
 .undersøkelser-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    height: calc(100vh - 60px); 
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 60px); 
+  overflow: hidden;
+  position: relative; 
+}
+
+.section {
+  flex: 1;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.question-form input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.question-form button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #005A9E;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.question-form button:hover {
+  background-color: #004080;
+}
+
+/* Success message styles */
+.undersokelse-success-message {
+  transition: opacity 0.5s ease-in-out;
+  color: #FFFFFF;
+  text-align: center;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: #52C41A; 
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 20px;
+  position: absolute;
+  top: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000; 
+}
+
+@media (max-width: 768px) {
+  .success-message {
+    top: 70px;
   }
-  
-  .section {
-    flex: 1;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-  }
-  
-  .section-title {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 24px;
-  }
-  
-  .question-form input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  .question-form button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #005A9E;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .question-form button:hover {
-    background-color: #004080;
-  }
-  
- 
-  @media (max-width: 768px) {
-    .undersøkelser-container {
-      flex-direction: column;
-    }
-  
-    .section {
-      margin-bottom: 20px;
-    }
-  }
-  
+}
+
+
