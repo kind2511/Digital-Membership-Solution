@@ -19,8 +19,30 @@ function Undersøkelser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle  logic here :)
-    console.log(newQuestion);
+
+    const payload = {
+      question: newQuestion.question,
+      answers: newQuestion.answers.map(answer => ({ answer })),
+    };
+
+    fetch('http://127.0.0.1:8000/digital_medlemsordning/create_question/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      // Clear the form after 4 seconds
+      setTimeout(() => {
+        setNewQuestion({ question: '', answers: ['', '', ''] });
+      }, 4000);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   };
 
   return (
@@ -53,7 +75,7 @@ function Undersøkelser() {
       {/* Alle Spørsmål Section */}
       <div className="section alle-spørsmål">
         <h2 className="section-title">Alle Spørsmål</h2>
-        {/*  displaying all questions goes here */}
+        {/* displaying all questions goes here */}
       </div>
     </div>
   );
