@@ -117,5 +117,8 @@ urlpatterns = [
 
     # Get all unverified members
     path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members'),
-    path('verify_member/<str:auth0_id>/', views.verify_member, name='verify_member')
+    path('verify_member/<str:auth0_id>/', views.verify_member, name='verify_member'),
+
+    # Searches for a member by name
+    path('search_member/', views.search_member, name='search_member'),
 ]
