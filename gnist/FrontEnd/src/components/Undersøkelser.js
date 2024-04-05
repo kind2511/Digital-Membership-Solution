@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Undersøkelser.css';
 
 function Undersøkelser() {
@@ -6,8 +6,12 @@ function Undersøkelser() {
     question: '',
     answers: ['', '', '']
   });
+  
+  const [questions, setQuestions] = useState([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [questionDetails, setQuestionDetails] = useState({});
 
 
   const handleChangeQuestion = (e) => {
@@ -50,6 +54,46 @@ function Undersøkelser() {
       });
   };
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions/')
+      .then(response => response.json())
+      .then(data => {
+        setQuestions(data.questions); 
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  const handleQuestionClick = (questionId) => {
+    fetch(`http://127.0.0.1:8000/digital_medlemsordning/get_question_responses/${questionId}/`)
+      .then(response => response.json())
+      .then(data => {
+        setQuestionDetails(data);
+        setSelectedQuestion(questionId);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleDeleteQuestion = (questionId) => {
+    fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_question/${questionId}/`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.message);
+        setShowSuccessMessage(true);
+        setSuccessMessage(data.message);
+        setQuestions(questions.filter(q => q.questionID !== questionId));
+        setSelectedQuestion(null); 
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   return (
     <div className="undersøkelser-container">
       {showSuccessMessage && (
@@ -82,7 +126,24 @@ function Undersøkelser() {
       {/* Alle Spørsmål Section */}
       <div className="section alle-spørsmål">
         <h2 className="section-title">Alle Spørsmål</h2>
-        {/* displaying all questions goes here */}
+        <div className="questions-list">
+          {questions.map(question => (
+            <div className="question-item" key={question.questionID} onClick={() => handleQuestionClick(question.questionID)}>
+              <h3>{question.question}</h3>
+              {/* ... answers ... */}
+            </div>
+          ))}
+        </div>
+        {selectedQuestion && (
+          <div className="question-details">
+            <h4>{questionDetails.question}</h4>
+            {Object.entries(questionDetails.answer_counts).map(([answer, count]) => (
+              <p key={answer}>{answer} : {count} brukere</p>
+            ))}
+            <button onClick={() => setSelectedQuestion(null)}>Lukk</button>
+            <button onClick={() => handleDeleteQuestion(selectedQuestion)}>Slett</button>
+          </div>
+        )}
       </div>
     </div>
   );
