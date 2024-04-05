@@ -6,7 +6,7 @@ function Undersøkelser() {
     question: '',
     answers: ['', '', '']
   });
-  
+
   const [questions, setQuestions] = useState([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -57,7 +57,7 @@ function Undersøkelser() {
     fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions/')
       .then(response => response.json())
       .then(data => {
-        setQuestions(data.questions); 
+        setQuestions(data.questions);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -76,21 +76,44 @@ function Undersøkelser() {
       });
   };
 
-  const handleDeleteQuestion = (questionId) => {
-    fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_question/${questionId}/`, {
-      method: 'DELETE',
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.message);
+  const handleDeleteQuestion = async (questionId) => {
+    console.log('Attempting to delete question with ID:', questionId);
+    const url = `http://127.0.0.1:8000/digital_medlemsordning/delete_question/${questionId}/`;
+    console.log('DELETE Request URL:', url);
+
+    try {
+      const response = await fetch(url, { method: 'DELETE' });
+
+      if (response.ok) {
+        setSuccessMessage('Spørsmålet ble slettet');
         setShowSuccessMessage(true);
-        setSuccessMessage(data.message);
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 4000);
         setQuestions(questions.filter(q => q.questionID !== questionId));
-        setSelectedQuestion(null); 
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        setSelectedQuestion(null);
+      } else {
+        if (response.status !== 204) {
+          const data = await response.json();
+          throw new Error(data.error || 'Failed to delete the question');
+        } else {
+          setSuccessMessage('Spørsmålet ble slettet');
+          setShowSuccessMessage(true);
+          setTimeout(() => {
+            setShowSuccessMessage(false);
+          }, 4000);
+          setQuestions(questions.filter(q => q.questionID !== questionId));
+          setSelectedQuestion(null);
+        }
+      }
+    } catch (error) {
+      console.error('Deletion error:', error);
+      setSuccessMessage(error.toString());
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 4000);
+    }
   };
 
   return (
