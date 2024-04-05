@@ -13,7 +13,6 @@ function Undersøkelser() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [questionDetails, setQuestionDetails] = useState({});
 
-
   const handleChangeQuestion = (e) => {
     setNewQuestion(prev => ({ ...prev, question: e.target.value }));
   };
@@ -123,8 +122,8 @@ function Undersøkelser() {
           <button type="submit">Lagre Spørsmål</button>
         </form>
       </div>
-      {/* Alle Spørsmål Section */}
-      <div className="section alle-spørsmål">
+      {/* Fetched Questions Section */}
+      <div className="section fetched-questions">
         <h2 className="section-title">Alle Spørsmål</h2>
         <div className="questions-list">
           {questions.map(question => (
@@ -134,17 +133,17 @@ function Undersøkelser() {
             </div>
           ))}
         </div>
-        {selectedQuestion && (
-          <div className="question-details">
-            <h4>{questionDetails.question}</h4>
-            {Object.entries(questionDetails.answer_counts).map(([answer, count]) => (
-              <p key={answer}>{answer} : {count} brukere</p>
-            ))}
-            <button onClick={() => setSelectedQuestion(null)}>Lukk</button>
-            <button onClick={() => handleDeleteQuestion(selectedQuestion)}>Slett</button>
-          </div>
-        )}
       </div>
+      {selectedQuestion && (
+        <div className="question-details">
+          <h4>{questionDetails.question}</h4>
+          {Object.entries(questionDetails.answer_counts).map(([answer, count]) => (
+            <p key={answer}>{answer} : {count} brukere</p>
+          ))}
+          <button onClick={() => setSelectedQuestion(null)}>Lukk</button>
+          <button onClick={() => handleDeleteQuestion(selectedQuestion)}>Slett</button>
+        </div>
+      )}
     </div>
   );
 }
