@@ -115,8 +115,12 @@
 
 
 .question-details button:last-child {
-  background-color: #dc3545;
+  background-color: red;
   color: #ffffff;
+}
+
+.question-details button:last-child:hover {
+  background-color: darkred;
 }
 
 .question-details button:first-child {
