@@ -145,17 +145,20 @@
 }
 
 .registrants-list {
-  margin-top: 20px;
+  list-style: decimal inside; 
+  padding: 0; 
+  width: 100%;
+  text-align: left;
   max-height: 400px;
   overflow-y: auto;
-  width: 100%;
-  text-align: center;
 }
 
 .registrant {
-  margin: 10px 0;
-  font-size: 18px;
+  margin: 5px 0; 
+  font-size: 16px; 
+  line-height: 1.5; 
 }
+
 
 /* modal width on smaller screens */
 @media (max-width: 768px) {

@@ -88,13 +88,14 @@ function Aktiviteter() {
         <div className="modal">
           <div className="modal-content">
             <span className="close-button" onClick={() => setSelectedActivity(null)}>Lukk</span>
-            <div className="registrants-list">
-              {registrants.map((reg, index) => (
-                <div key={index} className="registrant">
-                  {reg.first_name} {reg.last_name}
-                </div>
+            <h3>Folk som har registrert seg på denne aktiviteten:</h3>
+            <ol className="registrants-list">
+              {registrants.map((person, index) => (
+                <li key={index} className="registrant">
+                  {person.first_name} {person.last_name}
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </div>
       )}
