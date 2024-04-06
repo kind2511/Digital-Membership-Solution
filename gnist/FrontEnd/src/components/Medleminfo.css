@@ -73,6 +73,10 @@
   cursor: pointer;
 }
 
+.medleminfo-close-button:hover{
+  background-color: darkred;
+}
+
 .medleminfo-approve-button {
   background-color: green;
   color: #fff;
