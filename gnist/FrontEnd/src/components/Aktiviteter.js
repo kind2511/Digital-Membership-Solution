@@ -4,6 +4,7 @@ import './Aktiviteter.css';
 
 function Aktiviteter() {
   const [activities, setActivities] = useState([]);
+  const [registrants, setRegistrants] = useState([]);
   const [activity, setActivity] = useState({
     dato: '',
     tittel: '',
@@ -12,6 +13,7 @@ function Aktiviteter() {
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -49,11 +51,8 @@ function Aktiviteter() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      // Show success message 
       setSuccessMessage('Aktivitetet ble lagret');
       setShowSuccess(true);
-
-      // Clear success message after 5 seconds and clear form data
       setTimeout(() => {
         setShowSuccess(false);
         setActivity({
@@ -69,42 +68,44 @@ function Aktiviteter() {
     }
   };
 
+  const fetchRegistrants = async (activityId) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/digital_medlemsordning/get_signed_up_members/${activityId}/`);
+      setRegistrants(response.data.sign_up_members);
+      setSelectedActivity(activityId);
+    } catch (error) {
+      console.error("Error fetching registrants:", error);
+    }
+  };
+
   return (
     <div className="aktiviteter-container">
       <div className="activity-success-message" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
         {successMessage}
       </div>
+      {/* Modal for Registrants */}
+      {selectedActivity && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={() => setSelectedActivity(null)}>Lukk</span>
+            <div className="registrants-list">
+              {registrants.map((reg, index) => (
+                <div key={index} className="registrant">
+                  {reg.first_name} {reg.last_name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Lag Ny Aktivitet Section */}
       <div className="section lag-ny-aktivitet">
         <h2 className="section-title">Lag Ny Aktivitet</h2>
         <form onSubmit={handleSubmit} className="activity-form">
-          <input
-            type="date"
-            name="dato"
-            value={activity.dato}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="tittel"
-            placeholder="Tittel"
-            value={activity.tittel}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="file"
-            name="bilde"
-            onChange={handleChange}
-          />
-          <textarea
-            name="beskrivelse"
-            placeholder="Beskrivelse"
-            value={activity.beskrivelse}
-            onChange={handleChange}
-            required
-          />
+          <input type="date" name="dato" value={activity.dato} onChange={handleChange} required />
+          <input type="text" name="tittel" placeholder="Tittel" value={activity.tittel} onChange={handleChange} required />
+          <input type="file" name="bilde" onChange={handleChange} />
+          <textarea name="beskrivelse" placeholder="Beskrivelse" value={activity.beskrivelse} onChange={handleChange} required />
           <button type="submit">Lagre Aktivitet</button>
         </form>
       </div>
@@ -113,7 +114,7 @@ function Aktiviteter() {
         <h2 className="section-title">Alle Aktiviteter</h2>
         <div className="activities-list">
           {activities.map((activity) => (
-            <div className="activity-item" key={activity.activityID}>
+            <div className="activity-item" key={activity.activityID} onClick={() => fetchRegistrants(activity.activityID)}>
               <img src={activity.image} alt={activity.title} />
               <div className="activity-info">
                 <h3>{activity.title}</h3>

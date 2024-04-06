@@ -55,7 +55,6 @@
   white-space: nowrap;
 }
 
-
 .activities-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -70,6 +69,13 @@
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+  cursor: pointer;
+}
+
+.activity-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .activity-item img {
@@ -95,20 +101,75 @@
 }
 
 .alle-aktiviteter {
-  margin-top: 20px; 
+  margin-top: 20px;
 }
- 
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-button {
+  background-color: #D50000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.registrants-list {
+  margin-top: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
+  text-align: center;
+}
+
+.registrant {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+/* modal width on smaller screens */
 @media (max-width: 768px) {
+  .modal-content {
+    width: 80%;
+    height: 80%;
+  }
+
   .aktiviteter-container {
     flex-direction: column;
   }
 
   .section {
     margin-bottom: 20px;
-  }
-
-  .activity-item {
-    flex-direction: column;
   }
 
   .activity-item img {
