@@ -14,51 +14,51 @@ function Medleminfo() {
   };
 
   return (
-    <div className="Medleminfo-container">
+    <div className="medleminfo-container">
       {/* Each section designed for a specific part of the Medleminfo component */}
-      <div className="Medleminfo-section">
-        <h2 className="Medleminfo-title">Endelig Godkjenning</h2>
+      <div className="medleminfo-section">
+        <h2 className="medleminfo-title">Endelig Godkjenning</h2>
       </div>
 
-      <div className="Medleminfo-section">
-        <h2 className="Medleminfo-title">Ekstra Info om Medlem</h2>
+      <div className="medleminfo-section">
+        <h2 className="medleminfo-title">Ekstra Info om Medlem</h2>
       </div>
 
-      <div className="Medleminfo-section Medleminfo-searchSection">
-        <h2 className="Medleminfo-title">Legg til Ekstra Info om Medlem</h2>
+      <div className="medleminfo-section medleminfo-searchSection">
+        <h2 className="medleminfo-title">Legg til Ekstra Info om Medlem</h2>
         <input
           type="text"
-          className="Medleminfo-searchInput"
+          className="medleminfo-searchInput"
           placeholder="Søk etter medlem..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
       </div>
 
-      <div className="Medleminfo-section">
-        <h2 className="Medleminfo-title">Medlems Nivåer</h2>
+      <div className="medleminfo-section">
+        <h2 className="medleminfo-title">Medlems Nivåer</h2>
       </div>
 
-      <div className="Medleminfo-section Medleminfo-searchSection">
-        <h2 className="Medleminfo-title">Registrer Endret Medlems Poeng</h2>
+      <div className="medleminfo-section medleminfo-searchSection">
+        <h2 className="medleminfo-title">Registrer Endret Medlems Poeng</h2>
         <input
           type="text"
-          className="Medleminfo-searchInput"
+          className="medleminfo-searchInput"
           placeholder="Søk etter medlem..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
       </div>
 
-      <div className="Medleminfo-section">
-        <h2 className="Medleminfo-title">Forslag</h2>
+      <div className="medleminfo-section">
+        <h2 className="medleminfo-title">Forslag</h2>
       </div>
 
-      <div className="Medleminfo-section Medleminfo-searchSection">
-        <h2 className="Medleminfo-title">Last opp Bevis</h2>
+      <div className="medleminfo-section medleminfo-searchSection">
+        <h2 className="medleminfo-title">Last opp Bevis</h2>
         <input
           type="text"
-          className="Medleminfo-searchInput"
+          className="medleminfo-searchInput"
           placeholder="Søk etter medlem..."
           value={searchTerm}
           onChange={handleSearchChange}
