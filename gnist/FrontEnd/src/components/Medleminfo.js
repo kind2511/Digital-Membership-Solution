@@ -49,8 +49,8 @@ function Medleminfo() {
         <h2 className="medleminfo-title">Endelig Godkjenning</h2>
         <div className="medleminfo-list">
           {unverifiedMembers.map((member, index) => (
-            <div key={index} className="medleminfo-list-item">
-              <span onClick={() => handleNameClick(member)}>{index + 1}. {member.first_name} {member.last_name}</span>
+            <div key={index} className="medleminfo-list-item" onClick={() => handleNameClick(member)}>
+              <span>{index + 1}. {member.first_name} {member.last_name}</span>
             </div>
           ))}
         </div>
@@ -58,8 +58,8 @@ function Medleminfo() {
 
       {/* Modal for displaying member details */}
       {selectedMember && (
-        <div className="medleminfo-modal">
-          <div className="medleminfo-modal-content">
+        <div className="medleminfo-modal" onClick={handleCloseModal}>
+          <div className="medleminfo-modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Medlem Informasjon</h2>
             <p><strong>Navn:</strong> {selectedMember.first_name} {selectedMember.last_name}</p>
             <p><strong>Alder:</strong> {selectedMember.age}</p>

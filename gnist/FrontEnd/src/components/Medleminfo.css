@@ -8,8 +8,9 @@
 .medleminfo-section {
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease; /* Added transition for smoother hover effect */
+  cursor: pointer;
 }
 
 .medleminfo-title {
@@ -27,9 +28,15 @@
   overflow-y: auto;
 }
 
+
 .medleminfo-list-item {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   cursor: pointer;
+  background-color:whitesmoke;
+}
+
+.medleminfo-section:hover {
+  transform: scale(1.05); /* Increase scale on hover */
 }
 
 .medleminfo-modal {
