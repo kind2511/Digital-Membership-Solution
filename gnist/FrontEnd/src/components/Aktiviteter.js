@@ -78,6 +78,24 @@ function Aktiviteter() {
     }
   };
 
+  const handleDeleteActivity = async (activityId) => {
+    try {
+      
+      const response = await axios.delete(`http://127.0.0.1:8000/digital_medlemsordning/delete_activity/${activityId}/`);
+      console.log(response.data.message); 
+      setActivities(currentActivities => currentActivities.filter(act => act.activityID !== activityId));
+      setSelectedActivity(null);
+      setSuccessMessage('Aktivitet slettet');
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      console.error("Error deleting activity:", error);
+    }
+  };
+
   return (
     <div className="aktiviteter-container">
       <div className="activity-success-message" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
@@ -87,7 +105,6 @@ function Aktiviteter() {
       {selectedActivity && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close-button" onClick={() => setSelectedActivity(null)}>Lukk</span>
             <h3>Folk som har registrert seg på denne aktiviteten:</h3>
             <ol className="registrants-list">
               {registrants.map((person, index) => (
@@ -96,9 +113,14 @@ function Aktiviteter() {
                 </li>
               ))}
             </ol>
+            <div className="modal-footer">
+              <button className="delete-button" onClick={() => handleDeleteActivity(selectedActivity)}>Slett Aktivitet</button>
+              <button className="close-button" onClick={() => setSelectedActivity(null)}>Lukk</button>
+            </div>
           </div>
         </div>
       )}
+
       {/* Lag Ny Aktivitet Section */}
       <div className="section lag-ny-aktivitet">
         <h2 className="section-title">Lag Ny Aktivitet</h2>
