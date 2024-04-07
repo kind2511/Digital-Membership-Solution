@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
 import './HomePage.css';
 
 const promoSentences = [
-  "Your first promo sentence here",
-  "Your second promo sentence here!",
-  "Your third promo sentence here!",
-  "Your fourth promo sentence here"
+  "Bli medlem enkelt: Logg inn og start din reise hos oss",
+  "Ditt nærvær teller - registrer besøket og nyt fordelene",
+  "Stig opp i nivåer: Fra Noob til Pro, hver dag hos oss teller",
+  "Hold deg oppdatert med dagens program - bli med på aktiviteten",
+  "Din stemme teller: delta i meningsmålinger og bidra med forslag"
 ];
 
 const HomePage = () => {
@@ -20,14 +22,12 @@ const HomePage = () => {
     const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
     if (isCompleteSentence) {
       currentTimer = setTimeout(() => {
-        const nextIndex = (sentenceIndex + 1) % promoSentences.length;
-        setSentenceIndex(nextIndex);
+        setSentenceIndex((sentenceIndex + 1) % promoSentences.length);
         setDisplayedText('');
-      }, 3000);
+      }, 2000);
     } else {
       currentTimer = setTimeout(() => {
-        const newText = promoSentences[sentenceIndex].substr(0, displayedText.length + 1);
-        setDisplayedText(newText);
+        setDisplayedText(promoSentences[sentenceIndex].substr(0, displayedText.length + 1));
       }, 50);
     }
 
@@ -36,8 +36,6 @@ const HomePage = () => {
     };
   }, [displayedText, sentenceIndex]);
 
-
-  // Function to handle user login or registration
   const handleAuthAction = () => {
     loginWithRedirect();
   };
@@ -52,6 +50,9 @@ const HomePage = () => {
       <div className="right">
         <div className="nav-logo">Kom i<span> gang</span></div>
         <button onClick={handleAuthAction}>Login/Register</button>
+      </div>
+      <div className="kontakt-oss-link-container">
+        <Link to="/kontakt-oss" className="kontakt-link">Kontakt oss</Link>
       </div>
     </div>
   );

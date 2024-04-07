@@ -1,33 +1,34 @@
 .home-page {
     display: flex;
-    height: 100vh;  
-}
-
-.home-page .left {
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .home-page .left {
     width: 50%;
-    background-color: #005A9E;  
+    background-color: #005A9E;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.home-page .right {
+  }
+  
+  .home-page .right {
     width: 50%;
-    background-color: #FAFAFA;  
+    background-color: #FAFAFA;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.sentence-section p {
+  }
+  
+  .sentence-section p {
     font-size: 25px;
-    color: #FFFFFF; 
+    color: #FFFFFF;
     text-align: center;
-    font-weight: normal; 
-}
-
-.nav-logo {
+    font-weight: normal;
+  }
+  
+  .nav-logo {
     font-family: 'Fredoka One', cursive;
     font-weight: 700;
     font-size: 20px;
@@ -36,29 +37,45 @@
     text-transform: uppercase;
     text-decoration: none;
     display: inline-block;
-}
-
-.nav-logo span {
+  }
+  
+  .nav-logo span {
     color: #005A9E;
     text-shadow: 3px 3px 6px #FFFFFF;
-}
-
-.home-page .right button {
+  }
+  
+  .home-page .right button {
     margin: 10px 20px;
-    padding: 10px 20px; 
+    padding: 10px 20px;
     font-size: 16px;
-    border: 2px solid #005A9E;  
+    border: 2px solid #005A9E;
     cursor: pointer;
-    background-color: #FFFFFF;  
-    width: 180px; 
+    background-color: #FFFFFF;
+    width: 180px;
     text-align: center;
-    transition: all 0.3s;  
-    color: #005A9E; 
-}
-
-.home-page .right button:hover {
-    background-color: #005A9E; 
-    color: #FFFFFF; 
-}
-
- 
+    transition: all 0.3s;
+    color: #005A9E;
+  }
+  
+  .home-page .right button:hover {
+    background-color: #005A9E;
+    color: #FFFFFF;
+  }
+  
+  .kontakt-oss-link-container {
+    position: absolute;
+    bottom: 30px; 
+    right: 330px; 
+  }
+  
+  .kontakt-link {
+    color: #005A9E;
+    font-size: 18px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .kontakt-link:hover {
+    color: #003E70;
+  }
+  
