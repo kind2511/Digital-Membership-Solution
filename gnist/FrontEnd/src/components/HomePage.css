@@ -61,41 +61,4 @@
     color: #FFFFFF; 
 }
 
-.home-page .right button a {
-    text-decoration: none;
-    color: #005A9E;
-}
-
-.home-page .right button a:hover {
-    color: #FFFFFF;
-}
-
-.home-page .right .footer-about {
-    position: absolute;
-    bottom: 10px;
-    left: 75%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    color: black;
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-}
-
-.nav-logo img {
-    width: 35px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    top: -70px;
-    opacity: 0.7;
-}
-
-.home-page .right .footer-about .links-container a {
-    margin-right: 28px;
-    margin-left: 26px;
-    text-decoration: underline;
-    font-size: 12px;
-    opacity: 0.9; 
-}
+ 

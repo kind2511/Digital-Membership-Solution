@@ -17,7 +17,6 @@ const HomePage = () => {
   useEffect(() => {
     let currentTimer;
 
-    
     const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
     if (isCompleteSentence) {
       currentTimer = setTimeout(() => {
@@ -37,6 +36,7 @@ const HomePage = () => {
     };
   }, [displayedText, sentenceIndex]);
 
+
   // Function to handle user login or registration
   const handleAuthAction = () => {
     loginWithRedirect();
@@ -51,18 +51,7 @@ const HomePage = () => {
       </div>
       <div className="right">
         <div className="nav-logo">Kom i<span> gang</span></div>
-        <div className="navigation-section">
-          <button onClick={handleAuthAction}>Login/Register</button>
-          <div className="footer-about">
-            <div className="links-container">
-              <a href="/terms-of-use">Brukervilkår</a>
-              <a href="/privacy-policy">Personvern</a>
-            </div>
-            <div className="nav-logo">
-              <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
-            </div>
-          </div>
-        </div>
+        <button onClick={handleAuthAction}>Login/Register</button>
       </div>
     </div>
   );
