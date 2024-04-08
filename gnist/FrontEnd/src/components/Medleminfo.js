@@ -5,9 +5,11 @@ function Medleminfo() {
   const [searchTerm, setSearchTerm] = useState('');
   const [unverifiedMembers, setUnverifiedMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [levels, setLevels] = useState([]);
 
   useEffect(() => {
     fetchUnverifiedMembers();
+    fetchLevels();
   }, []);
 
   const fetchUnverifiedMembers = async () => {
@@ -18,6 +20,19 @@ function Medleminfo() {
       }
       const data = await response.json();
       setUnverifiedMembers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchLevels = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_levels/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch levels');
+      }
+      const data = await response.json();
+      setLevels(data);
     } catch (error) {
       console.error(error);
     }
@@ -73,6 +88,21 @@ function Medleminfo() {
         </div>
       )}
 
+      {/* Medlems Nivåer section */}
+      <div className="medleminfo-section medleminfo-scrollable">
+        <h2 className="medleminfo-title">Medlems Nivåer</h2>
+        <div className="medleminfo-list">
+          {levels.map((level, index) => (
+            <div key={index} className="medleminfo-list-item">
+              <p><strong>Navn:</strong> {level.name}</p>
+              <p><strong>Poeng:</strong> {level.points}</p>
+              <button className="medleminfo-edit-button">Endre</button>
+              <button className="medleminfo-delete-button">Slett</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Other sections */}
       <div className="medleminfo-section">
         <h2 className="medleminfo-title">Ekstra Info om Medlem</h2>
@@ -90,33 +120,15 @@ function Medleminfo() {
       </div>
 
       <div className="medleminfo-section">
-        <h2 className="medleminfo-title">Medlems Nivåer</h2>
+        <h2 className="medleminfo-title">Registrer Endret Medlems Poeng</h2>
       </div>
 
       <div className="medleminfo-section medleminfo-searchSection">
-        <h2 className="medleminfo-title">Registrer Endret Medlems Poeng</h2>
-        <input
-          type="text"
-          className="medleminfo-searchInput"
-          placeholder="Søk etter medlem..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
-
-      <div className="medleminfo-section">
         <h2 className="medleminfo-title">Forslag</h2>
       </div>
 
       <div className="medleminfo-section medleminfo-searchSection">
         <h2 className="medleminfo-title">Last opp Bevis</h2>
-        <input
-          type="text"
-          className="medleminfo-searchInput"
-          placeholder="Søk etter medlem..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
       </div>
     </div>
   );
