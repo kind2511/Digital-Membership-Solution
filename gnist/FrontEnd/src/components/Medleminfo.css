@@ -183,3 +183,43 @@
 .medleminfo-section {
   margin-top: 20px; 
 }
+
+
+/*Last opp bevis style */
+.medleminfo-section-lastopp {
+  padding: 20px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease;
+  cursor: pointer;
+  min-height: 300px;
+}
+
+.medleminfo-section-lastopp:hover {
+  transform: scale(1.05);
+}
+
+.medleminfo-title-lastopp {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.medleminfo-search-container-lastopp {
+  display: flex;
+  align-items: center;
+}
+
+.medleminfo-search-icon-lastopp {
+  margin-right: 8px;
+  font-size: 1.2em;
+  color: #005A9E;
+}
+
+.medleminfo-search-input-lastopp {
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 50%;
+  }
+
