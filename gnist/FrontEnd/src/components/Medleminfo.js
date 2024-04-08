@@ -282,7 +282,7 @@ function Medleminfo() {
       </div>
 
       <div className="medleminfo-section">
-        <h2 className="medleminfo-title">Registrer Endret Medlems Poeng</h2>
+        <h2 className="medleminfo-title"> Endret Medlems Poeng</h2>
       </div>
 
       <div className="medleminfo-section medleminfo-searchSection">

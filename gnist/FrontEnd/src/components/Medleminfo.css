@@ -11,6 +11,7 @@
   background-color: rgba(0, 0, 0, 0.1);
   transition: transform 0.1s ease; /* Added transition for smoother hover effect */
   cursor: pointer;
+  min-height: 300px; 
 }
 
 .medleminfo-title {
@@ -24,15 +25,14 @@
 }
 
 .medleminfo-list {
-  max-height: 200px; /* heigh of the Endelig Godkjenning container */
+  max-height: 200px; /* height of the Endelig Godkjenning container */
   overflow-y: auto;
 }
-
 
 .medleminfo-list-item {
   margin-bottom: 12px;
   cursor: pointer;
-  background-color:whitesmoke;
+  background-color: whitesmoke;
 }
 
 .medleminfo-section:hover {
@@ -64,115 +64,56 @@
   justify-content: space-between;
 }
 
-.medleminfo-close-button {
-  background-color: red;
-  color: #fff;
-  padding: 15px 30px;
-  border: none;
+.medleminfo-close-button,
+.medleminfo-approve-button,
+.medleminfo-edit-button,
+.medleminfo-delete-button,
+.medleminfo-add-button,
+.medleminfo-save-button {
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  color: #fff;
 }
 
-.medleminfo-close-button:hover{
+.medleminfo-close-button {
+  background-color: red;
+}
+
+.medleminfo-close-button:hover {
   background-color: darkred;
 }
 
 .medleminfo-approve-button {
   background-color: green;
-  color: #fff;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .medleminfo-approve-button:hover {
-  background-color:darkgreen;
+  background-color: darkgreen;
 }
+
 .medleminfo-edit-button {
   background-color: green;
-  color: #fff;
-  padding: 5px 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .medleminfo-delete-button {
   background-color: red;
-  color: #fff;
-  padding: 5px 9px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .medleminfo-add-button {
-  background-color: #005A9E; 
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-/* Add Level Modal */
-.medleminfo-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.medleminfo-modal-content {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  max-width: 600px;
-}
-
-.medleminfo-add-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #005A9E;
 }
 
 .medleminfo-add-button:hover {
-  background-color: #0056b3;
+  background-color: #003E7A;
 }
 
 .medleminfo-save-button {
   background-color: green;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-.medleminfo-close-button {
-  background-color: red;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.medleminfo-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
+.medleminfo-save-button:hover {
+  background-color: darkgreen;
 }
 
 /* Delete Confirmation Modal */
