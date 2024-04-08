@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './Medleminfo.css';
 
 function Medleminfo() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTermEndretMedlemsPoeng, setSearchTermEndretMedlemsPoeng] = useState('');
+  const [searchTermForslag, setSearchTermForslag] = useState('');
+  const [searchTermLastOppBevis, setSearchTermLastOppBevis] = useState('');
   const [unverifiedMembers, setUnverifiedMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
   const [levels, setLevels] = useState([]);
@@ -47,9 +49,19 @@ function Medleminfo() {
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    //TODO:  
+  const handleSearchChangeEndretMedlemsPoeng = (e) => {
+    setSearchTermEndretMedlemsPoeng(e.target.value);
+    // TODO: 
+  };
+
+  const handleSearchChangeForslag = (e) => {
+    setSearchTermForslag(e.target.value);
+    // TODO: 
+  };
+
+  const handleSearchChangeLastOppBevis = (e) => {
+    setSearchTermLastOppBevis(e.target.value);
+    // TODO: 
   };
 
   const handleNameClick = (member) => {
@@ -276,8 +288,8 @@ function Medleminfo() {
           type="text"
           className="medleminfo-searchInput"
           placeholder="Søk etter medlem..."
-          value={searchTerm}
-          onChange={handleSearchChange}
+          value={searchTermEndretMedlemsPoeng}
+          onChange={handleSearchChangeEndretMedlemsPoeng}
         />
       </div>
 
@@ -291,8 +303,8 @@ function Medleminfo() {
             type="text"
             className="medleminfo-search-input"
             placeholder="Skriv navn til medlem..."
-            value={searchTerm}
-            onChange={handleSearchChange}
+            value={searchTermForslag}
+            onChange={handleSearchChangeForslag}
           />
         </div>
       </div>
@@ -301,8 +313,20 @@ function Medleminfo() {
         <h2 className="medleminfo-title">Forslag</h2>
       </div>
 
-      <div className="medleminfo-section medleminfo-searchSection">
-        <h2 className="medleminfo-title">Last opp Bevis</h2>
+      <div className="medleminfo-section medleminfo-section-lastopp">
+        <h2 className="medleminfo-title medleminfo-title-lastopp">Last opp Bevis</h2>
+        <div className="medleminfo-search-container medleminfo-search-container-lastopp">
+          <span className="medleminfo-search-icon medleminfo-search-icon-lastopp" role="img" aria-label="Search">
+            🔍
+          </span>
+          <input
+            type="text"
+            className="medleminfo-search-input medleminfo-search-input-lastopp"
+            placeholder="Skriv navn til medlem..."
+            value={searchTermLastOppBevis}
+            onChange={handleSearchChangeLastOppBevis}
+          />
+        </div>
       </div>
     </div>
   );
