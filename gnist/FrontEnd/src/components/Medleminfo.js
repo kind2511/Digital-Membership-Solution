@@ -7,8 +7,10 @@ function Medleminfo() {
   const [selectedMember, setSelectedMember] = useState(null);
   const [levels, setLevels] = useState([]);
   const [showAddLevelModal, setShowAddLevelModal] = useState(false);
-  const [newLevelName, setNewLevelName] = useState('');
-  const [newLevelPoints, setNewLevelPoints] = useState('');
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
+  const [levelToDelete, setLevelToDelete] = useState(null);
+  const [newLevelName, setNewLevelName] = useState(''); 
+  const [newLevelPoints, setNewLevelPoints] = useState(''); 
 
   useEffect(() => {
     fetchUnverifiedMembers();
@@ -92,6 +94,30 @@ function Medleminfo() {
     }
   };
 
+  const handleDeleteLevel = (levelId) => {
+    setLevelToDelete(levelId);
+    setShowDeleteConfirmationModal(true);
+  };
+
+  const handleCloseDeleteConfirmationModal = () => {
+    setShowDeleteConfirmationModal(false);
+  };
+
+  const handleConfirmDeleteLevel = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_level/${levelToDelete}/`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete level');
+      }
+      setShowDeleteConfirmationModal(false);
+      fetchLevels(); // Fetch levels again to update the list
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="medleminfo-container">
       {/* Endelig Godkjenning section */}
@@ -132,7 +158,7 @@ function Medleminfo() {
               <p><strong>Navn:</strong> {level.name}</p>
               <p><strong>Poeng:</strong> {level.points}</p>
               <button className="medleminfo-edit-button">Endre</button>
-              <button className="medleminfo-delete-button">Slett</button>
+              <button className="medleminfo-delete-button" onClick={() => handleDeleteLevel(level.levelID)}>Slett</button>
             </div>
           ))}
           <button className="medleminfo-add-button" onClick={handleAddLevel}>Legg til nytt nivå</button>
@@ -159,6 +185,19 @@ function Medleminfo() {
             <div className="medleminfo-buttons">
               <button className="medleminfo-save-button" onClick={handleSaveLevel}>Lagre</button>
               <button className="medleminfo-close-button" onClick={handleCloseAddLevelModal}>Lukk</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmationModal && (
+        <div className="medleminfo-modal" onClick={handleCloseDeleteConfirmationModal}>
+          <div className="medleminfo-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Slette Nivå?</h2>
+            <div className="medleminfo-buttons">
+              <button className="medleminfo-save-button" onClick={handleConfirmDeleteLevel}>Ja</button>
+              <button className="medleminfo-close-button" onClick={handleCloseDeleteConfirmationModal}>Nei</button>
             </div>
           </div>
         </div>
