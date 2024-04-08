@@ -57,6 +57,11 @@ function Medleminfo() {
     setSelectedMember(null);
   };
 
+  const handleAddLevel = () => {
+    // TODO: 
+    console.log('Add new level');
+  };
+
   return (
     <div className="medleminfo-container">
       {/* Endelig Godkjenning section */}
@@ -100,6 +105,7 @@ function Medleminfo() {
               <button className="medleminfo-delete-button">Slett</button>
             </div>
           ))}
+          <button className="medleminfo-add-button" onClick={handleAddLevel}>Legg til nytt nivå</button>
         </div>
       </div>
 

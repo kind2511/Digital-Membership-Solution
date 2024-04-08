@@ -106,3 +106,14 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.medleminfo-add-button {
+  background-color: #005A9E; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
