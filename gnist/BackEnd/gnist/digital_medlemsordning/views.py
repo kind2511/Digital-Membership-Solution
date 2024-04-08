@@ -24,6 +24,7 @@ from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
 from .serializers import MemberAnswerSerializer
+from django.db.models import Q
 
 
 
@@ -1102,3 +1103,20 @@ def register_employee(request):
         return Response({'message': 'Added new employee'})
     else:
         return Response({'error': 'Invalid request method'})
+    
+
+# Searches for members by first and or last name
+@api_view(['GET'])
+def search_member(request):
+    # looks for name in params
+    if 'name' in request.query_params:
+        name = request.query_params['name']
+        # Perform case-insensitive search by full name
+        users = Members.objects.filter(
+            Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        )
+        serializer = MembersSerializer(users, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
+    
