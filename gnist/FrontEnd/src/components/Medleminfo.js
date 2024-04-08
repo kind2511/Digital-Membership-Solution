@@ -6,6 +6,9 @@ function Medleminfo() {
   const [unverifiedMembers, setUnverifiedMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
   const [levels, setLevels] = useState([]);
+  const [showAddLevelModal, setShowAddLevelModal] = useState(false);
+  const [newLevelName, setNewLevelName] = useState('');
+  const [newLevelPoints, setNewLevelPoints] = useState('');
 
   useEffect(() => {
     fetchUnverifiedMembers();
@@ -58,8 +61,35 @@ function Medleminfo() {
   };
 
   const handleAddLevel = () => {
-    // TODO: 
-    console.log('Add new level');
+    setShowAddLevelModal(true);
+  };
+
+  const handleCloseAddLevelModal = () => {
+    setShowAddLevelModal(false);
+  };
+
+  const handleSaveLevel = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/create_level/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: newLevelName,
+          points: newLevelPoints
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add new level');
+      }
+      setShowAddLevelModal(false);
+      setNewLevelName('');
+      setNewLevelPoints('');
+      fetchLevels(); // Fetch levels again to update the list
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -108,6 +138,31 @@ function Medleminfo() {
           <button className="medleminfo-add-button" onClick={handleAddLevel}>Legg til nytt nivå</button>
         </div>
       </div>
+
+      {/* Add Level Modal */}
+      {showAddLevelModal && (
+        <div className="medleminfo-modal" onClick={handleCloseAddLevelModal}>
+          <div className="medleminfo-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Legg til nytt nivå</h2>
+            <input
+              type="text"
+              placeholder="Navn til nivå"
+              value={newLevelName}
+              onChange={(e) => setNewLevelName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Total poeng"
+              value={newLevelPoints}
+              onChange={(e) => setNewLevelPoints(e.target.value)}
+            />
+            <div className="medleminfo-buttons">
+              <button className="medleminfo-save-button" onClick={handleSaveLevel}>Lagre</button>
+              <button className="medleminfo-close-button" onClick={handleCloseAddLevelModal}>Lukk</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Other sections */}
       <div className="medleminfo-section">
