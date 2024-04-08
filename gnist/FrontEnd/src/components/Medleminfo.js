@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Medleminfo.css'; 
+import './Medleminfo.css';
 
 function Medleminfo() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,6 +11,10 @@ function Medleminfo() {
   const [levelToDelete, setLevelToDelete] = useState(null);
   const [newLevelName, setNewLevelName] = useState(''); 
   const [newLevelPoints, setNewLevelPoints] = useState(''); 
+  const [showEditLevelModal, setShowEditLevelModal] = useState(false);
+  const [levelToEdit, setLevelToEdit] = useState(null);
+  const [editedLevelName, setEditedLevelName] = useState('');
+  const [editedLevelPoints, setEditedLevelPoints] = useState('');
 
   useEffect(() => {
     fetchUnverifiedMembers();
@@ -118,6 +122,39 @@ function Medleminfo() {
     }
   };
 
+  const handleEditLevel = (level) => {
+    setLevelToEdit(level);
+    setEditedLevelName(level.name);
+    setEditedLevelPoints(level.points);
+    setShowEditLevelModal(true);
+  };
+
+  const handleCloseEditLevelModal = () => {
+    setShowEditLevelModal(false);
+  };
+
+  const handleSaveEditedLevel = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/edit_level/${levelToEdit.levelID}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: editedLevelName,
+          points: editedLevelPoints
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to edit level');
+      }
+      setShowEditLevelModal(false);
+      fetchLevels(); // Fetch levels again to update the list
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="medleminfo-container">
       {/* Endelig Godkjenning section */}
@@ -157,7 +194,7 @@ function Medleminfo() {
             <div key={index} className="medleminfo-list-item">
               <p><strong>Navn:</strong> {level.name}</p>
               <p><strong>Poeng:</strong> {level.points}</p>
-              <button className="medleminfo-edit-button">Endre</button>
+              <button className="medleminfo-edit-button" onClick={() => handleEditLevel(level)}>Endre</button>
               <button className="medleminfo-delete-button" onClick={() => handleDeleteLevel(level.levelID)}>Slett</button>
             </div>
           ))}
@@ -185,6 +222,31 @@ function Medleminfo() {
             <div className="medleminfo-buttons">
               <button className="medleminfo-save-button" onClick={handleSaveLevel}>Lagre</button>
               <button className="medleminfo-close-button" onClick={handleCloseAddLevelModal}>Lukk</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Level Modal */}
+      {showEditLevelModal && (
+        <div className="medleminfo-modal" onClick={handleCloseEditLevelModal}>
+          <div className="medleminfo-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Rediger nivå</h2>
+            <input
+              type="text"
+              placeholder="Navn til nivå"
+              value={editedLevelName}
+              onChange={(e) => setEditedLevelName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Total poeng"
+              value={editedLevelPoints}
+              onChange={(e) => setEditedLevelPoints(e.target.value)}
+            />
+            <div className="medleminfo-buttons">
+              <button className="medleminfo-save-button" onClick={handleSaveEditedLevel}>Lagre</button>
+              <button className="medleminfo-close-button" onClick={handleCloseEditLevelModal}>Avbryt</button>
             </div>
           </div>
         </div>
