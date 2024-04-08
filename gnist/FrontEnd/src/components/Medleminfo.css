@@ -159,3 +159,27 @@
   background-color: green;
   color: #fff;
 }
+
+/* Endret Medlems Poeng style */
+.medleminfo-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.medleminfo-search-icon {
+  margin-right: 8px; 
+  font-size: 1.2em; 
+}
+
+.medleminfo-search-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em; 
+  width: 69%; 
+}
+
+/*Extra */
+.medleminfo-section {
+  margin-top: 20px; 
+}

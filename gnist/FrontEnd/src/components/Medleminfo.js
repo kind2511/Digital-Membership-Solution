@@ -9,8 +9,8 @@ function Medleminfo() {
   const [showAddLevelModal, setShowAddLevelModal] = useState(false);
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
   const [levelToDelete, setLevelToDelete] = useState(null);
-  const [newLevelName, setNewLevelName] = useState(''); 
-  const [newLevelPoints, setNewLevelPoints] = useState(''); 
+  const [newLevelName, setNewLevelName] = useState('');
+  const [newLevelPoints, setNewLevelPoints] = useState('');
   const [showEditLevelModal, setShowEditLevelModal] = useState(false);
   const [levelToEdit, setLevelToEdit] = useState(null);
   const [editedLevelName, setEditedLevelName] = useState('');
@@ -282,7 +282,19 @@ function Medleminfo() {
       </div>
 
       <div className="medleminfo-section">
-        <h2 className="medleminfo-title"> Endret Medlems Poeng</h2>
+        <h2 className="medleminfo-title">Endret Medlems Poeng</h2>
+        <div className="medleminfo-search-container">
+          <span className="medleminfo-search-icon" role="img" aria-label="Search">
+            🔍
+          </span>
+          <input
+            type="text"
+            className="medleminfo-search-input"
+            placeholder="Skriv navn til medlem..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
       </div>
 
       <div className="medleminfo-section medleminfo-searchSection">
