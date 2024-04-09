@@ -1,46 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import './Rød.css';
+import './Rød.css';  
 
 function Rød() {
-  /*
-    // TODO: 
-    // TODO: 
-    */
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-
-    /*
-    // TODO: 
-    // TODO: 
-    */
+    //TODO
   }, []);
 
   useEffect(() => {
-    /*
-    // TODO: 
-    // TODO: 
-    */
-  }, [searchTerm /*, utstengteMembers*/]);
+    //TODO
+  }, [searchTerm]);
 
   return (
-    <div className="rød-container">
-      {/* Utviste Section */}
-      <div className="section">
-        <h2 className="section-title">Utviste Medlemmer</h2>
-        {/* TODO Display logic for Utviste members */}
+    <div className="unique-rod-container">
+      <div className="unique-section unique-expelled-members">
+        <h2 className="unique-section-title">Utviste Medlemmer</h2>
       </div>
 
-      {/* Utstengte Medlem Section */}
-      <div className="section">
-        <h2 className="section-title">Utstengte Medlemmer</h2>
+      <div className="unique-section unique-banned-members">
+        <h2 className="unique-section-title">Utstengte Medlemmer</h2>
         <input
           type="text"
+          className="unique-section-input"
           placeholder="Søk etter medlem..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* TODO Display logic for  Utstengte members */}
       </div>
     </div>
   );

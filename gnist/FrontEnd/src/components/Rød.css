@@ -1,4 +1,4 @@
-.rød-container {
+.unique-rod-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -7,21 +7,37 @@
   overflow: auto;
 }
 
-.section {
+@media (min-width: 768px) {
+  .unique-rod-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.unique-section {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  flex: 1;
+  min-width: 300px;
+  min-height: 500px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.section-title {
+.unique-section:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.unique-section-title {
   margin-bottom: 20px;
   color: #333;
   font-size: 24px;
 }
 
-.section input[type="text"] {
+.unique-section-input {
   width: 100%;
   padding: 8px;
   margin-bottom: 15px;
@@ -29,9 +45,8 @@
   border-radius: 5px;
 }
 
-
 @media (max-width: 768px) {
-  .rød-container {
+  .unique-rod-container {
     gap: 15px;
   }
 }
