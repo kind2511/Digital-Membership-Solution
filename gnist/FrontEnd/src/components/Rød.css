@@ -135,3 +135,7 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.roed-modal-button-ban:hover {
+  background-color:darkred;
+}
