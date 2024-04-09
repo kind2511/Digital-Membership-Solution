@@ -44,39 +44,38 @@ function Rød() {
   };
 
   return (
-    <div className="unique-rod-container">
-      <div className="unique-section unique-expelled-members">
-        <h2 className="unique-section-title">Utviste Medlemmer</h2>
+    <div className="roed-unique-container">
+      <div className="roed-section roed-expelled-members">
+        <h2 className="roed-section-title">Utviste Medlemmer</h2>
       </div>
 
-      <div className="unique-section unique-banned-members">
-        <h2 className="unique-section-title">Utstengte Medlemmer</h2>
+      <div className="roed-section roed-banned-members">
+        <h2 className="roed-section-title">Utstengte Medlemmer</h2>
         <input
           type="text"
-          className="unique-section-input"
+          className="roed-section-input"
           placeholder="Søk etter medlem..."
           value={searchTerm}
           onChange={handleChange}
         />
-        {searchResults.map((result, index) => (
-          <div key={index} className="search-result" onClick={() => handleSelectMember(result)}>
-            {result.first_name} {result.last_name}
-          </div>
-        ))}
+        <div className="roed-names-container"> 
+          {searchResults.map((result, index) => (
+            <div key={index} className="roed-search-result" onClick={() => handleSelectMember(result)}>
+              {result.first_name} {result.last_name}
+            </div>
+          ))}
+        </div>
       </div>
       {activeMember && (
-        <div className="modal-rod">
-          <div className="modal-content-rod">
+        <div className="roed-modal">
+          <div className="roed-modal-content">
             <p>{activeMember.first_name} {activeMember.last_name}</p>
-            <div className="modal-buttons">
-              <button className="modal-button-rod" onClick={handleBanMember}>Ban</button>
-              <button className="modal-button-rod" onClick={handleCloseModal}>Lukk</button>
+            <div className="roed-modal-buttons">
+              <button className="roed-modal-button" onClick={handleBanMember}>Ban</button>
+              <button className="roed-modal-button" onClick={handleCloseModal}>Lukk</button>
             </div>
           </div>
         </div>
-      )}
-      {!activeMember && (
-        <div className="modal-placeholder"></div>
       )}
     </div>
   );

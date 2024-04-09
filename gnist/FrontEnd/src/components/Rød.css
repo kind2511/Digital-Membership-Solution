@@ -1,4 +1,4 @@
-.unique-rod-container {
+.roed-unique-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -7,7 +7,7 @@
   overflow: auto;
 }
 
-.unique-section {
+.roed-section {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -15,22 +15,26 @@
   overflow: hidden;
   flex: 1;
   min-width: 300px;
-  min-height: 500px;
+  height: 570px; 
+  max-height: 1000px; 
+  overflow-y: auto;  
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.unique-section:hover {
+
+
+.roed-section:hover {
   transform: scale(1.02);
   opacity: 0.9;
 }
 
-.unique-section-title {
+.roed-section-title {
   margin-bottom: 20px;
   color: #333;
   font-size: 24px;
 }
 
-.unique-section-input {
+.roed-section-input {
   width: 50%;
   padding: 10px; 
   margin-bottom: 20px;  
@@ -41,27 +45,27 @@
   transition: border-color 0.1s ease;  
 }
 
-.unique-section-input::placeholder {
+.roed-section-input::placeholder {
   color: #999;  
 }
 
-.unique-section-input:focus {
+.roed-section-input:focus {
   border-color: #005A9E; 
 }
 
-.search-result {
+.roed-search-result {
   padding: 10px;
   margin: 2px 0;
   background-color: #f0f0f0;
   cursor: pointer;
 }
 
-.search-result:hover {
+.roed-search-result:hover {
   background-color: #e0e0e0;
 }
 
 /* Styles for Modal */
-.modal-rod {
+.roed-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -74,7 +78,7 @@
   max-width: 400px;
 }
 
-.modal-content-rod {
+.roed-modal-content {
   padding: 20px;
   text-align: center; 
   display: flex;
@@ -83,13 +87,13 @@
   align-items: center; 
 }
 
-.modal-buttons {
+.roed-modal-buttons {
   display: flex;
   justify-content: center; 
   margin-top: 20px;
 }
 
-.modal-button-rod {
+.roed-modal-button {
   padding: 8px 16px;
   margin-left: 10px;
   border: none;
@@ -98,8 +102,13 @@
 }
 
 @media (min-width: 768px) {
-  .unique-rod-container {
+  .roed-unique-container {
     flex-direction: row;
     flex-wrap: wrap;
   }
+}
+
+.roed-names-container {
+  max-height: 400px;  
+  overflow-y: auto;
 }
