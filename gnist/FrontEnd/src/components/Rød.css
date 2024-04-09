@@ -139,3 +139,7 @@
 .roed-modal-button-ban:hover {
   background-color:darkred;
 }
+
+.roed-modal-button-close:hover{
+  background-color:darkorange;
+}
