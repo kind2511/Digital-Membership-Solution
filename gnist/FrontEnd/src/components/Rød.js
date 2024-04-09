@@ -75,6 +75,9 @@ function Rød() {
           </div>
         </div>
       )}
+      {!activeMember && (
+        <div className="modal-placeholder"></div>
+      )}
     </div>
   );
 }
