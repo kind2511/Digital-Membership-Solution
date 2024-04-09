@@ -58,7 +58,7 @@ function Rød() {
           value={searchTerm}
           onChange={handleChange}
         />
-        <div className="roed-names-container"> 
+        <div className="roed-names-container">
           {searchResults.map((result, index) => (
             <div key={index} className="roed-search-result" onClick={() => handleSelectMember(result)}>
               {result.first_name} {result.last_name}
@@ -71,8 +71,8 @@ function Rød() {
           <div className="roed-modal-content">
             <p>{activeMember.first_name} {activeMember.last_name}</p>
             <div className="roed-modal-buttons">
-              <button className="roed-modal-button" onClick={handleBanMember}>Ban</button>
-              <button className="roed-modal-button" onClick={handleCloseModal}>Lukk</button>
+              <button className="roed-modal-button-ban" onClick={handleBanMember}>Ban</button>
+              <button className="roed-modal-button-close" onClick={handleCloseModal}>Lukk</button>
             </div>
           </div>
         </div>

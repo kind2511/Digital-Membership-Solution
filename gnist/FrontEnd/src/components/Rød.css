@@ -89,8 +89,9 @@
 
 .roed-modal-buttons {
   display: flex;
-  justify-content: center; 
   margin-top: 20px;
+  justify-content: space-between; 
+
 }
 
 .roed-modal-button {
@@ -111,4 +112,26 @@
 .roed-names-container {
   max-height: 400px;  
   overflow-y: auto;
+}
+
+/* Styles for buttons */
+.roed-modal-button-ban {
+  background-color: red;  
+  color: white;  
+  padding: 8px 16px;
+  margin-right: 20px;  
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border:black;
+}
+
+
+.roed-modal-button-close {
+  background-color: orange; 
+  color: white; 
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
