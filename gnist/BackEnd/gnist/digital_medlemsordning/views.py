@@ -393,7 +393,8 @@ def get_banned_members(request):
             'full_name': f"{member.first_name} {member.last_name}",
             'profile_picture': member.profile_pic.url if member.profile_pic else None,
             'banned_from': member.banned_from,
-            'banned_until': member.banned_until
+            'banned_until': member.banned_until,
+            'auth0_id': member.auth0ID,
         }
         members_data.append(member_data)
 
