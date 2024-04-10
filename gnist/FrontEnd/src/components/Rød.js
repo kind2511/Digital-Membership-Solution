@@ -69,7 +69,7 @@ function Rød() {
       console.error("Please select a member and provide ban start and end dates");
       return;
     }
-  
+
     fetch(`http://127.0.0.1:8000/digital_medlemsordning/ban_member/${auth0ID}/`, {
       method: 'PUT',
       headers: {
@@ -93,26 +93,26 @@ function Rød() {
         console.error("Error banning member:", error);
       });
   };
-  
 
   return (
     <div className="roed-unique-container">
-      <div className="roed-section roed-expelled-members">
+      <div className="roed-section roed-banned-members">
         <h2 className="roed-section-title">Utviste Medlemmer</h2>
         <div className="roed-names-container">
           {bannedMembers.map((member, index) => (
-            <div key={index} className="roed-search-result" onClick={() => handleSelectMember(member, true)}>
-              <img src={member.profile_picture} alt={`${member.full_name}`} />
-              <div>
-                <p>{member.full_name}</p>
-                <p>Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
-                <p>Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
+            <div key={index} className="roed-banned-member-item">
+              <img src={member.profile_picture} alt={`${member.full_name}`} className="roed-member-image" />
+              <div className="roed-member-info">
+                <p className="roed-member-name">{member.full_name}</p>
+                <p className="banned-date">Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
+                <p className="banned-date">Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Section for Utstengte Medlemmer*/}
       <div className="roed-section">
         <h2 className="roed-section-title">Utstengte Medlemmer</h2>
         <input
@@ -131,6 +131,7 @@ function Rød() {
         </div>
       </div>
 
+      {/* Modal for handling banning*/}
       {activeMember && (
         <div className="roed-modal">
           <div className="roed-modal-content">

@@ -112,7 +112,6 @@
   overflow-y: auto;
 }
 
-/* Updated Styles for buttons */
 .roed-modal-button-ban {
   background-color: red;  
   color: white;
@@ -129,7 +128,6 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
 
 .roed-modal-button-close {
   margin-left: 20px; 
@@ -151,6 +149,7 @@
 .roed-modal-button-close:hover{
   background-color:darkorange;
 }
+
 
 .roed-expelled-members {
   display: flex;
@@ -185,7 +184,7 @@
   padding: 10px;
   margin: 2px 0;
   background-color: #f0f0f0;
-  cursor: pointer;
+  cursor: default; 
 }
 
 .roed-expelled-members .roed-search-result img {
