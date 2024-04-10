@@ -7,6 +7,8 @@ function Rød() {
   const [activeMember, setActiveMember] = useState(null);
   const [bannedMembers, setBannedMembers] = useState([]);
   const [isExpelledMemberModal, setIsExpelledMemberModal] = useState(false);
+  const [banStartDate, setBanStartDate] = useState(null);
+  const [banEndDate, setBanEndDate] = useState(null);
 
   useEffect(() => {
     fetchBannedMembers();
@@ -57,16 +59,41 @@ function Rød() {
     setSearchTerm('');
     setSearchResults([]);
     setIsExpelledMemberModal(false);
+    setBanStartDate(null);
+    setBanEndDate(null);
   };
 
-  const handleBanOrUnbanMember = () => {
-    if (isExpelledMemberModal) {
-      console.log("Member unbanned:", activeMember);
-    } else {
-      console.log("Member banned:", activeMember);
+  const handleBanMember = () => {
+    const auth0ID = localStorage.getItem('Auth0SearchedMember');
+    if (!auth0ID || !banStartDate || !banEndDate) {
+      console.error("Please select a member and provide ban start and end dates");
+      return;
     }
-    handleCloseModal();
+  
+    fetch(`http://127.0.0.1:8000/digital_medlemsordning/ban_member/${auth0ID}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        banned_from: banStartDate,
+        banned_until: banEndDate,
+      }),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("Member banned successfully");
+          handleCloseModal();
+          fetchBannedMembers();
+        } else {
+          console.error("Failed to ban member");
+        }
+      })
+      .catch(error => {
+        console.error("Error banning member:", error);
+      });
   };
+  
 
   return (
     <div className="roed-unique-container">
@@ -78,7 +105,6 @@ function Rød() {
               <img src={member.profile_picture} alt={`${member.full_name}`} />
               <div>
                 <p>{member.full_name}</p>
-                {/* Display the banned dates */}
                 <p>Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
                 <p>Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
               </div>
@@ -109,18 +135,32 @@ function Rød() {
         <div className="roed-modal">
           <div className="roed-modal-content">
             <p>{activeMember.full_name || `${activeMember.first_name} ${activeMember.last_name}`}</p>
+            <label htmlFor="banStartDate">Ban Start Date:</label>
+            <input
+              type="date"
+              id="banStartDate"
+              value={banStartDate}
+              onChange={e => setBanStartDate(e.target.value)}
+            />
+            <label htmlFor="banEndDate">Ban End Date:</label>
+            <input
+              type="date"
+              id="banEndDate"
+              value={banEndDate}
+              onChange={e => setBanEndDate(e.target.value)}
+            />
             <div className="roed-modal-buttons">
               <button
                 className={isExpelledMemberModal ? "roed-modal-button-unban" : "roed-modal-button-ban"}
-                onClick={handleBanOrUnbanMember}
+                onClick={handleBanMember}
               >
-                {isExpelledMemberModal ? 'Unban' : 'Ban'}
+                Ban
               </button>
               <button
                 className="roed-modal-button-close"
                 onClick={handleCloseModal}
               >
-                Lukk
+                Close
               </button>
             </div>
           </div>
