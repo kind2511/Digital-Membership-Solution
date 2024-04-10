@@ -9,16 +9,14 @@
 
 .roed-section {
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.1);
   overflow: hidden;
   flex: 1;
   min-width: 300px;
-  height: 570px; 
-  max-height: 1000px; 
-  overflow-y: auto;  
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  height: 570px;
+  overflow-y: auto;
 }
 
 .roed-section:hover {
@@ -30,25 +28,30 @@
   margin-bottom: 20px;
   color: #333;
   font-size: 24px;
+  border-bottom: 2px solid #ccc;
 }
 
 .roed-section-input {
   width: 50%;
-  padding: 10px; 
-  margin-bottom: 20px;  
+  padding: 10px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: 16px;  
-  outline: none;  
-  transition: border-color 0.1s ease;  
+  font-size: 16px;
+  outline: none;
 }
 
 .roed-section-input::placeholder {
-  color: #999;  
+  color: #999;
 }
 
 .roed-section-input:focus {
-  border-color: #005A9E; 
+  border-color: #005A9E;
+}
+
+.roed-names-container {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .roed-search-result {
@@ -62,7 +65,6 @@
   background-color: #e0e0e0;
 }
 
-/* Styles for Modal */
 .roed-modal {
   position: fixed;
   top: 50%;
@@ -78,26 +80,52 @@
 
 .roed-modal-content {
   padding: 20px;
-  text-align: center; 
+  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
 }
 
 .roed-modal-buttons {
   display: flex;
   margin-top: 20px;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 .roed-modal-button {
-  padding: 8px 16px;
+  padding: 8px 14px;
   border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  flex: none;
+  margin: 0 10px;
+}
+
+.roed-modal-button-ban {
+  background-color: red;
+  color: white;
   border-radius: 4px;
   cursor: pointer;
-  flex: none; 
-  margin: 0 10px; 
+  padding: 9px 12px;
+  margin-right: 20px; 
+}
+
+.roed-modal-button-close {
+  background-color: orange;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 9px 9px;
+  margin-left: 20px; 
+}
+
+.roed-modal-button-ban:hover {
+  background-color: darkred;
+}
+
+.roed-modal-button-close:hover {
+  background-color: darkorange;
 }
 
 @media (min-width: 768px) {
@@ -107,95 +135,56 @@
   }
 }
 
-.roed-names-container {
-  max-height: 400px;  
-  overflow-y: auto;
+.roed-banned-members {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 15px;
 }
 
-.roed-modal-button-ban {
-  background-color: red;  
-  color: white;
-  padding: 9px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+.roed-banned-members .roed-section-title {
+  font-size: 28px;
+  color: #333;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.roed-modal-button-unban {
-  margin-right: 20px; 
-  background-color: green;  
-  color: white;
-  padding: 8px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.roed-modal-button-close {
-  margin-left: 20px; 
-  background-color: orange; 
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.roed-modal-button-ban:hover {
-  background-color:darkred;
-}
-
-.roed-modal-button-unban:hover {
-  background-color: darkgreen;
-}
-
-.roed-modal-button-close:hover{
-  background-color:darkorange;
-}
-
-
-.roed-expelled-members {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+.roed-banned-members .roed-banned-member-item {
+  border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  flex: 1;
-  min-width: 300px;
-  height: 570px; 
-  max-height: 1000px; 
-  overflow-y: auto;  
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.roed-expelled-members:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
-}
-
-.roed-expelled-members .roed-names-container {
-  max-height: 400px;  
-  overflow-y: auto;
-}
-
-.roed-expelled-members .roed-search-result {
-  display: flex;
-  align-items: center;
   padding: 10px;
-  margin: 2px 0;
-  background-color: #f0f0f0;
-  cursor: default; 
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
 }
 
-.roed-expelled-members .roed-search-result img {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
+.roed-banned-members .roed-banned-member-item:last-child {
+  margin-bottom: 0;
+}
+
+.roed-banned-members .roed-banned-member-item:hover {
+  background-color: #e2e3e5;
+}
+
+.roed-banned-members .roed-member-info {
+  margin-left: 15px;
+}
+
+.roed-banned-members .roed-member-image {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
-.banned-date {
-  margin-top: 4px;
-  font-size: 0.8rem;
-  color: #555;
+.roed-banned-members .roed-member-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.roed-banned-members .banned-date {
+  font-size: 14px;
+  color: #333;
 }
