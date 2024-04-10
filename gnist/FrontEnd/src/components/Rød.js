@@ -16,13 +16,14 @@ function Rød() {
     fetch('http://127.0.0.1:8000/digital_medlemsordning/get_banned_members/')
       .then((response) => response.json())
       .then((data) => {
-        setBannedMembers(data.banned_members);
+        setBannedMembers(data.banned_members); 
       })
       .catch((error) => {
         console.error("Error fetching banned members:", error);
         setBannedMembers([]);
       });
   };
+
 
   const fetchMembers = (value) => {
     fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
@@ -48,7 +49,7 @@ function Rød() {
 
   const handleSelectMember = (member, isExpelled) => {
     setActiveMember(member);
-    setIsExpelledMemberModal(isExpelled); 
+    setIsExpelledMemberModal(isExpelled);
   };
 
   const handleCloseModal = () => {
@@ -75,7 +76,12 @@ function Rød() {
           {bannedMembers.map((member, index) => (
             <div key={index} className="roed-search-result" onClick={() => handleSelectMember(member, true)}>
               <img src={member.profile_picture} alt={`${member.full_name}`} />
-              <p>{member.full_name}</p>
+              <div>
+                <p>{member.full_name}</p>
+                {/* Display the banned dates */}
+                <p>Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
+                <p>Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -98,20 +104,20 @@ function Rød() {
           ))}
         </div>
       </div>
-      
+
       {activeMember && (
         <div className="roed-modal">
           <div className="roed-modal-content">
             <p>{activeMember.full_name || `${activeMember.first_name} ${activeMember.last_name}`}</p>
             <div className="roed-modal-buttons">
-              <button 
-                className={isExpelledMemberModal ? "roed-modal-button-unban" : "roed-modal-button-ban"} 
+              <button
+                className={isExpelledMemberModal ? "roed-modal-button-unban" : "roed-modal-button-ban"}
                 onClick={handleBanOrUnbanMember}
               >
                 {isExpelledMemberModal ? 'Unban' : 'Ban'}
               </button>
-              <button 
-                className="roed-modal-button-close" 
+              <button
+                className="roed-modal-button-close"
                 onClick={handleCloseModal}
               >
                 Lukk
