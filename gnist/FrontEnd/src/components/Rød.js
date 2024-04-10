@@ -14,30 +14,29 @@ function Rød() {
 
   const fetchBannedMembers = () => {
     fetch('http://127.0.0.1:8000/digital_medlemsordning/get_banned_members/')
-      .then((response) => response.json())
-      .then((data) => {
-        setBannedMembers(data.banned_members); 
+      .then(response => response.json())
+      .then(data => {
+        setBannedMembers(data.banned_members);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching banned members:", error);
         setBannedMembers([]);
       });
   };
 
-
-  const fetchMembers = (value) => {
+  const fetchMembers = value => {
     fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         setSearchResults(data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching data:", error);
         setSearchResults([]);
       });
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const value = e.target.value;
     setSearchTerm(value);
     if (value.length > 0) {
@@ -50,13 +49,14 @@ function Rød() {
   const handleSelectMember = (member, isExpelled) => {
     setActiveMember(member);
     setIsExpelledMemberModal(isExpelled);
+    localStorage.setItem('Auth0SearchedMember', member.auth0ID);
   };
 
   const handleCloseModal = () => {
     setActiveMember(null);
     setSearchTerm('');
     setSearchResults([]);
-    setIsExpelledMemberModal(false); 
+    setIsExpelledMemberModal(false);
   };
 
   const handleBanOrUnbanMember = () => {
