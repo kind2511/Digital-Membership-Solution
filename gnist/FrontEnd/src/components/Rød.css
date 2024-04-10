@@ -21,8 +21,6 @@
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-
-
 .roed-section:hover {
   transform: scale(1.02);
   opacity: 0.9;
@@ -91,15 +89,15 @@
   display: flex;
   margin-top: 20px;
   justify-content: space-between; 
-
 }
 
 .roed-modal-button {
   padding: 8px 16px;
-  margin-left: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  flex: none;  
+  margin: 0 10px;  
 }
 
 @media (min-width: 768px) {
@@ -114,24 +112,30 @@
   overflow-y: auto;
 }
 
-/* Styles for buttons */
+/* Updated Styles for buttons */
 .roed-modal-button-ban {
   background-color: red;  
-  color: white;  
-  padding: 8px 16px;
-  margin-right: 20px;  
-  border: none;
+  color: white;
+  padding: 9px 12px;
   border-radius: 4px;
   cursor: pointer;
-  border:black;
 }
 
+.roed-modal-button-unban {
+  margin-right: 20px;  
+  background-color: green;  
+  color: white;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
+ 
 .roed-modal-button-close {
+  margin-left: 20px;  
   background-color: orange; 
-  color: white; 
-  padding: 8px 16px;
-  border: none;
+  color: white;
+  padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -140,6 +144,53 @@
   background-color:darkred;
 }
 
+.roed-modal-button-unban:hover { /* Hover effect for Unban button */
+  background-color: darkgreen;
+}
+
 .roed-modal-button-close:hover{
   background-color:darkorange;
+}
+
+.roed-expelled-members {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  flex: 1;
+  min-width: 300px;
+  height: 570px; 
+  max-height: 1000px; 
+  overflow-y: auto;  
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.roed-expelled-members:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.roed-expelled-members .roed-names-container {
+  max-height: 400px;  
+  overflow-y: auto;
+}
+
+.roed-expelled-members .roed-search-result {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 2px 0;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.roed-expelled-members .roed-search-result img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
 }
