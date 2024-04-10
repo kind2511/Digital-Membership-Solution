@@ -9,6 +9,7 @@ function Rød() {
   const [isExpelledMemberModal, setIsExpelledMemberModal] = useState(false);
   const [banStartDate, setBanStartDate] = useState(null);
   const [banEndDate, setBanEndDate] = useState(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     fetchBannedMembers();
@@ -83,6 +84,8 @@ function Rød() {
       .then(response => {
         if (response.ok) {
           console.log("Member banned successfully");
+          setShowSuccessMessage(true); 
+          setTimeout(() => setShowSuccessMessage(false), 3000); 
           handleCloseModal();
           fetchBannedMembers();
         } else {
@@ -112,7 +115,6 @@ function Rød() {
         </div>
       </div>
 
-      {/* Section for Utstengte Medlemmer*/}
       <div className="roed-section">
         <h2 className="roed-section-title">Utstengte Medlemmer</h2>
         <input
@@ -131,7 +133,6 @@ function Rød() {
         </div>
       </div>
 
-      {/* Modal for handling banning*/}
       {activeMember && (
         <div className="roed-modal">
           <div className="roed-modal-content">
@@ -167,8 +168,15 @@ function Rød() {
           </div>
         </div>
       )}
+
+      {showSuccessMessage && (
+        <div className="success-banner">
+          Bruker ble bannlyst
+        </div>
+      )}
     </div>
   );
+
 }
 
 export default Rød;

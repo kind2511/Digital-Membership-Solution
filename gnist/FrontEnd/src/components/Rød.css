@@ -188,3 +188,17 @@
   font-size: 14px;
   color: #333;
 }
+
+/* Success message */
+.success-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #28a745; 
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
+}
