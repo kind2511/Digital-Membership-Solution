@@ -84,8 +84,8 @@ function Rød() {
       .then(response => {
         if (response.ok) {
           console.log("Member banned successfully");
-          setShowSuccessMessage(true); 
-          setTimeout(() => setShowSuccessMessage(false), 3000); 
+          setShowSuccessMessage(true);
+          setTimeout(() => setShowSuccessMessage(false), 3000);
           handleCloseModal();
           fetchBannedMembers();
         } else {
@@ -104,14 +104,16 @@ function Rød() {
         <div className="roed-names-container">
           {bannedMembers.map((member, index) => (
             <div key={index} className="roed-banned-member-item">
-              <img src={member.profile_picture} alt={`${member.full_name}`} className="roed-member-image" />
+              <img src={member.profile_picture || 'public/Default_Profile_Picture.jpg'} alt={`${member.full_name}`} className="roed-member-image" />
               <div className="roed-member-info">
                 <p className="roed-member-name">{member.full_name}</p>
                 <p className="banned-date">Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
                 <p className="banned-date">Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
               </div>
+              <button className="roed-modal-button-unban">Unban</button>
             </div>
           ))}
+
         </div>
       </div>
 
