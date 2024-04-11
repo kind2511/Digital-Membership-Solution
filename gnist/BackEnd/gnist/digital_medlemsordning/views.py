@@ -24,6 +24,7 @@ from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
 from .serializers import MemberAnswerSerializer
+from .serializers import MemberAttendanceSerializer
 from django.db.models import Q
 
 
@@ -392,7 +393,8 @@ def get_banned_members(request):
             'full_name': f"{member.first_name} {member.last_name}",
             'profile_picture': member.profile_pic.url if member.profile_pic else None,
             'banned_from': member.banned_from,
-            'banned_until': member.banned_until
+            'banned_until': member.banned_until,
+            'auth0_id': member.auth0ID,
         }
         members_data.append(member_data)
 
@@ -1119,4 +1121,30 @@ def search_member(request):
         return Response(serializer.data)
     else:
         return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
-    
+
+
+# Gets the stats of all attended members based on gender from one date to another
+@api_view(['GET'])
+def get_member_attendance_stats(request):
+    if request.method == 'GET':
+        # Get start and end dates from query parameters
+        start_date_str = request.query_params.get('start_date')
+        end_date_str = request.query_params.get('end_date')
+
+        # Convert date strings to datetime objects
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        # Query MemberDates model to get counts of different genders
+        attendance_counts = MemberDates.objects.filter(date__range=(start_date, end_date)).values('userID__gender').annotate(count=Count('userID__gender'))
+
+        # Calculate combined total attendance
+        total_attendance = sum(attendance['count'] for attendance in attendance_counts)
+
+        # Serialize data
+        serializer = MemberAttendanceSerializer({
+            'total_attendance': total_attendance,
+            'attendance_by_gender': {attendance['userID__gender']: attendance['count'] for attendance in attendance_counts}
+        })
+
+        return Response(serializer.data)

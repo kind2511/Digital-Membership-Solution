@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from .models import Members
- 
-# Middleware that unbannes a member once the banned period has expired
+
+# # Middleware that unbannes a member once the banned period has expired
 # class UnbannedMemberMiddleware:
 #     def __init__(self, get_response):
 #         self.get_response = get_response

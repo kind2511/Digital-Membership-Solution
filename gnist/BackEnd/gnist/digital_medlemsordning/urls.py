@@ -121,4 +121,7 @@ urlpatterns = [
 
     # Searches for a member by name
     path('search_member/', views.search_member, name='search_member'),
+
+    # Gets stats about member attendence
+    path('member_attendance_stats/', views.get_member_attendance_stats, name='member_attendance_stats'),
 ]

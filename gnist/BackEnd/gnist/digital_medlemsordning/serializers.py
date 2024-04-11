@@ -66,3 +66,7 @@ class MemberAnswerSerializer(serializers.ModelSerializer):
         model = MemberAnswer
         fields = ['question', 'answer']
 
+
+class MemberAttendanceSerializer(serializers.Serializer):
+    total_attendance = serializers.IntegerField()
+    attendance_by_gender = serializers.DictField(child=serializers.IntegerField())
