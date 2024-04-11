@@ -210,3 +210,16 @@
   font-weight: bold;
   z-index: 1500;
 }
+
+.unban-success-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: red;  
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
+}

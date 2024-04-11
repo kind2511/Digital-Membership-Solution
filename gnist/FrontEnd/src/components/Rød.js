@@ -10,6 +10,8 @@ function Rød() {
   const [banStartDate, setBanStartDate] = useState(null);
   const [banEndDate, setBanEndDate] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showUnbanSuccessMessage, setShowUnbanSuccessMessage] = useState(false);
+
 
   useEffect(() => {
     fetchBannedMembers();
@@ -41,8 +43,10 @@ function Rød() {
         throw new Error('Network response was not ok.');
       })
       .then(data => {
-        console.log(data.message); 
-        fetchBannedMembers(); 
+        console.log(data.message);
+        fetchBannedMembers();
+        setShowUnbanSuccessMessage(true); 
+        setTimeout(() => setShowUnbanSuccessMessage(false), 3000); 
       })
       .catch(error => {
         console.error("Error unbanning member:", error);
@@ -165,6 +169,11 @@ function Rød() {
           ))}
         </div>
       </div>
+      {showUnbanSuccessMessage && (
+        <div className="unban-success-banner">
+          Bruker ble avbannet
+        </div>
+      )}
 
       {activeMember && (
         <div className="roed-modal">
