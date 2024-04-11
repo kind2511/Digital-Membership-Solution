@@ -27,6 +27,28 @@ function Rød() {
       });
   };
 
+  const handleUnbanMember = (auth0ID) => {
+    fetch(`http://127.0.0.1:8000/digital_medlemsordning/unban_member/${auth0ID}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(data => {
+        console.log(data.message); 
+        fetchBannedMembers(); 
+      })
+      .catch(error => {
+        console.error("Error unbanning member:", error);
+      });
+  };
+
   const fetchMembers = value => {
     fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
       .then(response => response.json())
@@ -100,17 +122,26 @@ function Rød() {
   return (
     <div className="roed-unique-container">
       <div className="roed-section roed-banned-members">
-        <h2 className="roed-section-title">Utviste Medlemmer</h2>
+        <h2 className="roed-section-title">Rød Medlemmer</h2>
         <div className="roed-names-container">
           {bannedMembers.map((member, index) => (
             <div key={index} className="roed-banned-member-item">
-              <img src={member.profile_picture || 'public/Default_Profile_Picture.jpg'} alt={`${member.full_name}`} className="roed-member-image" />
+              <img
+                src={member.profile_picture || 'public/Default_Profile_Picture.jpg'}
+                alt={`${member.full_name}`}
+                className="roed-member-image"
+              />
               <div className="roed-member-info">
                 <p className="roed-member-name">{member.full_name}</p>
-                <p className="banned-date">Utestengt fra: {member.banned_from || 'Ikke oppgitt'}</p>
-                <p className="banned-date">Utestengt til: {member.banned_until || 'Ikke oppgitt'}</p>
+                <p className="banned-date">Fra: {member.banned_from || 'Ikke oppgitt'}</p>
+                <p className="banned-date">Til: {member.banned_until || 'Ikke oppgitt'}</p>
               </div>
-              <button className="roed-modal-button-unban">Unban</button>
+              <button
+                className="roed-modal-button-unban"
+                onClick={() => handleUnbanMember(member.auth0_id)}
+              >
+                Unban
+              </button>
             </div>
           ))}
 
@@ -158,7 +189,7 @@ function Rød() {
                 className={isExpelledMemberModal ? "roed-modal-button-unban" : "roed-modal-button-ban"}
                 onClick={handleBanMember}
               >
-                Ban
+                {isExpelledMemberModal ? 'Unban' : 'Ban'}
               </button>
               <button
                 className="roed-modal-button-close"
@@ -178,6 +209,7 @@ function Rød() {
       )}
     </div>
   );
+
 
 }
 
