@@ -1,0 +1,18 @@
+.legg-til-ekstra-info-om-medlem-container {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .legg-til-ekstra-info-om-medlem-container .section-title {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .legg-til-ekstra-info-om-medlem-container .section-content {
+    font-size: bold;
+  }
+  

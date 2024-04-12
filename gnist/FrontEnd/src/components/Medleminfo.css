@@ -1,225 +1,32 @@
-.medleminfo-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.medleminfo-grid-container {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   padding: 20px;
+  background-color: #f4f4f4;
 }
 
-.medleminfo-section {
+.component-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
   padding: 20px;
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
-  transition: transform 0.1s ease; /* Added transition for smoother hover effect */
-  cursor: pointer;
-  min-height: 300px; 
+  overflow: hidden;
+  height: 300px;  
 }
 
-.medleminfo-title {
-  margin-bottom: 20px;
+.component-container:hover {
+  transform: scale(1.03);
+}
+
+.component-title {
+  font-size: 20px;
   color: #333;
-  font-size: 24px;
+  margin-bottom: 15px;
 }
 
-.medleminfo-scrollable {
+.component-content {
   overflow-y: auto;
+  max-height: 250px;  
 }
-
-.medleminfo-list {
-  max-height: 200px; /* height of the Endelig Godkjenning container */
-  overflow-y: auto;
-}
-
-.medleminfo-list-item {
-  margin-bottom: 12px;
-  cursor: pointer;
-  background-color: whitesmoke;
-}
-
-.medleminfo-section:hover {
-  transform: scale(1.05); /* Increase scale on hover */
-}
-
-.medleminfo-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.medleminfo-modal-content {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  max-width: 600px;
-}
-
-.medleminfo-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.medleminfo-close-button,
-.medleminfo-approve-button,
-.medleminfo-edit-button,
-.medleminfo-delete-button,
-.medleminfo-add-button,
-.medleminfo-save-button {
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.medleminfo-close-button {
-  background-color: red;
-}
-
-.medleminfo-close-button:hover {
-  background-color: darkred;
-}
-
-.medleminfo-approve-button {
-  background-color: green;
-}
-
-.medleminfo-approve-button:hover {
-  background-color: darkgreen;
-}
-
-.medleminfo-edit-button {
-  background-color: green;
-}
-
-.medleminfo-delete-button {
-  background-color: red;
-}
-
-.medleminfo-add-button {
-  background-color: #005A9E;
-}
-
-.medleminfo-add-button:hover {
-  background-color: #003E7A;
-}
-
-.medleminfo-save-button {
-  background-color: green;
-}
-
-.medleminfo-save-button:hover {
-  background-color: darkgreen;
-}
-
-/* Delete Confirmation Modal */
-.medleminfo-delete-confirmation-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.medleminfo-delete-confirmation-modal-content {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  max-width: 400px;
-}
-
-.medleminfo-delete-confirmation-modal-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center; 
-}
-
-.medleminfo-delete-confirmation-modal-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 10px; 
-}
-
-.medleminfo-delete-confirmation-modal-button-yes {
-  background-color: red;
-  color: #fff;
-}
-
-.medleminfo-delete-confirmation-modal-button-no {
-  background-color: green;
-  color: #fff;
-}
-
-/* Endret Medlems Poeng style */
-.medleminfo-search-container {
-  display: flex;
-  align-items: center;
-}
-
-.medleminfo-search-icon {
-  margin-right: 8px; 
-  font-size: 1.2em; 
-}
-
-.medleminfo-search-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em; 
-  width: 69%; 
-}
-
-/*Extra */
-.medleminfo-section {
-  margin-top: 20px; 
-}
-
-
-/*Last opp bevis style */
-.medleminfo-section-lastopp {
-  padding: 20px;
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
-  transition: transform 0.1s ease;
-  cursor: pointer;
-  min-height: 300px;
-}
-
-.medleminfo-section-lastopp:hover {
-  transform: scale(1.05);
-}
-
-.medleminfo-title-lastopp {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 24px;
-}
-
-.medleminfo-search-container-lastopp {
-  display: flex;
-  align-items: center;
-}
-
-.medleminfo-search-icon-lastopp {
-  margin-right: 8px;
-  font-size: 1.2em;
-  color: #005A9E;
-}
-
-.medleminfo-search-input-lastopp {
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 1em;
-  width: 50%;
-  }
-
