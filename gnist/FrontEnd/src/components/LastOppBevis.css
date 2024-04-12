@@ -4,6 +4,7 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;  
 }
 
 .last-opp-bevis-container .section-title {
@@ -20,28 +21,64 @@
   border-radius: 4px;
 }
 
+.section-content {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 200px; /* Set a max height for the scrollable area */
+  overflow-y: auto; /* Add scroll to the Y axis */
+  margin-bottom: 20px; /* Add space before buttons */
+} 
+
 .search-status {
   color: #666;
   margin-bottom: 10px;
 }
 
-.section-content {
-  max-height: 300px;
-  overflow-y: auto;
+.section-content,
+.selected-member {
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
 }
 
-.search-result {
+.search-result,
+.selected-name {
   padding: 10px;
   border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.search-result:hover,
+.selected-name {
+  background-color: #f7f7f7;
 }
 
 .search-result:last-child {
   border-bottom: none;
 }
 
-.search-result:hover {
-  background-color: #f7f7f7;
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.upload-button,
+.close-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.upload-button {
+  background-color: #4CAF50;  
+  color: white;
+}
+
+.close-button {
+  background-color: #f44336;  
+  color: white;
 }

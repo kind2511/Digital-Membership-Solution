@@ -3,15 +3,18 @@ import './LastOppBevis.css';
 
 function LastOppBevis() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedMember, setSelectedMember] = useState(null);
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
 
     const fetchData = (value) => {
         if (value.trim() === '') {
-            setResults([]);  
+            setResults([]);
             setSearchStatus('');
             return;
         }
+
+        setSearchStatus('Searching...');
 
         fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
             .then((response) => {
@@ -36,24 +39,54 @@ function LastOppBevis() {
         fetchData(value);
     };
 
+    const handleSelectMember = (member) => {
+        setSelectedMember(member);
+        setSearchTerm(`${member.first_name} ${member.last_name}`);
+        setResults([]); // Clear search results
+        setSearchStatus('');
+    };
+
+    const handleUpload = () => {
+        console.log('Uploading for member:', selectedMember);
+        //TODO
+    };
+
+    const handleClose = () => {
+        setSelectedMember(null);
+        setSearchTerm('');
+        setSearchStatus('');
+    };
+
     return (
         <div className="last-opp-bevis-container">
             <h2 className="section-title">Last Opp Bevis</h2>
-            <input
-                type="text"
-                className="search-input"
-                placeholder="Søk etter medlem..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-            />
+            {!selectedMember && (
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Søk etter medlem..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            )}
             <div className="search-status">{searchStatus}</div>
-            <div className="section-content">
-                {results.map((result, index) => (
-                    <div key={index} className="search-result">
-                        {result.first_name} {result.last_name}
+            {selectedMember ? (
+                <div className="selected-member">
+                    <div className="selected-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</div>
+                    <div className="buttons-container">
+                        <button className="upload-button" onClick={handleUpload}>Last Opp</button>
+                        <button className="close-button" onClick={handleClose}>Lukk</button>
                     </div>
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="section-content">
+                    {results.map((member, index) => (
+                        <div key={index} className="search-result" onClick={() => handleSelectMember(member)}>
+                            {`${member.first_name} ${member.last_name}`}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
