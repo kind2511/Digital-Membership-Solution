@@ -1,141 +1,134 @@
 .home-page {
-    display: flex;
-    min-height: 100vh;
-    position: relative;
-  }
-  
-  .home-page .left {
-    width: 50%;
-    background-color: #005A9E;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .home-page .right {
-    width: 50%;
-    background-color: #FAFAFA;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .sentence-section p {
-    font-size: 25px;
-    color: #FFFFFF;
-    text-align: center;
-    font-weight: normal;
-  }
-  
-  .nav-logo {
-    font-family: 'Fredoka One', cursive;
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -2px;
-    color: #005A9E;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-  }
-  
-  .nav-logo span {
-    color: #005A9E;
-    text-shadow: 3px 3px 6px #FFFFFF;
-  }
-  
-  .home-page .right button {
-    margin: 10px 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 2px solid #005A9E;
-    cursor: pointer;
-    background-color: #FFFFFF;
-    width: 180px;
-    text-align: center;
-    transition: all 0.3s;
-    color: #005A9E;
-  }
-  
-  .home-page .right button:hover {
-    background-color: #005A9E;
-    color: #FFFFFF;
-  }
-  
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.home-page .left {
+  width: 50%;
+  background-color: #005A9E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-page .right {
+  width: 50%;
+  background-color: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-logo {
+  font-family: 'Fredoka One', cursive;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -2px;
+  color: #005A9E;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav-logo span {
+  color: #005A9E;
+  text-shadow: 3px 3px 6px #FFFFFF;
+}
+
+.home-page .right button {
+  margin: 10px 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #005A9E;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  width: 180px;
+  text-align: center;
+  transition: all 0.3s;
+  color: #005A9E;
+}
+
+.home-page .right button:hover {
+  background-color: #005A9E;
+  color: #FFFFFF;
+}
+
+.kontakt-oss-link-container {
+  position: absolute;
+  bottom: 30px; 
+  right: 330px; 
+}
+
+.kontakt-link {
+  color: #005A9E;
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.kontakt-link:hover {
+  color: #003E70;
+}
+
+@media only screen and (max-width: 768px) {
   .kontakt-oss-link-container {
-    position: absolute;
-    bottom: 30px; 
-    right: 330px; 
+    right: 45px;  
+    bottom: 20px;  
   }
-  
-  .kontakt-link {
-    color: #005A9E;
-    font-size: 18px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  .kontakt-link:hover {
-    color: #003E70;
-  }
-  
-  @media only screen and (max-width: 768px) {
-    .kontakt-oss-link-container {
-      right: 45px;  
-      bottom: 20px;  
-    }
-  }
+}
 
 /* Phones in portrait */
 @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-  .kontakt-oss-link-container {
-    right: 45px;
-    bottom: 20px;
-  }
+and (min-device-width: 320px) 
+and (max-device-width: 480px) 
+and (-webkit-min-device-pixel-ratio: 2) {
+.kontakt-oss-link-container {
+  right: 45px;
+  bottom: 20px;
+}
 }
 
 /* iPhone XR, iPhone 11, iPhone 12 Pro, iPhone 14 Max Pro in portrait */
 @media only screen 
-  and (min-device-width: 414px) 
-  and (max-device-width: 896px) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-  .kontakt-oss-link-container {
-    right: 45px;
-    bottom: 20px;
-  }
+and (min-device-width: 414px) 
+and (max-device-width: 896px) 
+and (-webkit-min-device-pixel-ratio: 2) {
+.kontakt-oss-link-container {
+  right: 45px;
+  bottom: 20px;
+}
 }
 
 /* Samsung S8+ in portrait */
 @media only screen 
-  and (min-device-width: 360px) 
-  and (max-device-width: 740px) 
-  and (-webkit-min-device-pixel-ratio: 4) {
-  .kontakt-oss-link-container {
-    right: 45px;
-    bottom: 20px;
-  }
+and (min-device-width: 360px) 
+and (max-device-width: 740px) 
+and (-webkit-min-device-pixel-ratio: 4) {
+.kontakt-oss-link-container {
+  right: 45px;
+  bottom: 20px;
+}
 }
 
 /* iPads in portrait and landscape */
 @media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) {
-  .kontakt-oss-link-container {
-    right: 140px;
-    bottom: 20px;
-  }
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) {
+.kontakt-oss-link-container {
+  right: 140px;
+  bottom: 20px;
+}
 }
 
 /* iPads Pro in portrait and landscape */
 @media only screen 
-  and (min-device-width: 1024px) 
-  and (max-device-width: 1366px) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-  .kontakt-oss-link-container {
-    right: 190px;
-    bottom: 20px;
-  }
+and (min-device-width: 1024px) 
+and (max-device-width: 1366px) 
+and (-webkit-min-device-pixel-ratio: 2) {
+.kontakt-oss-link-container {
+  right: 190px;
+  bottom: 20px;
+}
 }
