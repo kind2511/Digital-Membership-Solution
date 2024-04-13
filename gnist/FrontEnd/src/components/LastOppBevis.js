@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './LastOppBevis.css';
 
 function LastOppBevis() {
@@ -6,6 +6,8 @@ function LastOppBevis() {
     const [selectedMember, setSelectedMember] = useState(null);
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
+    const [uploadSuccess, setUploadSuccess] = useState(false);  
+    const fileInputRef = useRef(null);  
 
     const fetchData = (value) => {
         if (value.trim() === '') {
@@ -47,8 +49,37 @@ function LastOppBevis() {
     };
 
     const handleUpload = () => {
-        console.log('Uploading for member:', selectedMember);
-        //TODO
+        if (!selectedMember) {
+            alert('Please select a member to upload a certificate for.');
+            return;
+        }
+        
+        const file = fileInputRef.current.files[0]; // Access the file from the ref
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('certificate', file);
+
+        fetch(`http://127.0.0.1:8000/digital_medlemsordning/add_user_certificate/${selectedMember.auth0ID}/`, {
+            method: 'PATCH',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            setUploadSuccess(true); 
+            setTimeout(() => setUploadSuccess(false), 3000); 
+            setSelectedMember(null); // Reset selected member
+            setSearchTerm(''); // Clear search term
+        })
+        .catch(error => {
+            alert('Failed to upload certificate.');
+            console.error('Error:', error);
+        });
     };
 
     const handleClose = () => {
@@ -73,6 +104,7 @@ function LastOppBevis() {
             {selectedMember ? (
                 <div className="selected-member">
                     <div className="selected-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</div>
+                    <input type="file" ref={fileInputRef} className="file-input" />
                     <div className="buttons-container">
                         <button className="upload-button" onClick={handleUpload}>Last Opp</button>
                         <button className="close-button" onClick={handleClose}>Lukk</button>
@@ -86,6 +118,9 @@ function LastOppBevis() {
                         </div>
                     ))}
                 </div>
+            )}
+            {uploadSuccess && (
+                <div className="last-opp-success-message">Bevis ble lastet opp</div>
             )}
         </div>
     );

@@ -82,3 +82,13 @@
   background-color: #f44336;  
   color: white;
 }
+
+
+.last-opp-success-message {
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
