@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import './UserDashboard.css';
 import ProgramComponent from './ProgramComponent';
-import MeldingerComponent from './MeldingerComponent';
+import Bevis from './Bevis';
 import UserProfilePicture from './UserProfilePicture';
 import RegistrationStatus from './RegistrationStatus';
 import TodayActivitiesComponent from './TodayActivitiesComponent';
@@ -59,8 +59,8 @@ function UserDashboard() {
         );
       case 'Program':
         return <ProgramComponent />;
-      case 'Meldinger':
-        return <MeldingerComponent />;
+      case 'Bevis':
+        return <Bevis />;
       case 'MinMening':
         return <MinMening />;
       default:
@@ -74,7 +74,7 @@ function UserDashboard() {
         <div className="navbar-menu">
           <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
-          <div className={`nav-item ${activeNavItem === 'Meldinger' ? 'active' : ''}`} onClick={() => setActiveNavItem('Meldinger')}>Meldinger</div>
+          <div className={`nav-item ${activeNavItem === 'Bevis' ? 'active' : ''}`} onClick={() => setActiveNavItem('Bevis')}>Bevis</div>
           <div className={`nav-item ${activeNavItem === 'MinMening' ? 'active' : ''}`} onClick={() => setActiveNavItem('MinMening')}>Min Mening</div>
           <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Log Ut</div>
         </div>
