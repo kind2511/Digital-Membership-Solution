@@ -6,8 +6,8 @@ function LastOppBevis() {
     const [selectedMember, setSelectedMember] = useState(null);
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
-    const [uploadSuccess, setUploadSuccess] = useState(false);  
-    const fileInputRef = useRef(null);  
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const fileInputRef = useRef(null);
 
     const fetchData = (value) => {
         if (value.trim() === '') {
@@ -15,9 +15,7 @@ function LastOppBevis() {
             setSearchStatus('');
             return;
         }
-
         setSearchStatus('Searching...');
-
         fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
             .then((response) => {
                 if (!response.ok) {
@@ -44,7 +42,7 @@ function LastOppBevis() {
     const handleSelectMember = (member) => {
         setSelectedMember(member);
         setSearchTerm(`${member.first_name} ${member.last_name}`);
-        setResults([]); // Clear search results
+        setResults([]);
         setSearchStatus('');
     };
 
@@ -53,13 +51,11 @@ function LastOppBevis() {
             alert('Please select a member to upload a certificate for.');
             return;
         }
-        
-        const file = fileInputRef.current.files[0]; // Access the file from the ref
+        const file = fileInputRef.current.files[0];
         if (!file) {
             alert('Please select a file to upload.');
             return;
         }
-
         const formData = new FormData();
         formData.append('certificate', file);
 
@@ -71,10 +67,10 @@ function LastOppBevis() {
             if (!response.ok) {
                 throw new Error('Network response was not ok.');
             }
-            setUploadSuccess(true); 
-            setTimeout(() => setUploadSuccess(false), 3000); 
-            setSelectedMember(null); // Reset selected member
-            setSearchTerm(''); // Clear search term
+            setUploadSuccess(true);
+            setTimeout(() => setUploadSuccess(false), 3000);
+            setSelectedMember(null);
+            setSearchTerm('');
         })
         .catch(error => {
             alert('Failed to upload certificate.');
