@@ -1,15 +1,49 @@
 .endret-medlems-poen-container {
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .endret-medlems-poen-container .section-title {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  
+  background-color: #ededed;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.endret-medlems-poen-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.endret-medlems-poen-search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.endret-medlems-poen-search-status {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.endret-medlems-poen-section-content {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto; 
+}
+
+.endret-medlems-poen-search-result {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.endret-medlems-poen-search-result:hover {
+  background-color: #f7f7f7;
+}
+
+.endret-medlems-poen-search-result:last-child {
+  border-bottom: none;
+}
