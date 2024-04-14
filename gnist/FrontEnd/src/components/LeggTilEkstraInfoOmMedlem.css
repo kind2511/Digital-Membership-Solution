@@ -1,18 +1,48 @@
 .legg-til-ekstra-info-om-medlem-container {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .legg-til-ekstra-info-om-medlem-container .section-title {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .legg-til-ekstra-info-om-medlem-container .section-content {
-    font-size: bold;
-  }
-  
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.legg-til-ekstra-info-om-medlem-container .section-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-status {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-section-content {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 200px; 
+  overflow-y: auto; 
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result:hover {
+  background-color: #f7f7f7;
+}
+
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result:last-child {
+  border-bottom: none;
+}
