@@ -105,3 +105,9 @@
   left: 0;
   overflow: hidden;
 }
+
+.no-scroll {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
