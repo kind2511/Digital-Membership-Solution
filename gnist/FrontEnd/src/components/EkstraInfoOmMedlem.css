@@ -1,13 +1,48 @@
 .ekstra-info-om-medlem-container {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .ekstra-info-om-medlem-container .section-title {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ekstra-info-om-medlem-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.ekstra-info-om-medlem-search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ekstra-info-om-medlem-search-status {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.ekstra-info-om-medlem-section-content {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 200px; 
+  overflow-y: auto; 
+}
+
+.ekstra-info-om-medlem-search-result {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.ekstra-info-om-medlem-search-result:hover {
+  background-color: #f7f7f7;
+}
+
+.ekstra-info-om-medlem-search-result:last-child {
+  border-bottom: none;
+}
