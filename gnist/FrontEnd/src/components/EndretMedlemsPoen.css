@@ -30,8 +30,8 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
-  max-height: 200px;
-  overflow-y: auto; 
+  max-height: 200px; 
+  overflow-y: auto;
 }
 
 .endret-medlems-poen-search-result {
@@ -46,4 +46,62 @@
 
 .endret-medlems-poen-search-result:last-child {
   border-bottom: none;
+}
+
+.endret-medlems-poen-selected-member-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 30px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.endret-medlems-poen-selected-member-name {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.endret-medlems-poen-selected-member-points {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.endret-medlems-poen-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.endret-medlems-poen-endre-poen-button,
+.endret-medlems-poen-lukk-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.endret-medlems-poen-endre-poen-button {
+  background-color: #005A9E;
+  color: #fff;
+}
+
+.endret-medlems-poen-lukk-button {
+  background-color: red;
+  color: #fff;
+}
+
+.endret-medlems-poen-container.member-selected {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 }

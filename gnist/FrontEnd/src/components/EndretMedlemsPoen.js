@@ -5,6 +5,7 @@ function EndretMedlemsPoen() {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
+    const [selectedMember, setSelectedMember] = useState(null);
 
     const fetchData = (value) => {
         if (value.trim() === '') {
@@ -37,11 +38,21 @@ function EndretMedlemsPoen() {
     };
 
     const handleSelectMember = (member) => {
-        console.log('Selected member:', member);
+        setSelectedMember(member);
+        document.body.classList.add('no-scroll'); 
+    };
+
+    const handleEndrePoen = () => {
+        console.log('Endre poen button clicked');
+    };
+
+    const handleLukk = () => {
+        setSelectedMember(null);
+        document.body.classList.remove('no-scroll'); 
     };
 
     return (
-        <div className="endret-medlems-poen-container">
+        <div className={`endret-medlems-poen-container ${selectedMember ? 'member-selected' : ''}`}>
             <h2 className="endret-medlems-poen-title">Endret medlems poeng</h2>
             <input
                 type="text"
@@ -58,6 +69,16 @@ function EndretMedlemsPoen() {
                     </div>
                 ))}
             </div>
+            {selectedMember && (
+                <div className="endret-medlems-poen-selected-member-container">
+                    <h2 className="endret-medlems-poen-selected-member-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</h2>
+                    <p className="endret-medlems-poen-selected-member-points">Total Points: {selectedMember.total_points}</p>
+                    <div className="endret-medlems-poen-button-container">
+                        <button className="endret-medlems-poen-endre-poen-button" onClick={handleEndrePoen}>Endre poen</button>
+                        <button className="endret-medlems-poen-lukk-button" onClick={handleLukk}>Lukk</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
