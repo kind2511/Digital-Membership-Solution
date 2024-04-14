@@ -47,16 +47,16 @@
 }
 
 .forslag-submit {
-  padding: 10px 15px; /* Adjust padding as needed */
+  padding: 10px 15px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  width: auto; /* Change width to auto */
-  max-width: 150px; /* Set a maximum width for the button */
-  margin: 0 auto; /* This will center the button in the form */
+  width: auto;
+  max-width: 150px;
+  margin: 0 auto;
 }
 
 .forslag-submit:hover {
@@ -74,4 +74,11 @@
   padding: 10px;
   font-weight: bold;
   z-index: 1500;
+}
+
+.sporsmal-item {
+  background-color: #f0f0f0;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
 }

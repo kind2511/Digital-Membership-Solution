@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './MinMening.css';
 
 function MinMening() {
   const [forslagTittel, setForslagTittel] = useState('');
   const [forslagBeskrivelse, setForslagBeskrivelse] = useState('');
+  const [sporsmal, setSporsmal] = useState([]);
   const [visSuksessMelding, setVisSuksessMelding] = useState(false);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/digital_medlemsordning/get_all_questions')
+      .then(response => {
+        setSporsmal(response.data.questions);
+      })
+      .catch(error => {
+        console.error("Det oppstod en feil ved henting av spørsmål:", error);
+      });
+  }, []);
 
   const handleForslagSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +40,11 @@ function MinMening() {
       <div className="minmening-section-container">
         <div className="minmening-section-title">Avstemninger</div>
         <div className="minmening-section-content">
-          {/* Innhold for Avstemninger */}
+          {sporsmal.map((sporsmalItem) => (
+            <div key={sporsmalItem.id} className="sporsmal-item">
+              <p>{sporsmalItem.question}</p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="minmening-section-container">
