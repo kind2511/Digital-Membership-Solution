@@ -2,16 +2,15 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  gap: 20px; 
+  gap: 20px;
   height: calc(100vh - 60px); 
-  overflow: hidden;
+  
 }
 
 .section {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible; /* Changed from 'hidden' to 'visible' to ensure content is not clipped */
 }
 
 .registrerte-medlemmer, .statistikk {
@@ -19,12 +18,13 @@
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  
 }
 
 .section-title {
   margin-bottom: 20px;
   color: #333;
-  font-size: 24px; 
+  font-size: 24px;
 }
 
 .date-filter-container {
@@ -60,7 +60,7 @@
 
 .members-list {
   overflow-y: auto;
-  max-height: 400px; 
+  max-height: 400px;
 }
 
 .member-item {
@@ -74,8 +74,8 @@
 }
 
 .member-photo {
-  width: 50px; 
-  height: 50px; 
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
@@ -90,7 +90,14 @@
   color: #555;
 }
 
-/* New styles for the statistikk section */
+.statistikk {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  flex-grow: 1; 
+}
+
 .statistikk .date-filter-container {
   margin-bottom: 20px;
 }
@@ -107,23 +114,6 @@
   margin-right: 10px;
 }
 
-@media (max-width: 768px) {
-  .tilstede-container {
-    flex-direction: column;
-  }
-  
-  .section {
-    margin-bottom: 20px;
-  }
-}
-
-.statistikk-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
 .reset-button {
   background-color: red;
   color: white;
@@ -135,4 +125,21 @@
 
 .reset-button:hover {
   background-color: darkred;
+}
+
+@media (max-width: 768px) {
+  .tilstede-container {
+    flex-direction: column;
+  }
+
+  .section {
+    margin-bottom: 20px;
+  }
+}
+
+.statistikk-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
