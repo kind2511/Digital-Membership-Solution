@@ -121,7 +121,6 @@ function Tilstede() {
             onChange={handleEndDateChange}
           />
         </div>
-        <p>Statistikkinformasjon kommer snart.</p>
       </div>
     </div>
   );
