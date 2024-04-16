@@ -116,3 +116,10 @@
     margin-bottom: 20px;
   }
 }
+
+.statistikk-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

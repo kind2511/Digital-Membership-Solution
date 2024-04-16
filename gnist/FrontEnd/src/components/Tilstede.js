@@ -121,9 +121,15 @@ function Tilstede() {
             onChange={handleEndDateChange}
           />
         </div>
+        <div className="statistikk-message">
+          {startDate === '' && endDate === '' && (
+            <p>Velg en start dato og slutt dato for å se statistikken.</p>
+          )}
+        </div>
       </div>
     </div>
   );
+
 }
 
 export default Tilstede;
