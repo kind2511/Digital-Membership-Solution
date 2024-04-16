@@ -123,3 +123,16 @@
   align-items: center;
   height: 100%;
 }
+
+.reset-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.reset-button:hover {
+  background-color: darkred;
+}

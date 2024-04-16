@@ -76,6 +76,12 @@ function Tilstede() {
     return imagePath ? `http://127.0.0.1:8000${imagePath}` : DEFAULT_PROFILE_IMAGE;
   };
 
+  const clearStatistics = () => {
+    setStartDate('');
+    setEndDate('');
+  };
+  
+
   return (
     <div className="tilstede-container">
       <div className="section registrerte-medlemmer">
@@ -120,6 +126,7 @@ function Tilstede() {
             value={endDate}
             onChange={handleEndDateChange}
           />
+          <button onClick={clearStatistics} className="reset-button">Tøm</button>
         </div>
         <div className="statistikk-message">
           {startDate === '' && endDate === '' && (
@@ -128,7 +135,7 @@ function Tilstede() {
         </div>
       </div>
     </div>
-  );
+  );  
 
 }
 
