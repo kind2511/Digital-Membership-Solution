@@ -13,6 +13,11 @@
   overflow: visible; /* Changed from 'hidden' to 'visible' to ensure content is not clipped */
 }
 
+.registrerte-medlemmer {
+  max-height: 700px; 
+  overflow-y: auto; 
+}
+
 .registrerte-medlemmer, .statistikk {
   padding: 20px;
   border-radius: 5px;
