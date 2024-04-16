@@ -90,6 +90,23 @@
   color: #555;
 }
 
+/* New styles for the statistikk section */
+.statistikk .date-filter-container {
+  margin-bottom: 20px;
+}
+
+.statistikk .date-filter-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.statistikk .date-filter-input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
 @media (max-width: 768px) {
   .tilstede-container {
     flex-direction: column;

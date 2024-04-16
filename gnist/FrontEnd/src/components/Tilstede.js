@@ -8,6 +8,8 @@ function Tilstede() {
   const [filterDate, setFilterDate] = useState('');
   const [registeredMembers, setRegisteredMembers] = useState([]);
   const [message, setMessage] = useState('Velg en dato for å se aktive brukere');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     if (!filterDate) {
@@ -37,7 +39,15 @@ function Tilstede() {
     setFilterDate(event.target.value);
   };
 
-  // This effect runs once on mount and retrieves any saved filter date and members from local storage
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
+
   useEffect(() => {
     const savedFilterDate = localStorage.getItem('filterDate');
     const savedMembers = JSON.parse(localStorage.getItem('registeredMembers'));
@@ -93,6 +103,24 @@ function Tilstede() {
       </div>
       <div className="section statistikk">
         <h2 className="section-title">Statistikk</h2>
+        <div className="date-filter-container">
+          <label htmlFor="startDate" className="date-filter-label">Start Dato:</label>
+          <input
+            id="startDate"
+            type="date"
+            className="date-filter-input"
+            value={startDate}
+            onChange={handleStartDateChange}
+          />
+          <label htmlFor="endDate" className="date-filter-label">Slutt Dato:</label>
+          <input
+            id="endDate"
+            type="date"
+            className="date-filter-input"
+            value={endDate}
+            onChange={handleEndDateChange}
+          />
+        </div>
         <p>Statistikkinformasjon kommer snart.</p>
       </div>
     </div>
