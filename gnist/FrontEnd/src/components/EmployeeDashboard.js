@@ -10,8 +10,15 @@ import './EmployeeDashboard.css';
 function EmployeeDashboard() {
   const { logout } = useAuth0();
   const [activeNavItem, setActiveNavItem] = useState('Tilstede');
+  const [showLogoutModal, setShowLogoutModal] = useState(false); 
 
   const handleLogout = () => {
+    // Show logout confirmation modal
+    setShowLogoutModal(true);
+  };
+
+  const handleLogoutConfirmation = () => {
+    // Perform logout
     logout({ returnTo: window.location.origin });
   };
 
@@ -77,6 +84,17 @@ function EmployeeDashboard() {
       <div className="emp-main-content">
         {renderContent()}
       </div>
+      {showLogoutModal && (
+        <div className="logout-modal">
+          <div className="logout-modal-content">
+            <p>Er du sikker på at du vil logge ut?</p>
+            <div className="logout-modal-buttons">
+              <button className="logout-confirm-button" onClick={handleLogoutConfirmation}>Ja</button>
+              <button className="logout-confirm-button" onClick={() => setShowLogoutModal(false)}>Nei</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
