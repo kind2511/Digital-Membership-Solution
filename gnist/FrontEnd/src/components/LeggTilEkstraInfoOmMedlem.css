@@ -12,7 +12,8 @@
   margin-bottom: 10px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-input {
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-input,
+.additional-info-modal textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -20,17 +21,19 @@
   border-radius: 4px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-status {
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-status,
+.additional-info-modal h3 {
   color: #666;
   margin-bottom: 10px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-section-content {
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-section-content,
+.additional-info-modal {
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
-  max-height: 200px; 
-  overflow-y: auto; 
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result {
@@ -45,4 +48,23 @@
 
 .legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result:last-child {
   border-bottom: none;
+}
+
+.additional-info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: auto;
+  max-width: 90%; 
+}
+
+@media (max-width: 600px) {
+  .additional-info-modal {
+    width: 80%; 
+  }
 }

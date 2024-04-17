@@ -5,6 +5,8 @@ function LeggTilEkstraInfoOmMedlem() {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [additionalInfo, setAdditionalInfo] = useState('');
 
     const fetchData = (value) => {
         if (value.trim() === '') {
@@ -12,7 +14,7 @@ function LeggTilEkstraInfoOmMedlem() {
             setSearchStatus('');
             return;
         }
-        setSearchStatus('Searching...');
+        setSearchStatus('Søker...');
         fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
             .then((response) => {
                 if (!response.ok) {
@@ -22,11 +24,11 @@ function LeggTilEkstraInfoOmMedlem() {
             })
             .then((data) => {
                 setResults(data);
-                setSearchStatus(`Found ${data.length} results.`);
+                setSearchStatus(`Fant ${data.length} resultater.`);
             })
             .catch((error) => {
-                console.error("Error fetching data:", error);
-                setSearchStatus("Failed to fetch data. Please try again later.");
+                console.error("Feil ved henting av data:", error);
+                setSearchStatus("Kunne ikke hente data. Vennligst prøv igjen senere.");
             });
     };
 
@@ -37,7 +39,23 @@ function LeggTilEkstraInfoOmMedlem() {
     };
 
     const handleSelectMember = (member) => {
-        console.log('Selected member:', member);
+        setSelectedMember(member);
+    };
+
+    const handleAdditionalInfoChange = (e) => {
+        setAdditionalInfo(e.target.value);
+    };
+
+    const saveAdditionalInfo = () => {
+        console.log('Lagrer informasjon for:', selectedMember.first_name, selectedMember.last_name, 'med tilleggsinfo:', additionalInfo);
+        //TODD
+        setAdditionalInfo('');
+        setSelectedMember(null);
+    };
+
+    const closeForm = () => {
+        setSelectedMember(null);
+        setAdditionalInfo('');
     };
 
     return (
@@ -58,6 +76,18 @@ function LeggTilEkstraInfoOmMedlem() {
                     </div>
                 ))}
             </div>
+            {selectedMember && (
+                <div className="additional-info-modal">
+                    <h3>Legg til informasjon for: {`${selectedMember.first_name} ${selectedMember.last_name}`}</h3>
+                    <textarea
+                        value={additionalInfo}
+                        onChange={handleAdditionalInfoChange}
+                        placeholder="Skriv inn tilleggsinformasjon her..."
+                    ></textarea>
+                    <button onClick={saveAdditionalInfo}>Lagre</button>
+                    <button onClick={closeForm}>Lukk</button>
+                </div>
+            )}
         </div>
     );
 }
