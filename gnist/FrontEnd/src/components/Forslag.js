@@ -56,7 +56,7 @@ function Forslag() {
         ))}
       </div>
       {showSuccessMessage && (
-        <div className="delete-suggestion-success-message ">Forslaget ble slettet.</div>
+        <div className="forslag-success-message">Forslaget ble slettet.</div>
       )}
     </div>
   );
