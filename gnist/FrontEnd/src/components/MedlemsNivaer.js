@@ -10,6 +10,8 @@ function MedlemsNivaer() {
     const [levelToEdit, setLevelToEdit] = useState(null);
     const [editedLevelName, setEditedLevelName] = useState('');
     const [editedLevelPoints, setEditedLevelPoints] = useState('');
+    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
+    const [levelToDelete, setLevelToDelete] = useState(null);
 
     useEffect(() => {
         fetchLevels();
@@ -51,7 +53,7 @@ function MedlemsNivaer() {
                 throw new Error('Failed to edit level');
             }
             setShowEditLevelModal(false);
-            fetchLevels(); // Fetch levels again to update the list
+            fetchLevels();
             setShowSuccessMessage(true);
             setTimeout(() => {
                 setShowSuccessMessage(false);
@@ -63,7 +65,27 @@ function MedlemsNivaer() {
 
     const handleDeleteLevel = async (levelID) => {
         try {
-            //TODO
+            setLevelToDelete(levelID);
+            setShowDeleteConfirmationModal(true);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleCloseDeleteConfirmationModal = () => {
+        setShowDeleteConfirmationModal(false);
+    };
+
+    const handleConfirmDeleteLevel = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_level/${levelToDelete}/`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete level');
+            }
+            setShowDeleteConfirmationModal(false);
+            fetchLevels();
         } catch (error) {
             console.error(error);
         }
@@ -87,7 +109,7 @@ function MedlemsNivaer() {
             setShowSuccessMessage(true);
             setNewLevelName('');
             setNewLevelPoints('');
-            fetchLevels(); // Fetch levels again to update the list
+            fetchLevels();
             setTimeout(() => {
                 setShowSuccessMessage(false);
             }, 3000);
@@ -146,6 +168,13 @@ function MedlemsNivaer() {
                         onChange={(e) => setEditedLevelPoints(e.target.value)}
                     />
                     <button onClick={handleEditLevelSubmit}>Lagre</button>
+                </div>
+            )}
+            {showDeleteConfirmationModal && (
+                <div className="delete-level-confirmation-modal">
+                    <p>Er du sikker på at du vil slette dette nivået?</p>
+                    <button onClick={handleConfirmDeleteLevel}>Ja</button>
+                    <button onClick={handleCloseDeleteConfirmationModal}>Nei</button>
                 </div>
             )}
         </div>
