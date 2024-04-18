@@ -6,6 +6,10 @@ function MedlemsNivaer() {
     const [newLevelName, setNewLevelName] = useState('');
     const [newLevelPoints, setNewLevelPoints] = useState('');
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showEditLevelModal, setShowEditLevelModal] = useState(false);
+    const [levelToEdit, setLevelToEdit] = useState(null);
+    const [editedLevelName, setEditedLevelName] = useState('');
+    const [editedLevelPoints, setEditedLevelPoints] = useState('');
 
     useEffect(() => {
         fetchLevels();
@@ -24,14 +28,45 @@ function MedlemsNivaer() {
         }
     };
 
-    const handleEditLevel = (levelID) => {
-        //TODO
-        console.log(`Editing level with ID: ${levelID}`);
+    const handleEditLevel = (level) => {
+        setLevelToEdit(level);
+        setEditedLevelName(level.name);
+        setEditedLevelPoints(level.points);
+        setShowEditLevelModal(true);
     };
 
-    const handleDeleteLevel = (levelID) => {
-        //TODO
-        console.log(`Deleting level with ID: ${levelID}`);
+    const handleEditLevelSubmit = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/edit_level/${levelToEdit.levelID}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: editedLevelName,
+                    points: editedLevelPoints
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to edit level');
+            }
+            setShowEditLevelModal(false);
+            fetchLevels(); // Fetch levels again to update the list
+            setShowSuccessMessage(true);
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 3000);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDeleteLevel = async (levelID) => {
+        try {
+            //TODO
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleAddLevel = async () => {
@@ -54,7 +89,7 @@ function MedlemsNivaer() {
             setNewLevelPoints('');
             fetchLevels(); // Fetch levels again to update the list
             setTimeout(() => {
-                setShowSuccessMessage(false); // Hide the success message after 3 seconds
+                setShowSuccessMessage(false);
             }, 3000);
         } catch (error) {
             console.error(error);
@@ -70,7 +105,7 @@ function MedlemsNivaer() {
                         <div key={index} className="level-item">
                             <p className="level-info">{level.name} - {level.points} Poeng</p>
                             <div>
-                                <button className="level-button edit-button" onClick={() => handleEditLevel(level.levelID)}>Redigere</button>
+                                <button className="level-button edit-button" onClick={() => handleEditLevel(level)}>Redigere</button>
                                 <button className="level-button delete-button" onClick={() => handleDeleteLevel(level.levelID)}>Slett</button>
                             </div>
                         </div>
@@ -95,6 +130,22 @@ function MedlemsNivaer() {
             {showSuccessMessage && (
                 <div className="success-banner">
                     Niva har blitt lagt til
+                </div>
+            )}
+            {showEditLevelModal && (
+                <div className="edit-level-modal">
+                    <h2>Rediger nivå</h2>
+                    <input
+                        type="text"
+                        value={editedLevelName}
+                        onChange={(e) => setEditedLevelName(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        value={editedLevelPoints}
+                        onChange={(e) => setEditedLevelPoints(e.target.value)}
+                    />
+                    <button onClick={handleEditLevelSubmit}>Lagre</button>
                 </div>
             )}
         </div>

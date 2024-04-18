@@ -4,7 +4,7 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: auto; 
+  overflow: auto;
 }
 
 .medlems-nivaer-section-title {
@@ -14,8 +14,8 @@
 }
 
 .level-list {
-  max-height: 300px; /* Set a maximum height for the list to enable scrolling */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .level-item {
@@ -23,21 +23,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid #ccc; 
+  border-bottom: 1px solid #ccc;
 }
 
 .level-info {
   margin: 0;
 }
 
-.level-buttons {
-  display: flex;
-}
-
 .level-button {
   flex: 1;
   padding: 8px 16px;
-  margin-right: 10px; 
+  margin-right: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -45,18 +41,18 @@
 }
 
 .level-button.edit-button {
-  background-color: #005A9E; 
+  background-color: #005a9e;
   padding: 8px 5px;
   color: white;
 }
 
 .level-button.delete-button {
-  background-color: red; 
+  background-color: red;
   color: white;
 }
 
 .level-button.add-button {
-  background-color: #005A9E; 
+  background-color: #005a9e;
   padding: 3px 9px;
   color: white;
 }
@@ -70,10 +66,37 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(40, 167, 69, 0.9); /* Adjusted for opacity */
+  background-color: rgba(40, 167, 69, 0.9);
   color: white;
   text-align: center;
   padding: 10px;
   font-weight: bold;
   z-index: 1500;
+}
+
+.edit-level-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  z-index: 2000;
+}
+
+.edit-level-modal input {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.edit-level-modal button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  background-color: #005a9e;
+  color: white;
 }
