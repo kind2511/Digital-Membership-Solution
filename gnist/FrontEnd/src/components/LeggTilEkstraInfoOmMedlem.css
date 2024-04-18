@@ -14,7 +14,7 @@
 
 .legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-input,
 .additional-info-modal textarea {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -30,10 +30,11 @@
 .legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-section-content,
 .additional-info-modal {
   background-color: #fff;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 20px;
+  border-radius: 8px;
   max-height: 200px;
   overflow-y: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result {
@@ -58,13 +59,43 @@
   padding: 20px;
   background-color: #f8f8f8;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: auto;
-  max-width: 90%; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 50%;
+  max-width: 500px; /* Ensuring the modal is not too wide on large screens */
+}
+
+.additional-info-modal h3 {
+  color: #0056b3;
+  font-weight: 600;
+}
+
+.additional-info-modal textarea {
+  min-height: 100px; 
+  font-family: Arial, sans-serif; 
+}
+
+.additional-info-modal button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.additional-info-modal .save {
+  background-color: #007BFF !important; 
+  color: white !important; 
+}
+
+.additional-info-modal .close {
+  background-color: #d3d3d3 !important; 
+  color: black !important; 
 }
 
 @media (max-width: 600px) {
   .additional-info-modal {
-    width: 80%; 
+    width: 80%;
   }
 }

@@ -48,7 +48,6 @@ function LeggTilEkstraInfoOmMedlem() {
 
     const saveAdditionalInfo = () => {
         console.log('Lagrer informasjon for:', selectedMember.first_name, selectedMember.last_name, 'med tilleggsinfo:', additionalInfo);
-        //TODD
         setAdditionalInfo('');
         setSelectedMember(null);
     };
@@ -78,18 +77,19 @@ function LeggTilEkstraInfoOmMedlem() {
             </div>
             {selectedMember && (
                 <div className="additional-info-modal">
-                    <h3>Legg til informasjon for: {`${selectedMember.first_name} ${selectedMember.last_name}`}</h3>
                     <textarea
                         value={additionalInfo}
                         onChange={handleAdditionalInfoChange}
                         placeholder="Skriv inn tilleggsinformasjon her..."
                     ></textarea>
-                    <button onClick={saveAdditionalInfo}>Lagre</button>
-                    <button onClick={closeForm}>Lukk</button>
+                    <button onClick={saveAdditionalInfo}>Lagre</button>  
+                    <button onClick={closeForm}>Lukk</button>  
                 </div>
             )}
+
         </div>
     );
+
 }
 
 export default LeggTilEkstraInfoOmMedlem;
