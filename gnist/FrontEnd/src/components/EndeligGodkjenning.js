@@ -22,6 +22,25 @@ function EndeligGodkjenning() {
         }
     };
 
+    const verifyMember = async (member) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/verify_member/${member.auth0ID}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to verify member');
+            }
+            // After verification, refetch the unverified members
+            fetchUnverifiedMembers();
+            handleClose();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleClose = () => {
         setSelectedMember(null);
     };
@@ -32,7 +51,7 @@ function EndeligGodkjenning() {
             <div className="eg-section-content">
                 <ul className="eg-members-list">
                     {unverifiedMembers.map(member => (
-                        <li key={member.id} onClick={() => setSelectedMember(member)}>
+                        <li key={member.userID} onClick={() => setSelectedMember(member)}>
                             {member.first_name} {member.last_name}
                         </li>
                     ))}
@@ -45,13 +64,14 @@ function EndeligGodkjenning() {
                         <p><strong>Navn og Tlf for Foresatt:</strong> {selectedMember.guardian_name || 'N/A'} {selectedMember.guardian_phone || 'N/A'}</p>
                         <div className="eg-modal-buttons">
                             <button className="eg-button-lukk" onClick={handleClose}>Lukk</button>
-                            <button className="eg-button-godkjent" onClick={() => console.log('Godkjent:', selectedMember)}>Godkjent</button>
+                            <button className="eg-button-godkjent" onClick={() => verifyMember(selectedMember)}>Godkjent</button>
                         </div>
                     </div>
                 </div>
             )}
         </div>
     );
+
 }
 
 export default EndeligGodkjenning;
