@@ -6,6 +6,7 @@ function MedlemsNivaer() {
     const [newLevelName, setNewLevelName] = useState('');
     const [newLevelPoints, setNewLevelPoints] = useState('');
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const [showEditLevelModal, setShowEditLevelModal] = useState(false);
     const [levelToEdit, setLevelToEdit] = useState(null);
     const [editedLevelName, setEditedLevelName] = useState('');
@@ -54,6 +55,7 @@ function MedlemsNivaer() {
             }
             setShowEditLevelModal(false);
             fetchLevels();
+            setSuccessMessage('Niva ble oppdatert');
             setShowSuccessMessage(true);
             setTimeout(() => {
                 setShowSuccessMessage(false);
@@ -86,6 +88,11 @@ function MedlemsNivaer() {
             }
             setShowDeleteConfirmationModal(false);
             fetchLevels();
+            setSuccessMessage('Niva ble slettet');
+            setShowSuccessMessage(true);
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 3000);
         } catch (error) {
             console.error(error);
         }
@@ -107,6 +114,7 @@ function MedlemsNivaer() {
                 throw new Error('Failed to add new level');
             }
             setShowSuccessMessage(true);
+            setSuccessMessage('Niva ble lagt til');
             setNewLevelName('');
             setNewLevelPoints('');
             fetchLevels();
@@ -151,7 +159,7 @@ function MedlemsNivaer() {
             </div>
             {showSuccessMessage && (
                 <div className="success-banner">
-                    Niva har blitt lagt til
+                    {successMessage}
                 </div>
             )}
             {showEditLevelModal && (
