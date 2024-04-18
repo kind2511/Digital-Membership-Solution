@@ -23,6 +23,10 @@ urlpatterns = [
     path('get_activity_today/', views.get_activity_today, name='get_activity_today'),
     # Get all activities
     path('get_all_activity/', views.get_all_activity, name='get_all_activity'),
+    # Get all past activities
+    path('get_past_activities/', views.get_past_activities, name='get_past_activities'),
+    #Get all activities that has not yet occured
+    path('get_future_activities/', views.get_future_activities, name='get_future_activities'),
     # Lets member sign up for activity
     path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
     # Gets details about a specific activity
