@@ -33,9 +33,27 @@ function MedlemsNivaer() {
         console.log(`Deleting level with ID: ${levelID}`);
     };
 
-    const handleAddLevel = () => {
-        //TODO:
-        console.log('Adding new level:', newLevelName, newLevelPoints);
+    const handleAddLevel = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/create_level/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: newLevelName,
+                    points: newLevelPoints
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to add new level');
+            }
+            setNewLevelName('');
+            setNewLevelPoints('');
+            fetchLevels(); // Fetch levels again to update the list
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
