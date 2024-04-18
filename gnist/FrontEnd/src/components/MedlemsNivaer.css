@@ -46,6 +46,7 @@
 
 .level-button.edit-button {
   background-color: #005A9E; 
+  padding: 8px 5px;
   color: white;
 }
 
@@ -56,6 +57,7 @@
 
 .level-button.add-button {
   background-color: #005A9E; 
+  padding: 3px 9px;
   color: white;
 }
 

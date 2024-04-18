@@ -3,6 +3,8 @@ import './MedlemsNivaer.css';
 
 function MedlemsNivaer() {
     const [levels, setLevels] = useState([]);
+    const [newLevelName, setNewLevelName] = useState('');
+    const [newLevelPoints, setNewLevelPoints] = useState('');
 
     useEffect(() => {
         fetchLevels();
@@ -31,6 +33,11 @@ function MedlemsNivaer() {
         console.log(`Deleting level with ID: ${levelID}`);
     };
 
+    const handleAddLevel = () => {
+        //TODO:
+        console.log('Adding new level:', newLevelName, newLevelPoints);
+    };
+
     return (
         <div className="medlems-nivaer-container">
             <h2 className="medlems-nivaer-section-title">Medlems Nivåer</h2>
@@ -46,7 +53,21 @@ function MedlemsNivaer() {
                         </div>
                     ))}
                 </div>
-                <button className="level-button add-button" onClick={() => console.log('Adding new level')}>Legg til nytt nivå</button>
+                <div className="add-level-form">
+                    <input
+                        type="text"
+                        placeholder="Navn på nivå"
+                        value={newLevelName}
+                        onChange={(e) => setNewLevelName(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Poeng"
+                        value={newLevelPoints}
+                        onChange={(e) => setNewLevelPoints(e.target.value)}
+                    />
+                    <button className="level-button add-button" onClick={handleAddLevel}>Legg til nytt nivå</button>
+                </div>
             </div>
         </div>
     );
