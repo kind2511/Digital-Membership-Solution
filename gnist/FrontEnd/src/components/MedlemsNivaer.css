@@ -1,13 +1,59 @@
 .medlems-nivaer-container {
-    background-color: #eaeaea;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .medlems-nivaer-container .section-title {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
+  background-color: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: auto; 
+}
+
+.section-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.level-list {
+  max-height: 300px; /* Set a maximum height for the list to enable scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.level-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc; 
+}
+
+.level-info {
+  margin: 0;
+}
+
+.level-buttons {
+  display: flex;
+}
+
+.level-button {
+  flex: 1;
+  padding: 8px 16px;
+  margin-right: 10px; /* Add space between buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.level-button.edit-button {
+  background-color: #FFA500; 
+  color: white;
+}
+
+.level-button.delete-button {
+  background-color: #FF6347; 
+  color: white;
+}
+
+.level-button:hover {
+  opacity: 0.8;
+}
