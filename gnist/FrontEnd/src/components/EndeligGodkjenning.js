@@ -3,6 +3,7 @@ import './EndeligGodkjenning.css';
 
 function EndeligGodkjenning() {
     const [unverifiedMembers, setUnverifiedMembers] = useState([]);
+    const [selectedMember, setSelectedMember] = useState(null);
 
     useEffect(() => {
         fetchUnverifiedMembers();
@@ -21,18 +22,34 @@ function EndeligGodkjenning() {
         }
     };
 
+    const handleClose = () => {
+        setSelectedMember(null);
+    };
+
     return (
         <div className="eg-godkjenning-container">
             <h2 className="eg-section-title">Endelig Godkjenning</h2>
             <div className="eg-section-content">
                 <ul className="eg-members-list">
                     {unverifiedMembers.map(member => (
-                        <li key={member.id} onClick={() => console.log(`Member ${member.first_name} ${member.last_name} clicked`)}>
+                        <li key={member.id} onClick={() => setSelectedMember(member)}>
                             {member.first_name} {member.last_name}
                         </li>
                     ))}
                 </ul>
             </div>
+            {selectedMember && (
+                <div className="eg-modal-overlay">
+                    <div className="eg-modal-content">
+                        <p><strong>Navn:</strong> {selectedMember.first_name} {selectedMember.last_name}</p>
+                        <p><strong>Navn og Tlf for Foresatt:</strong> {selectedMember.guardian_name || 'N/A'} {selectedMember.guardian_phone || 'N/A'}</p>
+                        <div className="eg-modal-buttons">
+                            <button className="eg-button-lukk" onClick={handleClose}>Lukk</button>
+                            <button className="eg-button-godkjent" onClick={() => console.log('Godkjent:', selectedMember)}>Godkjent</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -4,7 +4,7 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .eg-godkjenning-container .eg-section-title {
@@ -14,25 +14,76 @@
 }
 
 .eg-section-content {
-  max-height: 200px; /* Set a maximum height for scrollable area */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .eg-members-list {
   list-style: none;
   padding: 0;
-  margin: 0; /* Ensure no default margin is pushing content down */
+  margin: 0;
 }
 
 .eg-members-list li {
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
-  margin-top: 5px; 
+  margin-top: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .eg-members-list li:hover {
-  background-color: #e9e9e9; 
+  background-color: #e9e9e9;
+}
+
+.eg-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eg-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 40%;
+  min-width: 300px;
+}
+
+.eg-modal-content p {
+  font-size: 16px;
+  color: #333;
+  margin-top: 10px;
+}
+
+.eg-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.eg-button-lukk {
+  padding: 8px 16px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.eg-button-godkjent {
+  padding: 8px 16px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
