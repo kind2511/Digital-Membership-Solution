@@ -4,6 +4,7 @@ import './EndeligGodkjenning.css';
 function EndeligGodkjenning() {
     const [unverifiedMembers, setUnverifiedMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
+    const [showVerificationSuccessMessage, setShowVerificationSuccessMessage] = useState(false);
 
     useEffect(() => {
         fetchUnverifiedMembers();
@@ -33,7 +34,8 @@ function EndeligGodkjenning() {
             if (!response.ok) {
                 throw new Error('Failed to verify member');
             }
-            // After verification, refetch the unverified members
+            setShowVerificationSuccessMessage(true);
+            setTimeout(() => setShowVerificationSuccessMessage(false), 3000);
             fetchUnverifiedMembers();
             handleClose();
         } catch (error) {
@@ -69,9 +71,13 @@ function EndeligGodkjenning() {
                     </div>
                 </div>
             )}
+            {showVerificationSuccessMessage && (
+                <div className="verification-success-banner">
+                    Medlem ble verifisert
+                </div>
+            )}
         </div>
     );
-
 }
 
 export default EndeligGodkjenning;
