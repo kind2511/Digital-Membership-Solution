@@ -7,7 +7,7 @@
   overflow: auto; 
 }
 
-.section-title {
+.medlems-nivaer-section-title {
   color: #333;
   font-size: 20px;
   margin-bottom: 10px;
@@ -37,7 +37,7 @@
 .level-button {
   flex: 1;
   padding: 8px 16px;
-  margin-right: 10px; /* Add space between buttons */
+  margin-right: 10px; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -45,15 +45,20 @@
 }
 
 .level-button.edit-button {
-  background-color: #FFA500; 
+  background-color: #005A9E; 
   color: white;
 }
 
 .level-button.delete-button {
-  background-color: #FF6347; 
+  background-color: red; 
   color: white;
 }
 
-.level-button:hover {
+.level-button.add-button {
+  background-color: #005A9E; 
+  color: white;
+}
+
+.level-button.add-button:hover {
   opacity: 0.8;
 }
