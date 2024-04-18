@@ -64,3 +64,16 @@
 .level-button.add-button:hover {
   opacity: 0.8;
 }
+
+.success-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(40, 167, 69, 0.9); /* Adjusted for opacity */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
+}
