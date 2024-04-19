@@ -8,28 +8,25 @@ function LeggTilEkstraInfoOmMedlem() {
     const [selectedMember, setSelectedMember] = useState(null);
     const [additionalInfo, setAdditionalInfo] = useState('');
 
-    const fetchData = (value) => {
+    const fetchData = async (value) => {
         if (value.trim() === '') {
             setResults([]);
             setSearchStatus('');
             return;
         }
         setSearchStatus('Søker...');
-        fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setResults(data);
-                setSearchStatus(`Fant ${data.length} resultater.`);
-            })
-            .catch((error) => {
-                console.error("Feil ved henting av data:", error);
-                setSearchStatus("Kunne ikke hente data. Vennligst prøv igjen senere.");
-            });
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setResults(data);
+            setSearchStatus(`Fant ${data.length} resultater.`);
+        } catch (error) {
+            console.error("Feil ved henting av data:", error);
+            setSearchStatus("Kunne ikke hente data. Vennligst prøv igjen senere.");
+        }
     };
 
     const handleSearchChange = (e) => {
@@ -46,10 +43,30 @@ function LeggTilEkstraInfoOmMedlem() {
         setAdditionalInfo(e.target.value);
     };
 
-    const saveAdditionalInfo = () => {
-        console.log('Lagrer informasjon for:', selectedMember.first_name, selectedMember.last_name, 'med tilleggsinfo:', additionalInfo);
-        setAdditionalInfo('');
-        setSelectedMember(null);
+    const saveAdditionalInfo = async () => {
+        if (selectedMember && additionalInfo) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/add_member_info/${selectedMember.auth0ID}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ info: additionalInfo })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to save additional information.');
+                }
+                const result = await response.json();
+                console.log('Informasjon lagret:', result);
+                setAdditionalInfo('');
+                setSelectedMember(null);
+                fetchData(searchTerm); // Optionally refresh the member list
+            } catch (error) {
+                console.error("Feil ved lagring av informasjon:", error);
+            }
+        } else {
+            alert('Vennligst velg et medlem og skriv inn tilleggsinformasjon.');
+        }
     };
 
     const closeForm = () => {
@@ -71,7 +88,7 @@ function LeggTilEkstraInfoOmMedlem() {
             <div className="legg-til-ekstra-info-om-medlem-section-content">
                 {results.map((member, index) => (
                     <div key={index} className="legg-til-ekstra-info-om-medlem-search-result" onClick={() => handleSelectMember(member)}>
-                        {`${member.first_name} ${member.last_name}`}
+                        {member.first_name} {member.last_name}
                     </div>
                 ))}
             </div>
@@ -82,14 +99,12 @@ function LeggTilEkstraInfoOmMedlem() {
                         onChange={handleAdditionalInfoChange}
                         placeholder="Skriv inn tilleggsinformasjon her..."
                     ></textarea>
-                    <button onClick={saveAdditionalInfo}>Lagre</button>  
-                    <button onClick={closeForm}>Lukk</button>  
+                    <button onClick={saveAdditionalInfo}>Lagre</button>
+                    <button onClick={closeForm}>Lukk</button>
                 </div>
             )}
-
         </div>
     );
-
 }
 
 export default LeggTilEkstraInfoOmMedlem;
