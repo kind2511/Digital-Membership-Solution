@@ -4,6 +4,7 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 270px;
 }
 
 .legg-til-ekstra-info-om-medlem-container .section-title {
@@ -12,8 +13,7 @@
   margin-bottom: 10px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-input,
-.additional-info-modal textarea {
+.legg-til-ekstra-info-om-medlem-search-input {
   width: 95%;
   padding: 10px;
   margin-bottom: 10px;
@@ -21,34 +21,29 @@
   border-radius: 4px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-status,
-.additional-info-modal h3 {
+.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-status {
   color: #666;
   margin-bottom: 10px;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-section-content,
-.additional-info-modal {
+.legg-til-ekstra-info-om-medlem-section-content {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-height: 200px;
+  max-height: 110px;
   overflow-y: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  width: 93.3%;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result {
+.legg-til-ekstra-info-om-medlem-search-result {
   padding: 10px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
 }
 
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result:hover {
+.legg-til-ekstra-info-om-medlem-search-result:hover {
   background-color: #f7f7f7;
-}
-
-.legg-til-ekstra-info-om-medlem-container .legg-til-ekstra-info-om-medlem-search-result:last-child {
-  border-bottom: none;
 }
 
 .additional-info-modal {
@@ -61,7 +56,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: 50%;
-  max-width: 500px; /* Ensuring the modal is not too wide on large screens */
+  max-width: 500px;
 }
 
 .additional-info-modal h3 {
@@ -69,9 +64,14 @@
   font-weight: 600;
 }
 
-.additional-info-modal textarea {
-  min-height: 100px; 
-  font-family: Arial, sans-serif; 
+.additional-info-modal-textarea {
+  width: 100%;
+  min-height: 100px;
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .additional-info-modal button {
@@ -85,13 +85,13 @@
 }
 
 .additional-info-modal .save {
-  background-color: #007BFF !important; 
-  color: white !important; 
+  background-color: #007BFF;
+  color: white;
 }
 
 .additional-info-modal .close {
-  background-color: #d3d3d3 !important; 
-  color: black !important; 
+  background-color: #d3d3d3;
+  color: black;
 }
 
 @media (max-width: 600px) {
@@ -100,13 +100,12 @@
   }
 }
 
-
 .legg-til-ekstra-info-success-message {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #28a745;  
+  background-color: #28a745;
   color: white;
   text-align: center;
   padding: 10px;
@@ -116,11 +115,11 @@
 
 @keyframes slideInFromBottom {
   0% {
-      bottom: 0;
-      opacity: 0;
+    bottom: 0;
+    opacity: 0;
   }
   100% {
-      bottom: 20px;
-      opacity: 1;
+    bottom: 20px;
+    opacity: 1;
   }
 }

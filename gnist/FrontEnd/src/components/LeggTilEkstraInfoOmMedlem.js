@@ -97,6 +97,7 @@ function LeggTilEkstraInfoOmMedlem() {
             {selectedMember && (
                 <div className="additional-info-modal">
                     <textarea
+                        className="additional-info-modal-textarea"
                         value={additionalInfo}
                         onChange={handleAdditionalInfoChange}
                         placeholder="Skriv inn tilleggsinformasjon her..."
@@ -112,6 +113,7 @@ function LeggTilEkstraInfoOmMedlem() {
             )}
         </div>
     );
+
 
 }
 
