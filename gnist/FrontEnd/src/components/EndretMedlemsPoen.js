@@ -7,7 +7,6 @@ function EndretMedlemsPoen() {
     const [searchStatus, setSearchStatus] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
     const [pointsAdjustment, setPointsAdjustment] = useState('');
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const fetchData = async (value) => {
         if (value.trim() === '') {
@@ -44,21 +43,18 @@ function EndretMedlemsPoen() {
     const handleAdjustPointsSubmit = async () => {
         if (selectedMember && pointsAdjustment !== '') {
             const adjustedPoints = parseInt(selectedMember.days_without_incident) + parseInt(pointsAdjustment);
-            const url = `http://127.0.0.1:8000/digital_medlemsordning/adjust_member_points_total/${selectedMember.auth0_id}/`;
             try {
-                const response = await fetch(url, {
+                const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/adjust_member_points_total/${selectedMember.auth0ID}/`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ days_without_incident: adjustedPoints }),
+                    body: JSON.stringify({ days_without_incident: adjustedPoints })
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 await response.json();
-                setShowSuccessMessage(true);
-                setTimeout(() => setShowSuccessMessage(false), 3000);
                 setPointsAdjustment('');
                 setSelectedMember(null);
                 fetchData(searchTerm);
@@ -66,7 +62,7 @@ function EndretMedlemsPoen() {
                 console.error("Error:", error);
             }
         } else {
-            alert('Please enter a value to adjust points.');
+            alert('Please select a member and enter a value to adjust points.');
         }
     };
 
@@ -106,11 +102,6 @@ function EndretMedlemsPoen() {
                     />
                     <button className="endret-medlems-poen-submit-button" onClick={handleAdjustPointsSubmit}>Send inn justering</button>
                     <button className="endret-medlems-poen-lukk-button" onClick={handleClose}>Lukk</button>
-                </div>
-            )}
-            {showSuccessMessage && (
-                <div className="endret-medlems-poen-success-message">
-                    Poeng har blitt justert.
                 </div>
             )}
         </div>
