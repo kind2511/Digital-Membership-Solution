@@ -27,10 +27,11 @@
 
 .eiom-section-content {
   background-color: #fff;
+  width: 95%;
   padding: 10px;
   border-radius: 4px;
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: 118px; 
+  overflow-y: auto; 
 }
 
 .eiom-search-result {
