@@ -1,4 +1,4 @@
-.ekstra-info-om-medlem-container {
+.eiom-container {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -6,13 +6,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.ekstra-info-om-medlem-title {
+.eiom-title {
   color: #333;
   font-size: 20px;
   margin-bottom: 10px;
 }
 
-.ekstra-info-om-medlem-search-input {
+.eiom-search-input {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -20,12 +20,12 @@
   border-radius: 4px;
 }
 
-.ekstra-info-om-medlem-search-status {
+.eiom-search-status {
   color: #666;
   margin-bottom: 10px;
 }
 
-.ekstra-info-om-medlem-section-content {
+.eiom-section-content {
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
@@ -33,16 +33,60 @@
   overflow-y: auto; 
 }
 
-.ekstra-info-om-medlem-search-result {
+.eiom-search-result {
   padding: 10px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
 }
 
-.ekstra-info-om-medlem-search-result:hover {
+.eiom-search-result:hover {
   background-color: #f7f7f7;
 }
 
-.ekstra-info-om-medlem-search-result:last-child {
+.eiom-search-result:last-child {
   border-bottom: none;
+}
+
+.eiom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.eiom-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.eiom-modal-content h3 {
+  margin-bottom: 15px;
+}
+
+.eiom-modal-content p {
+  margin-bottom: 20px;
+}
+
+.eiom-modal-content button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #005A9E;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.eiom-modal-content button:hover {
+  background-color: #0056b3;
 }
