@@ -6,29 +6,28 @@ function EndretMedlemsPoen() {
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
+    const [pointsAdjustment, setPointsAdjustment] = useState('');
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const fetchData = (value) => {
+    const fetchData = async (value) => {
         if (value.trim() === '') {
             setResults([]);
             setSearchStatus('');
             return;
         }
         setSearchStatus('Searching...');
-        fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setResults(data);
-                setSearchStatus(`Found ${data.length} results.`);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-                setSearchStatus("Failed to fetch data. Please try again later.");
-            });
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setResults(data);
+            setSearchStatus(`Found ${data.length} results.`);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setSearchStatus("Failed to fetch data. Please try again later.");
+        }
     };
 
     const handleSearchChange = (e) => {
@@ -39,20 +38,45 @@ function EndretMedlemsPoen() {
 
     const handleSelectMember = (member) => {
         setSelectedMember(member);
-        document.body.classList.add('no-scroll'); 
+        setPointsAdjustment('');
     };
 
-    const handleEndrePoen = () => {
-        console.log('Endre poen button clicked');
+    const handleAdjustPointsSubmit = async () => {
+        if (selectedMember && pointsAdjustment !== '') {
+            const adjustedPoints = parseInt(selectedMember.days_without_incident) + parseInt(pointsAdjustment);
+            const url = `http://127.0.0.1:8000/digital_medlemsordning/adjust_member_points_total/${selectedMember.auth0_id}/`;
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ days_without_incident: adjustedPoints }),
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                await response.json();
+                setShowSuccessMessage(true);
+                setTimeout(() => setShowSuccessMessage(false), 3000);
+                setPointsAdjustment('');
+                setSelectedMember(null);
+                fetchData(searchTerm);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        } else {
+            alert('Please enter a value to adjust points.');
+        }
     };
 
-    const handleLukk = () => {
+    const handleClose = () => {
         setSelectedMember(null);
-        document.body.classList.remove('no-scroll'); 
+        setPointsAdjustment('');
     };
 
     return (
-        <div className={`endret-medlems-poen-container ${selectedMember ? 'member-selected' : ''}`}>
+        <div className="endret-medlems-poen-container">
             <h2 className="endret-medlems-poen-title">Endret medlems poeng</h2>
             <input
                 type="text"
@@ -72,11 +96,21 @@ function EndretMedlemsPoen() {
             {selectedMember && (
                 <div className="endret-medlems-poen-selected-member-container">
                     <h2 className="endret-medlems-poen-selected-member-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</h2>
-                    <p className="endret-medlems-poen-selected-member-points">Total Points: {selectedMember.total_points}</p>
-                    <div className="endret-medlems-poen-button-container">
-                        <button className="endret-medlems-poen-endre-poen-button" onClick={handleEndrePoen}>Endre poen</button>
-                        <button className="endret-medlems-poen-lukk-button" onClick={handleLukk}>Lukk</button>
-                    </div>
+                    <p className="endret-medlems-poen-selected-member-points">Totale poeng: {selectedMember.days_without_incident}</p>
+                    <input
+                        type="number"
+                        className="endret-medlems-poen-points-input"
+                        value={pointsAdjustment}
+                        onChange={(e) => setPointsAdjustment(e.target.value)}
+                        placeholder="Juster poeng"
+                    />
+                    <button className="endret-medlems-poen-submit-button" onClick={handleAdjustPointsSubmit}>Send inn justering</button>
+                    <button className="endret-medlems-poen-lukk-button" onClick={handleClose}>Lukk</button>
+                </div>
+            )}
+            {showSuccessMessage && (
+                <div className="endret-medlems-poen-success-message">
+                    Poeng har blitt justert.
                 </div>
             )}
         </div>

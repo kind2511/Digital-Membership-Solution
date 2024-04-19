@@ -54,11 +54,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  padding: 30px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10; 
 }
 
 .endret-medlems-poen-selected-member-name {
@@ -73,41 +73,45 @@
   margin-bottom: 20px;
 }
 
-.endret-medlems-poen-button-container {
-  display: flex;
-  justify-content: center;
+.endret-medlems-poen-adjustment-form {
+  margin-bottom: 20px;
 }
 
-.endret-medlems-poen-endre-poen-button,
-.endret-medlems-poen-lukk-button {
-  padding: 10px 20px;
-  margin: 0 10px;
+.endret-medlems-poen-points-input {
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.endret-medlems-poen-submit-button {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.endret-medlems-poen-endre-poen-button {
-  background-color: #005A9E;
-  color: #fff;
+.endret-medlems-poen-submit-button:hover {
+  background-color: #45a049;
 }
 
 .endret-medlems-poen-lukk-button {
-  background-color: red;
-  color: #fff;
+  padding: 5px 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.endret-medlems-poen-container.member-selected {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+.endret-medlems-poen-lukk-button:hover {
+  background-color: #d32f2f;
 }
 
 .no-scroll {
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
