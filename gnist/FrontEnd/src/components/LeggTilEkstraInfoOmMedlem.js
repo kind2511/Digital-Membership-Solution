@@ -7,6 +7,7 @@ function LeggTilEkstraInfoOmMedlem() {
     const [searchStatus, setSearchStatus] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
     const [additionalInfo, setAdditionalInfo] = useState('');
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const fetchData = async (value) => {
         if (value.trim() === '') {
@@ -56,11 +57,12 @@ function LeggTilEkstraInfoOmMedlem() {
                 if (!response.ok) {
                     throw new Error('Failed to save additional information.');
                 }
-                const result = await response.json();
-                console.log('Informasjon lagret:', result);
+                await response.json();
+                setShowSuccessMessage(true);
+                setTimeout(() => setShowSuccessMessage(false), 3000);
                 setAdditionalInfo('');
                 setSelectedMember(null);
-                fetchData(searchTerm); // Optionally refresh the member list
+                fetchData(searchTerm);
             } catch (error) {
                 console.error("Feil ved lagring av informasjon:", error);
             }
@@ -88,7 +90,7 @@ function LeggTilEkstraInfoOmMedlem() {
             <div className="legg-til-ekstra-info-om-medlem-section-content">
                 {results.map((member, index) => (
                     <div key={index} className="legg-til-ekstra-info-om-medlem-search-result" onClick={() => handleSelectMember(member)}>
-                        {member.first_name} {member.last_name}
+                        {`${member.first_name} ${member.last_name}`}
                     </div>
                 ))}
             </div>
@@ -103,8 +105,14 @@ function LeggTilEkstraInfoOmMedlem() {
                     <button onClick={closeForm}>Lukk</button>
                 </div>
             )}
+            {showSuccessMessage && (
+                <div className="legg-til-ekstra-info-success-message">
+                    Info har blitt lagret
+                </div>
+            )}
         </div>
     );
+
 }
 
 export default LeggTilEkstraInfoOmMedlem;

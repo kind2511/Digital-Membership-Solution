@@ -99,3 +99,28 @@
     width: 80%;
   }
 }
+
+
+.legg-til-ekstra-info-success-message {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #28a745;  
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
+}
+
+@keyframes slideInFromBottom {
+  0% {
+      bottom: 0;
+      opacity: 0;
+  }
+  100% {
+      bottom: 20px;
+      opacity: 1;
+  }
+}
