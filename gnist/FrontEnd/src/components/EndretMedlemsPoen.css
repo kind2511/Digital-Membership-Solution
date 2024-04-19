@@ -14,7 +14,7 @@
 }
 
 .endret-medlems-poen-search-input {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -28,10 +28,11 @@
 
 .endret-medlems-poen-section-content {
   background-color: #fff;
+  width: 95%;
   padding: 10px;
   border-radius: 4px;
   max-height: 118px; 
-  overflow-y: auto;
+  overflow-y: auto;  
 }
 
 .endret-medlems-poen-search-result {

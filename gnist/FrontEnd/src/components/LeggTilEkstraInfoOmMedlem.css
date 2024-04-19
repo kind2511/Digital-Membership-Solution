@@ -28,12 +28,11 @@
 
 .legg-til-ekstra-info-om-medlem-section-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-height: 110px;
-  overflow-y: auto;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  width: 93.3%;
+  width: 95%;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 118px; 
+  overflow-y: auto; 
 }
 
 .legg-til-ekstra-info-om-medlem-search-result {
