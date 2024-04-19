@@ -29,8 +29,8 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
-  max-height: 200px; 
-  overflow-y: auto; 
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .eiom-search-result {
@@ -78,15 +78,35 @@
   margin-bottom: 20px;
 }
 
-.eiom-modal-content button {
+/* Button styles */
+.eiom-modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+}
+
+.eiom-modal-buttons .eiom-delete-btn {
   padding: 10px 20px;
   border: none;
-  background-color: #005A9E;
+  background-color: #d9534f; 
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.eiom-modal-content button:hover {
-  background-color: #0056b3;
+.eiom-modal-buttons .eiom-delete-btn:hover {
+  background-color: darkred;
+}
+
+.eiom-modal-buttons .eiom-close-btn {
+  padding: 10px 20px;
+  border: none;
+  background-color: #005A9E; 
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.eiom-modal-buttons .eiom-close-btn:hover {
+  background-color: #004a7c;
 }

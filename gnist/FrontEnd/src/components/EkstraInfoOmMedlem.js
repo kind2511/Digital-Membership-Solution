@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './EkstraInfoOmMedlem.css';
 
 function EkstraInfoOmMedlem() {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
-    const [selectedMember, setSelectedMember] = useState(null);
+
+    useEffect(() => {
+        const savedAuth0ID = localStorage.getItem('selectedAuth0ID');
+        if (savedAuth0ID) {
+            const member = results.find(m => m.auth0ID === savedAuth0ID);
+            if (member) {
+                setSelectedMember(member);
+            }
+        }
+    }, [results]);
 
     const fetchData = (value) => {
         if (value.trim() === '') {
             setResults([]);
             setSearchStatus('');
             setSelectedMember(null);
+            localStorage.removeItem('selectedAuth0ID'); // Ensure local storage is also cleared
             return;
         }
         setSearchStatus('Searching...');
@@ -38,8 +48,42 @@ function EkstraInfoOmMedlem() {
         fetchData(value);
     };
 
+    const [selectedMember, setSelectedMember] = useState(null);
+
     const handleSelectMember = (member) => {
         setSelectedMember(member);
+        localStorage.setItem('selectedAuth0ID', member.auth0ID);
+    };
+
+    const handleDeleteMemberInfo = () => {
+        const auth0ID = localStorage.getItem('selectedAuth0ID');
+        if (auth0ID) {
+            const url = `http://127.0.0.1:8000/digital_medlemsordning/remove_member_info/${auth0ID}/`;
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ info: "" })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(() => {
+                alert("Medlemsinfo slettet");
+                setSelectedMember(null);
+                localStorage.removeItem('selectedAuth0ID');
+                fetchData(searchTerm);
+            })
+            .catch(error => {
+                console.error("Error deleting member info:", error);
+            });
+        } else {
+            console.error('Cannot delete member info: No auth0ID found in local storage');
+        }
     };
 
     return (
@@ -65,7 +109,13 @@ function EkstraInfoOmMedlem() {
                     <div className="eiom-modal-content">
                         <h3>{`${selectedMember.first_name} ${selectedMember.last_name}`}</h3>
                         <p>{selectedMember.info || "N/A"}</p>
-                        <button onClick={() => setSelectedMember(null)}>Close</button>
+                        <div className="eiom-modal-buttons">
+                            <button onClick={handleDeleteMemberInfo} className="eiom-delete-btn">Slett</button>
+                            <button onClick={() => {
+                                setSelectedMember(null);
+                                localStorage.removeItem('selectedAuth0ID');
+                            }} className="eiom-close-btn">Lukk</button>
+                        </div>
                     </div>
                 </div>
             )}
