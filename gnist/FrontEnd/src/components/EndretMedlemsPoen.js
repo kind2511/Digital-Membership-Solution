@@ -7,6 +7,7 @@ function EndretMedlemsPoen() {
     const [searchStatus, setSearchStatus] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
     const [pointsAdjustment, setPointsAdjustment] = useState('');
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const fetchData = async (value) => {
         if (value.trim() === '') {
@@ -55,6 +56,8 @@ function EndretMedlemsPoen() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 await response.json();
+                setShowSuccessMessage(true);
+                setTimeout(() => setShowSuccessMessage(false), 3000);
                 setPointsAdjustment('');
                 setSelectedMember(null);
                 fetchData(searchTerm);
@@ -102,6 +105,11 @@ function EndretMedlemsPoen() {
                     />
                     <button className="endret-medlems-poen-submit-button" onClick={handleAdjustPointsSubmit}>Send inn justering</button>
                     <button className="endret-medlems-poen-lukk-button" onClick={handleClose}>Lukk</button>
+                </div>
+            )}
+            {showSuccessMessage && (
+                <div className="endret-medlems-poen-success-message">
+                    Poeng har blitt justert.
                 </div>
             )}
         </div>
