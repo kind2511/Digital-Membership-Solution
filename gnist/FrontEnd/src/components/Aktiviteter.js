@@ -14,6 +14,7 @@ function Aktiviteter() {
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [archivedActivities, setArchivedActivities] = useState([]);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -96,11 +97,25 @@ function Aktiviteter() {
     }
   };
 
+  useEffect(() => {
+    const fetchArchivedActivities = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/digital_medlemsordning/get_past_activities/');
+        setArchivedActivities(response.data);
+      } catch (error) {
+        console.error("Error fetching archived activities:", error);
+      }
+    };
+
+    fetchArchivedActivities();
+  }, []);
+
   return (
     <div className="aktiviteter-container-unique">
       <div className="activity-success-message-unique" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
         {successMessage}
       </div>
+  
       {/* Modal for Registrants */}
       {selectedActivity && (
         <div className="modal-unique">
@@ -120,7 +135,7 @@ function Aktiviteter() {
           </div>
         </div>
       )}
-
+  
       {/* Lag Ny Aktivitet Section */}
       <div className="section-unique lag-ny-aktivitet-unique">
         <h2 className="section-title-unique">Lag Ny Aktivitet</h2>
@@ -132,7 +147,8 @@ function Aktiviteter() {
           <button type="submit">Lagre Aktivitet</button>
         </form>
       </div>
-      {/* Alle Aktiviteter Section */}
+  
+      {/* Kommende Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
         <h2 className="section-title-unique">Kommende Aktiviteter</h2>
         <div className="activities-list-unique">
@@ -148,8 +164,26 @@ function Aktiviteter() {
           ))}
         </div>
       </div>
+  
+      {/* Arkiverte Aktiviteter Section */}
+      <div className="section-unique alle-aktiviteter-unique">
+        <h2 className="section-title-unique">Arkiverte Aktiviteter</h2>
+        <div className="activities-list-unique">
+          {archivedActivities.map((archivedActivity) => (
+            <div className="activity-item-unique" key={archivedActivity.activityID} onClick={() => fetchRegistrants(archivedActivity.activityID)}>
+              <img src={archivedActivity.image} alt={archivedActivity.title} />
+              <div className="activity-info-unique">
+                <h3>{archivedActivity.title}</h3>
+                <p className="activity-date-unique">{archivedActivity.date}</p>
+                <p className="activity-description-unique">{archivedActivity.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
+ 
 }
 
 export default Aktiviteter;
