@@ -4,7 +4,7 @@ import './Undersøkelser.css';
 function Undersøkelser() {
   const [newQuestion, setNewQuestion] = useState({
     question: '',
-    answers: ['', '', '']
+    answers: ['', '', '', '', '']
   });
 
   const [questions, setQuestions] = useState([]);
