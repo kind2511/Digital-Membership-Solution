@@ -79,7 +79,6 @@
   margin-bottom: 20px;
 }
 
-/* Button styles */
 .eiom-modal-buttons {
   display: flex;
   justify-content: center;
@@ -110,4 +109,18 @@
 
 .eiom-modal-buttons .eiom-close-btn:hover {
   background-color: #004a7c;
+}
+
+/* Unique success message styling */
+.eiom-delete-success-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
 }

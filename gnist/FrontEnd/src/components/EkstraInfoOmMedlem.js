@@ -5,6 +5,8 @@ function EkstraInfoOmMedlem() {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [showDeleteSuccessMessage, setShowDeleteSuccessMessage] = useState(false);
 
     useEffect(() => {
         const savedAuth0ID = localStorage.getItem('selectedAuth0ID');
@@ -21,7 +23,7 @@ function EkstraInfoOmMedlem() {
             setResults([]);
             setSearchStatus('');
             setSelectedMember(null);
-            localStorage.removeItem('selectedAuth0ID'); // Ensure local storage is also cleared
+            localStorage.removeItem('selectedAuth0ID');
             return;
         }
         setSearchStatus('Searching...');
@@ -48,8 +50,6 @@ function EkstraInfoOmMedlem() {
         fetchData(value);
     };
 
-    const [selectedMember, setSelectedMember] = useState(null);
-
     const handleSelectMember = (member) => {
         setSelectedMember(member);
         localStorage.setItem('selectedAuth0ID', member.auth0ID);
@@ -64,7 +64,7 @@ function EkstraInfoOmMedlem() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ info: "" })
+                body: JSON.stringify({})
             })
             .then(response => {
                 if (!response.ok) {
@@ -73,10 +73,11 @@ function EkstraInfoOmMedlem() {
                 return response.json();
             })
             .then(() => {
-                alert("Medlemsinfo slettet");
                 setSelectedMember(null);
                 localStorage.removeItem('selectedAuth0ID');
                 fetchData(searchTerm);
+                setShowDeleteSuccessMessage(true);
+                setTimeout(() => setShowDeleteSuccessMessage(false), 3000);
             })
             .catch(error => {
                 console.error("Error deleting member info:", error);
@@ -117,6 +118,11 @@ function EkstraInfoOmMedlem() {
                             }} className="eiom-close-btn">Lukk</button>
                         </div>
                     </div>
+                </div>
+            )}
+            {showDeleteSuccessMessage && (
+                <div className="eiom-delete-success-banner">
+                    Medlems ekstra info er slettet
                 </div>
             )}
         </div>
