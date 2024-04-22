@@ -97,34 +97,34 @@ function Aktiviteter() {
   };
 
   return (
-    <div className="aktiviteter-container">
-      <div className="activity-success-message" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
+    <div className="aktiviteter-container-unique">
+      <div className="activity-success-message-unique" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
         {successMessage}
       </div>
       {/* Modal for Registrants */}
       {selectedActivity && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-unique">
+          <div className="modal-content-unique">
             <h3>Folk som har registrert seg på denne aktiviteten:</h3>
-            <ol className="registrants-list">
+            <ol className="registrants-list-unique">
               {registrants.map((person, index) => (
-                <li key={index} className="registrant">
+                <li key={index} className="registrant-unique">
                   {person.first_name} {person.last_name}
                 </li>
               ))}
             </ol>
-            <div className="modal-footer">
-              <button className="delete-button" onClick={() => handleDeleteActivity(selectedActivity)}>Slett Aktivitet</button>
-              <button className="close-button" onClick={() => setSelectedActivity(null)}>Lukk</button>
+            <div className="modal-footer-unique">
+              <button className="delete-button-unique" onClick={() => handleDeleteActivity(selectedActivity)}>Slett Aktivitet</button>
+              <button className="close-button-unique" onClick={() => setSelectedActivity(null)}>Lukk</button>
             </div>
           </div>
         </div>
       )}
 
       {/* Lag Ny Aktivitet Section */}
-      <div className="section lag-ny-aktivitet">
-        <h2 className="section-title">Lag Ny Aktivitet</h2>
-        <form onSubmit={handleSubmit} className="activity-form">
+      <div className="section-unique lag-ny-aktivitet-unique">
+        <h2 className="section-title-unique">Lag Ny Aktivitet</h2>
+        <form onSubmit={handleSubmit} className="activity-form-unique">
           <input type="date" name="dato" value={activity.dato} onChange={handleChange} required />
           <input type="text" name="tittel" placeholder="Tittel" value={activity.tittel} onChange={handleChange} required />
           <input type="file" name="bilde" onChange={handleChange} />
@@ -133,16 +133,16 @@ function Aktiviteter() {
         </form>
       </div>
       {/* Alle Aktiviteter Section */}
-      <div className="section alle-aktiviteter">
-        <h2 className="section-title">Alle Aktiviteter</h2>
-        <div className="activities-list">
+      <div className="section-unique alle-aktiviteter-unique">
+        <h2 className="section-title-unique">Alle Aktiviteter</h2>
+        <div className="activities-list-unique">
           {activities.map((activity) => (
-            <div className="activity-item" key={activity.activityID} onClick={() => fetchRegistrants(activity.activityID)}>
+            <div className="activity-item-unique" key={activity.activityID} onClick={() => fetchRegistrants(activity.activityID)}>
               <img src={activity.image} alt={activity.title} />
-              <div className="activity-info">
+              <div className="activity-info-unique">
                 <h3>{activity.title}</h3>
-                <p className="activity-date">{activity.date}</p>
-                <p className="activity-description">{activity.description}</p>
+                <p className="activity-date-unique">{activity.date}</p>
+                <p className="activity-description-unique">{activity.description}</p>
               </div>
             </div>
           ))}

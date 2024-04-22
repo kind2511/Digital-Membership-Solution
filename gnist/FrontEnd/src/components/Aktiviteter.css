@@ -1,24 +1,24 @@
-.aktiviteter-container {
+.aktiviteter-container-unique {
   display: flex;
   flex-direction: column;
 }
 
-.section {
+.section-unique {
   padding: 22px;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
 
-.section-title {
+.section-title-unique {
   margin-bottom: 20px;
   color: #333;
   font-size: 24px;
 }
 
-.activity-form input[type="text"],
-.activity-form input[type="date"],
-.activity-form textarea {
+.activity-form-unique input[type="text"],
+.activity-form-unique input[type="date"],
+.activity-form-unique textarea {
   width: 100%;
   padding: 5px;
   margin-bottom: 20px;
@@ -26,11 +26,11 @@
   border: 1px solid #ccc;
 }
 
-.activity-form input[type="file"] {
+.activity-form-unique input[type="file"] {
   margin-bottom: 15px;
 }
 
-.activity-form button {
+.activity-form-unique button {
   padding: 10px 20px;
   border: none;
   background-color: #005A9E;
@@ -39,11 +39,11 @@
   border-radius: 5px;
 }
 
-.activity-form button:hover {
+.activity-form-unique button:hover {
   background-color: #004080;
 }
 
-.activity-success-message {
+.activity-success-message-unique {
   transition: opacity 0.5s ease-in-out;
   color: #FFFFFF;
   text-align: center;
@@ -55,13 +55,13 @@
   white-space: nowrap;
 }
 
-.activities-list {
+.activities-list-unique {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
 
-.activity-item {
+.activity-item-unique {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -73,39 +73,39 @@
   cursor: pointer;
 }
 
-.activity-item:hover {
+.activity-item-unique:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.activity-item img {
+.activity-item-unique img {
   width: 100%;
   height: auto;
   border-radius: 5px;
 }
 
-.activity-info h3 {
+.activity-info-unique h3 {
   margin: 0;
   color: #005A9E;
   font-size: 18px;
 }
 
-.activity-date {
+.activity-date-unique {
   font-size: 14px;
   color: #666;
 }
 
-.activity-description {
+.activity-description-unique {
   font-size: 14px;
   color: #333;
 }
 
-.alle-aktiviteter {
+.alle-aktiviteter-unique {
   margin-top: 20px;
 }
 
 /* Modal Styles */
-.modal {
+.modal-unique {
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -118,7 +118,7 @@
   align-items: center;
 }
 
-.modal-content {
+.modal-content-unique {
   background-color: #fefefe;
   padding: 20px;
   border-radius: 5px;
@@ -132,7 +132,7 @@
   align-items: center;
 }
 
-.close-button {
+.close-button-unique {
   background-color: #D50000;
   color: white;
   padding: 10px 20px;
@@ -144,7 +144,7 @@
   right: 10px;
 }
 
-.registrants-list {
+.registrants-list-unique {
   list-style: decimal inside; 
   padding: 0; 
   width: 100%;
@@ -153,13 +153,13 @@
   overflow-y: auto;
 }
 
-.registrant {
+.registrant-unique {
   margin: 5px 0; 
   font-size: 16px; 
   line-height: 1.5; 
 }
 
-.modal-footer {
+.modal-footer-unique {
   display: flex;
   justify-content: flex-end;
   padding-top: 20px;
@@ -168,7 +168,7 @@
   right: 10px;
 }
 
-.delete-button {
+.delete-button-unique {
   background-color: #D50000;
   color: white;
   padding: 10px 8px;
@@ -179,7 +179,7 @@
   margin-top: -10px;
 }
 
-.close-button {
+.close-button-unique {
   background-color: #FFA500;
   color: white;
   padding: 10px 20px;
@@ -189,31 +189,31 @@
 
 }
 
-.delete-button:hover{
+.delete-button-unique:hover{
   background-color: darkred;
 }
 
-.close-button:hover{
+.close-button-unique:hover{
   background-color: darkorange;
 }
 
 
 /* modal width on smaller screens */
 @media (max-width: 768px) {
-  .modal-content {
+  .modal-content-unique {
     width: 80%;
     height: 80%;
   }
 
-  .aktiviteter-container {
+  .aktiviteter-container-unique {
     flex-direction: column;
   }
 
-  .section {
+  .section-unique {
     margin-bottom: 20px;
   }
 
-  .activity-item img {
+  .activity-item-unique img {
     width: 100%;
     height: auto;
   }
