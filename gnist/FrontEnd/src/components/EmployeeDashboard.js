@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import Tilstede from './Tilstede';
 import Aktiviteter from './Aktiviteter';
@@ -9,8 +9,15 @@ import './EmployeeDashboard.css';
 
 function EmployeeDashboard() {
   const { logout } = useAuth0();
-  const [activeNavItem, setActiveNavItem] = useState('Tilstede');
+
+  // Initialize activeNavItem from local storage or default to 'Tilstede'
+  const [activeNavItem, setActiveNavItem] = useState(localStorage.getItem('activeNavItem') || 'Tilstede');
   const [showLogoutModal, setShowLogoutModal] = useState(false); 
+
+  // Update local storage whenever activeNavItem changes
+  useEffect(() => {
+    localStorage.setItem('activeNavItem', activeNavItem);
+  }, [activeNavItem]);
 
   const handleLogout = () => {
     // Show logout confirmation modal
@@ -35,7 +42,7 @@ function EmployeeDashboard() {
       case 'Medleminfo': 
         return <Medleminfo />;
       default:
-        return <div className="emp-content">Please select an item from the navbar.</div>;
+        return <div className="emp-content">Velg et element fra navigasjonslinjen.</div>;
     }
   };
 
