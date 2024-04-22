@@ -1148,3 +1148,22 @@ def get_member_attendance_stats(request):
         })
 
         return Response(serializer.data)
+
+
+# Function that gets all past activities
+@api_view(['GET'])
+def get_past_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        past_activities = Activity.objects.filter(date__lt=today)
+        serializer = ActivitySerializer(past_activities, many=True)
+        return Response(serializer.data)
+    
+# Function to get all activites that has not yet occured
+@api_view(['GET'])
+def get_future_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        future_activities = Activity.objects.filter(date__gte=today)
+        serializer = ActivitySerializer(future_activities, many=True)
+        return Response(serializer.data)
