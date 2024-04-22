@@ -11,14 +11,17 @@ import MinMening from './MinMening';
 
 function UserDashboard() {
   const { logout, user, isAuthenticated } = useAuth0();
-  const [activeNavItem, setActiveNavItem] = useState(localStorage.getItem('activeNavItem') || 'Profil');
+  const [activeNavItem, setActiveNavItem] = useState(() => {
+    const savedItem = localStorage.getItem('activeNavItem');
+    return isAuthenticated ? (savedItem || 'Profil') : 'Profil';
+  });
   const [isRegistered, setIsRegistered] = useState(false);
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
   const [firstName, setFirstName] = useState('');
   const [level, setLevel] = useState(0);
-  const baseApiUrl = 'http://localhost:8000'; // TEST new approach
+  const baseApiUrl = 'http://localhost:8000';
   const date = new Date().toLocaleDateString();
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // State for controlling the visibility of logout modal
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -39,7 +42,13 @@ function UserDashboard() {
 
   const handleLogoutConfirmation = () => {
     localStorage.removeItem('isRegistered');
+    localStorage.removeItem('activeNavItem');
     logout({ returnTo: window.location.origin });
+  };
+
+  const handleNavItemClick = (navItem) => {
+    setActiveNavItem(navItem);
+    localStorage.setItem('activeNavItem', navItem);
   };
 
   const renderContent = () => {
@@ -72,10 +81,10 @@ function UserDashboard() {
     <div className="dashboard-container">
       <div className="navbar">
         <div className="navbar-menu">
-          <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => setActiveNavItem('Profil')}>Profil</div>
-          <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => setActiveNavItem('Program')}>Program</div>
-          <div className={`nav-item ${activeNavItem === 'Bevis' ? 'active' : ''}`} onClick={() => setActiveNavItem('Bevis')}>Bevis</div>
-          <div className={`nav-item ${activeNavItem === 'MinMening' ? 'active' : ''}`} onClick={() => setActiveNavItem('MinMening')}>Min Mening</div>
+          <div className={`nav-item ${activeNavItem === 'Profil' ? 'active' : ''}`} onClick={() => handleNavItemClick('Profil')}>Profil</div>
+          <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => handleNavItemClick('Program')}>Program</div>
+          <div className={`nav-item ${activeNavItem === 'Bevis' ? 'active' : ''}`} onClick={() => handleNavItemClick('Bevis')}>Bevis</div>
+          <div className={`nav-item ${activeNavItem === 'MinMening' ? 'active' : ''}`} onClick={() => handleNavItemClick('MinMening')}>Min Mening</div>
           <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Log Ut</div>
         </div>
       </div>
