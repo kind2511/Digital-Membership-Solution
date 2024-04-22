@@ -44,15 +44,16 @@
 }
 
 .activity-success-message-unique {
-  transition: opacity 0.5s ease-in-out;
-  color: #FFFFFF;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: red;  
+  color: white;
   text-align: center;
-  border-radius: 5px;
   padding: 10px;
-  margin-bottom: 20px;
-  background-color: #52C41A;
-  overflow: hidden;
-  white-space: nowrap;
+  font-weight: bold;
+  z-index: 1500;
 }
 
 .activities-list-unique {
