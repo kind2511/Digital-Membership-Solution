@@ -179,14 +179,14 @@ function Rød() {
         <div className="roed-modal">
           <div className="roed-modal-content">
             <p>{activeMember.full_name || `${activeMember.first_name} ${activeMember.last_name}`}</p>
-            <label htmlFor="banStartDate">Ban Start Date:</label>
+            <label htmlFor="banStartDate">Fra:</label>
             <input
               type="date"
               id="banStartDate"
               value={banStartDate}
               onChange={e => setBanStartDate(e.target.value)}
             />
-            <label htmlFor="banEndDate">Ban End Date:</label>
+            <label htmlFor="banEndDate">Til:</label>
             <input
               type="date"
               id="banEndDate"
@@ -204,7 +204,7 @@ function Rød() {
                 className="roed-modal-button-close"
                 onClick={handleCloseModal}
               >
-                Close
+                Lukk
               </button>
             </div>
           </div>
