@@ -144,7 +144,7 @@ function Rød() {
                 className="roed-modal-button-unban"
                 onClick={() => handleUnbanMember(member.auth0_id)}
               >
-                Unban
+                Grønn
               </button>
             </div>
           ))}
