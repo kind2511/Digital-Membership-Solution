@@ -43,7 +43,7 @@ function EndretMedlemsPoen() {
 
     const handleAdjustPointsSubmit = async () => {
         if (selectedMember && pointsAdjustment !== '') {
-            const adjustedPoints = parseInt(selectedMember.days_without_incident) + parseInt(pointsAdjustment);
+            const adjustedPoints =  parseInt(pointsAdjustment);
             try {
                 const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/adjust_member_points_total/${selectedMember.auth0ID}/`, {
                     method: 'PUT',
