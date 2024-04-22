@@ -15,17 +15,18 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
   }, [userSub, setIsRegistered]);
 
   const handleCheckboxClick = () => {
-    setShowConfirmModal(true);
+    if (!isRegistered) {
+      setShowConfirmModal(true);
+    }
   };
 
   const handleRegistrationChange = async (confirm) => {
-    if (confirm) {
+    if (confirm && !isRegistered) {
       const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
       try {
         await axios.get(endpoint);
-        const newRegistrationStatus = !isRegistered;
-        setIsRegistered(newRegistrationStatus);
-        localStorage.setItem('isRegistered', newRegistrationStatus.toString());
+        setIsRegistered(true);
+        localStorage.setItem('isRegistered', 'true');
       } catch (error) {
         console.error("Error toggling registration:", error.response || error);
       }
@@ -48,7 +49,7 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
       {showConfirmModal && (
         <div className="registration-modal-overlay">
           <div className="registration-modal-content">
-            <p>{isRegistered ? 'Er du sikker på at du vil avregistrere deg?' : 'Er du sikker på at du vil registrere deg?'}</p>
+            <p>Er du sikker på at du vil registrere deg?</p>
             <button onClick={() => handleRegistrationChange(true)}>Ja</button>
             <button onClick={() => handleRegistrationChange(false)}>Nei</button>
           </div>
