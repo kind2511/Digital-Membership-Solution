@@ -153,7 +153,7 @@ function Rød() {
       </div>
 
       <div className="roed-section">
-        <h2 className="roed-section-title">Utstengte Medlemmer</h2>
+        <h2 className="roed-section-title">Legg Til Ny</h2>
         <input
           type="text"
           className="roed-section-input"
