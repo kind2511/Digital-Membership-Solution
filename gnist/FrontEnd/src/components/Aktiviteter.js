@@ -18,7 +18,7 @@ function Aktiviteter() {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/digital_medlemsordning/get_all_activity/');
+        const response = await axios.get('http://127.0.0.1:8000/digital_medlemsordning/get_future_activities/');
         setActivities(response.data);
       } catch (error) {
         console.error("Error fetching activities:", error);
@@ -134,7 +134,7 @@ function Aktiviteter() {
       </div>
       {/* Alle Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
-        <h2 className="section-title-unique">Alle Aktiviteter</h2>
+        <h2 className="section-title-unique">Kommende Aktiviteter</h2>
         <div className="activities-list-unique">
           {activities.map((activity) => (
             <div className="activity-item-unique" key={activity.activityID} onClick={() => fetchRegistrants(activity.activityID)}>
