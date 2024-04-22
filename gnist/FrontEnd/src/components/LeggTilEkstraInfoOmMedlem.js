@@ -78,7 +78,7 @@ function LeggTilEkstraInfoOmMedlem() {
 
     return (
         <div className="legg-til-ekstra-info-om-medlem-container">
-            <h2 className="section-title">Legg til ekstra info om medlem</h2>
+            <h2 className="section-title">Legg til ekstra info om medlem (IKKE SENSITIVE)</h2>
             <input
                 type="text"
                 className="legg-til-ekstra-info-om-medlem-search-input"
