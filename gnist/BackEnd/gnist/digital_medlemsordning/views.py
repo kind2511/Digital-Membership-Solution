@@ -690,7 +690,7 @@ def adjust_member_points_total(request, auth0_id):
     if adjusted_points is None:
         return Response({"error": "Missing 'days_without_incident' field in request data"}, status=400)
 
-    member.days_without_incident = member.days_without_incident + adjusted_points
+    member.days_without_incident =  adjusted_points #changed here :)
     member.save()
 
     serializer = MembersSerializer(member)
