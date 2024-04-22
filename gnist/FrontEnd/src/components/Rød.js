@@ -126,7 +126,7 @@ function Rød() {
   return (
     <div className="roed-unique-container">
       <div className="roed-section roed-banned-members">
-        <h2 className="roed-section-title">Rød Medlemmer</h2>
+        <h2 className="roed-section-title">Status</h2>
         <div className="roed-names-container">
           {bannedMembers.map((member, index) => (
             <div key={index} className="roed-banned-member-item">
