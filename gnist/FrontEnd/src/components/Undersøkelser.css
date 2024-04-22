@@ -63,6 +63,7 @@
 .questions-list {
   max-height: calc(100vh - 250px); 
   overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 171px;
 }
 
 .question-item {
