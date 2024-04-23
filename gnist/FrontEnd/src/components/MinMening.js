@@ -52,47 +52,47 @@ const MinMening = () => {
 
     // Submit answer to selected question
     const handleSubmitAnswer = async () => {
-        if (!user?.sub) {
-            console.error('User authentication required.');
-            return;
+      if (!user?.sub) {
+        console.error('User authentication required.');
+        return;
+      }
+    
+      const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
+      if (!selectedAnswerValue) {
+        console.error('No answer selected.');
+        return;
+      }
+    
+      try {
+        const token = await getAccessTokenSilently();
+        const endpoint = `http://localhost:8000/digital_medlemsordning/submit_response/${user.sub}/`;
+    
+        const response = await axios.post(endpoint, {
+          question: selectedQuestion.questionID,
+          answer: selectedAnswerValue
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+    
+        if (response.status === 201) {
+          setConfirmationMessage("Svar ble sendt.");
+          setMessageType('confirmation');
+          setSelectedQuestion(null); 
+          setTimeout(() => setConfirmationMessage(''), 3000);
         }
-
-        const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
-        if (!selectedAnswerValue) {
-            console.error('No answer selected.');
-            return;
+      } catch (error) {
+        if (error.response && error.response.status === 400 && error.response.data.error === "User has already answered this question") {
+          setConfirmationMessage("Spørsmål allerede besvart.");
+          setMessageType('error');
+          setTimeout(() => setConfirmationMessage(''), 3000);
+        } else {
+          console.error("Error submitting answer:", error.response ? error.response.data : error);
         }
-
-        try {
-            const token = await getAccessTokenSilently();
-            const endpoint = `http://localhost:8000/digital_medlemsordning/submit_response/${user.sub}/`;
-
-            const response = await axios.post(endpoint, {
-                question: selectedQuestion.questionID,
-                answer: selectedAnswerValue
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (response.status === 201) {
-                setConfirmationMessage("Svar ble sendt.");
-                setMessageType('confirmation');
-                setSelectedQuestion(null);
-                setTimeout(() => setConfirmationMessage(''), 3000);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 400 && error.response.data.error === "User has already answered this question") {
-                setConfirmationMessage("Spørsmål allerede besvart.");
-                setMessageType('error');
-                setTimeout(() => setConfirmationMessage(''), 3000);
-            } else {
-                console.error("Error submitting answer:", error.response ? error.response.data : error);
-            }
-        }
+      }
     };
-
+    
     return (
         <div className="minMeningUniqueContainer">
             {showConfirmModal && (
