@@ -16,7 +16,7 @@ function ProgramComponent() {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_all_activity/`);
+      const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_future_activities/`);
       if (!response.ok) {
         throw new Error('Failed to fetch activities');
       }
