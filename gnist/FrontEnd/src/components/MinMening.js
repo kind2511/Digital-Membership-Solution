@@ -1,159 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
 import './MinMening.css';
 
-function MinMening() {
-  const { getAccessTokenSilently, user } = useAuth0();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState('');
-  const [messageType, setMessageType] = useState('confirmation');
+const MinMening = () => {
+    const [title, setTitle] = useState('');
+    const [suggestion, setSuggestion] = useState('');
+    const [questions, setQuestions] = useState([]);
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [selectedAnswer, setSelectedAnswer] = useState('');
+    
+    // TEST STYLE 
+    useEffect(() => {
+        setQuestions([
+            { id: 1, text: "What is your favorite color?", answers: ["Red", "Blue", "Green"] },
+            { id: 2, text: "Best programming language?", answers: ["JavaScript", "Python", "C#", "Rust"] },
+        ]);
+    }, []);
 
-  useEffect(() => {
-    axios.get('http://localhost:8000/digital_medlemsordning/get_all_questions')
-      .then(response => {
-        setQuestions(response.data.questions);
-      })
-      .catch(error => {
-        console.error("Error fetching questions:", error);
-      });
-  }, []);
-
-
-  const handleSubmissionConfirm = async (confirm) => {
-    if (confirm) {
-      try {
-        await axios.post('http://localhost:8000/digital_medlemsordning/create_suggestion/', { title, description });
+    const handleSuggestionSubmit = (e) => {
+        e.preventDefault();
+        console.log(`Suggestion Sent: ${title} - ${suggestion}`);
         setTitle('');
-        setDescription('');
-        setConfirmationMessage('Takk for ditt forslag');
-        setTimeout(() => setConfirmationMessage(''), 3000);
-      } catch (error) {
-        console.error("Error sending suggestion:", error);
-      }
-    }
-    setShowConfirmModal(false);
-  };
+        setSuggestion('');
+    };
 
+    const openQuestionModal = (question) => {
+        setSelectedQuestion(question);
+        setSelectedAnswer('');
+    };
 
-  const handleQuestionSelect = question => {
-    setSelectedQuestion(question);
-  };
-
-  const handleCancel = () => {
-    setSelectedQuestion(null);
-  };
-
-  const handleSubmitAnswer = async () => {
-    if (!user?.sub) {
-      console.error('User authentication required.');
-      return;
-    }
-
-    const selectedAnswerValue = document.querySelector('input[name="selectedAnswer"]:checked')?.value;
-    if (!selectedAnswerValue) {
-      console.error('No answer selected.');
-      return;
-    }
-
-    try {
-      const token = await getAccessTokenSilently();
-      const endpoint = `http://localhost:8000/digital_medlemsordning/submit_response/${user.sub}/`;
-
-      const response = await axios.post(endpoint, {
-        question: selectedQuestion.questionID,
-        answer: selectedAnswerValue
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (response.status === 201) {
-        setConfirmationMessage("Svar ble sendt.");
-        setMessageType('confirmation');
+    const closeQuestionModal = () => {
         setSelectedQuestion(null);
-        setTimeout(() => setConfirmationMessage(''), 3000);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 400 && error.response.data.error === "User has already answered this question") {
-        setConfirmationMessage("Spørsmål allerede besvart.");
-        setMessageType('error');
-        setTimeout(() => setConfirmationMessage(''), 3000);
-      } else {
-        console.error("Error submitting answer:", error.response ? error.response.data : error);
-      }
-    }
-  };
+        setSelectedAnswer('');
+    };
 
+    const handleAnswerChange = (answer) => {
+        setSelectedAnswer(answer);
+    };
 
-  return (
-    <div className="minMening-container">
-      {showConfirmModal && (
-        <div className="forslag-modal-overlay">
-          <div className="forslag-modal-content">
-            <p>Er du sikker på at du vil sende forslag?</p>
-            <button onClick={() => handleSubmissionConfirm(true)}>Ja</button>
-            <button onClick={() => handleSubmissionConfirm(false)}>Nei</button>
-          </div>
+    const submitAnswer = () => {
+        console.log(`Answer Submitted for Question ID ${selectedQuestion.id}: ${selectedAnswer}`);
+        closeQuestionModal();
+    };
+
+    return (
+        <div className="minMeningContainer">
+            <section className="suggestionSection">
+                <h2>Forslag</h2>
+                <form onSubmit={handleSuggestionSubmit}>
+                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tittel" required />
+                    <textarea value={suggestion} onChange={(e) => setSuggestion(e.target.value)} placeholder="Ditt forslag" required />
+                    <button type="submit">Send Inn</button>
+                </form>
+            </section>
+            <section className="questionSection">
+                <h2>Avstemninger</h2>
+                {questions.map(question => (
+                    <div key={question.id} className="question" onClick={() => openQuestionModal(question)}>
+                        <p>{question.text}</p>
+                    </div>
+                ))}
+            </section>
+
+            {selectedQuestion && (
+                <div className="modalOverlay">
+                    <div className="modalContent">
+                        <h3>{selectedQuestion.text}</h3>
+                        <div className="answers">
+                            {selectedQuestion.answers.map(answer => (
+                                <div key={answer} className="answerOption">
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="answer"
+                                            value={answer}
+                                            checked={selectedAnswer === answer}
+                                            onChange={() => handleAnswerChange(answer)}
+                                        />
+                                        {answer}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="modalButtons">
+                            <button onClick={submitAnswer} disabled={!selectedAnswer}>Send Inn</button>
+                            <button onClick={closeQuestionModal}>Lukk</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-      {confirmationMessage && (
-        <div className={`message ${messageType === 'confirmation' ? 'confirmation' : 'error'}`}>{confirmationMessage}</div>
-      )}
-      <div className="questions-container">
-        <div className="introduction-sentence">Avstemninger</div>
-        {questions.map((question) => (
-          <div key={question.questionID} className="question-block" onClick={() => handleQuestionSelect(question)}>
-            <h2 className="question-title">{question.question}</h2>
-          </div>
-        ))}
-      </div>
-      {selectedQuestion && (
-        <div className="answers-container">
-          <h3>Answers for: {selectedQuestion.question}</h3>
-          <ul className="answers-list">
-            {selectedQuestion.answers.map((answer) => (
-              <li key={answer.answer_id} className="answer">
-                <label>
-                  <input type="radio" name="selectedAnswer" value={answer.answer_id} />
-                  {answer.answer_text}
-                </label>
-              </li>
-            ))}
-          </ul>
-          <div className="button-group">
-            <button className="cancel-button" onClick={handleCancel}>Avbryt</button>
-            <button className="answer-button" onClick={handleSubmitAnswer}>Svar</button>
-          </div>
-        </div>
-      )}
-      <hr className="divider" />
-      <h1 className="title">Send Inn Forslag</h1>
-      <form className="forslag-form" onSubmit={(e) => e.preventDefault()}>
-        <input
-          type="text"
-          className="forslag-input"
-          placeholder="Tittel"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          className="forslag-textarea"
-          placeholder="Beskrivelse"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <button type="button" className="forslag-submit" onClick={() => setShowConfirmModal(true)}>Send Inn</button>
-      </form>
-    </div>
-  );
-}
+    );
+};
 
 export default MinMening;
