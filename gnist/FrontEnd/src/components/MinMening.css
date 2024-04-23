@@ -31,14 +31,15 @@ textarea {
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #007BFF;
+  background-color: #005A9E;
   color: white;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background: #004080;
+  color: #FFFFFF;
 }
 
 .uniqueQuestion {
@@ -102,7 +103,7 @@ button:hover {
 }
 
 .uniqueForslagModalContent {
-  background-color:  #FFFFFF;
+  background-color: #FFFFFF;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -114,7 +115,7 @@ button:hover {
 
 .uniqueForslagModalContent button {
   background-color: #005A9E;
-  color:  #FFFFFF;
+  color: #FFFFFF;
   border: none;
   padding: 10px 20px;
   margin: 10px;
@@ -128,7 +129,8 @@ button:hover {
   color: #FFFFFF;
 }
 
-.uniqueMessage.confirmation {
+.uniqueMessage.confirmation,
+.uniqueMessage.error {
   position: fixed;
   left: 0;
   right: 0;
@@ -141,15 +143,52 @@ button:hover {
   z-index: 1500;
 }
 
-.uniqueMessage.error {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: red;  
-  color: white;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  z-index: 1500;
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+  .minMeningUniqueContainer,
+  .uniqueSuggestionSection,
+  .uniqueQuestionSection,
+  .uniqueModalContent,
+  .uniqueForslagModalContent {
+    width: 100%;
+    margin-bottom: 30px; 
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%; 
+    margin: 15px 0; 
+  }
+
+  .dashboard-container,
+  .main-content {
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* Media Queries for Tablets */
+@media (max-width: 1024px) {
+  .minMeningUniqueContainer,
+  .uniqueSuggestionSection,
+  .uniqueQuestionSection,
+  .uniqueModalContent,
+  .uniqueForslagModalContent {
+    width: 90%; 
+    margin-bottom: 25px; 
+  }
+
+  input[type="text"],
+  textarea {
+    width: 87%; 
+    margin: 15px 0; 
+  }
+
+  .dashboard-container,
+  .main-content {
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+  }
 }
