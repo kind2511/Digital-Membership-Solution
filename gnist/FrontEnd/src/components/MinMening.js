@@ -112,7 +112,11 @@ const MinMening = () => {
                 <form onSubmit={(e) => e.preventDefault()}>
                     <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tittel" required />
                     <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Ditt forslag" required />
-                    <button type="button" className="uniqueSendInnButton" onClick={() => setShowConfirmModal(true)}>Send Inn</button>
+                    <button type="button" 
+                    className="uniqueSendInnButton" 
+                    onClick={() => setShowConfirmModal(true)}
+                    disabled={!title.trim() || !description.trim()}
+                    >Send Inn</button>
                 </form>
             </section>
             <section className="uniqueQuestionSection">
