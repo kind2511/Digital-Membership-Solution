@@ -135,3 +135,49 @@
   color: white;
   padding: 7px 12px;
 }
+
+@media (max-width: 767px) {
+  .level-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensures the level-item takes full width */
+  }
+
+  .level-info {
+    flex-basis: 60%; /* Use flex-basis for flexible width */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .level-buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-basis: 40%; /* Assign the remaining width to the button container */
+  }
+
+  .level-button.edit-button,
+  .level-button.delete-button {
+    width: 70px; /* Fixed width */
+    padding: 6px 8px;
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 480px) {
+  .level-info {
+    flex-basis: 180%; /* move both buttons to right */
+  }
+
+  .level-buttons-container {
+    justify-content: flex-end;
+    flex-basis: 50%;  
+  }
+
+  .level-button.edit-button,
+  .level-button.delete-button {
+    width: 60px;  
+    padding: 4px 6px;
+    font-size: 0.7em;
+  }
+}
