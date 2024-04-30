@@ -4,7 +4,6 @@ from .models import Members
 from .models import Employee
 from .models import MemberDates
 from .models import Activity
-from .models import ActivityDate
 from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
