@@ -128,4 +128,7 @@ urlpatterns = [
 
     # Gets stats about member attendence
     path('member_attendance_stats/', views.get_member_attendance_stats, name='member_attendance_stats'),
+
+    # Deletes a member that does not pass the verification stage
+    path('delete_member/<str:auth0_id>/', views.delete_member, name='delete_member'),
 ]

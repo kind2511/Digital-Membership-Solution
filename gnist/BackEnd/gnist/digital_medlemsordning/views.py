@@ -29,7 +29,6 @@ from django.db.models import Q
 
 
 
-
 # Create your views here.
 
 @api_view(['GET'])
@@ -149,55 +148,6 @@ def get_one_member_data(request, auth0_id):
     }
     return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
 
-# # Gets activity today
-# @api_view(['GET'])
-# def get_activity_today(request):
-#     today_date = date.today()
-
-#     # Filter activity dates happening on the same day
-#     activity_dates = ActivityDate.objects.filter(date=today_date)
-
-#     activity_data = []
-#     for activity_date in activity_dates:
-#         activity = activity_date.activityID
-#         activity_info = {
-#             'title': activity.title, 
-#             'description': activity.description,
-#             'image': activity.image.url if activity.image else None,
-#         }
-#         activity_data.append(activity_info)
-
-#     response_data = {
-#         'date': today_date.strftime("%Y-%m-%d"),
-#         'activities': activity_data
-#     }
-#     return Response(response_data)
-
-#lists all activity
-# @api_view(['GET'])
-# def get_all_activity(request):
-#     activities = Activity.objects.all()
-
-#     activity_data = []
-#     for activity in activities:
-#         activity_dates = ActivityDate.objects.filter(activityID=activity)
-#         dates_list = [date.date.strftime('%Y-%m-%d') for date in activity_dates]
-
-#         activity_info = {
-#             'activity_id': activity.activityID,
-#             'title': activity.title,
-#             'description': activity.description,
-#             'dates': dates_list,
-#             'image': activity.image.url,
-#         }
-
-#         activity_data.append(activity_info)
-
-#     response_data = {
-#         'activities': activity_data
-#     }
-#     return Response(response_data)
-
 #signs up for an activity
 @api_view(['POST'])
 def sign_up_activity(request):
@@ -242,34 +192,6 @@ def get_activity_details(request, activity_id):
     
     return Response(serializer.data)
 
-# Get activity a specific member has signed up for
-# @api_view(['GET'])
-# def get_member_activity(request, user_id):
-#     try:
-#         activity_signups = ActivitySignup.objects.filter(userID=user_id)
-
-#         activity_data = []
-#         for signup in activity_signups:
-#             activity_info = {
-#                 'title': signup.activityID.title, 
-#                 'description': signup.activityID.description,
-#                 'dates': [],  
-#             }
-
-#             activity_dates = ActivityDate.objects.filter(activityID=signup.activityID)
-
-#             for date in activity_dates:
-#                 activity_info['dates'].append(date.date.strftime('%Y-%m-%d'))
-
-#             activity_data.append(activity_info)
-
-#         response_data = {
-#             'activities': activity_data
-#         }
-#         return Response(response_data)
-#     except Members.DoesNotExist:
-#         return Response({'error': 'User does not exist'}, status=404)
-    
 
 # Get signed up members for a specific activity
 @api_view(['GET'])
@@ -566,30 +488,6 @@ def get_visit_by_gender_one_day(request, one_date):
     return Response(gender_data)
 
 
-# adds a new activity  
-# @api_view(['POST'])
-# @csrf_exempt
-# def create_activity(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-        
-#         activityid = data['activityID'] 
-#         title = data['title']
-#         description = data['description']
-#         date = data['date'] 
-#         image = image['image']
-
-#         new_activity  = Activity(activityID=activityid, title=title, description=description, image=image)
-#         new_activity .save()
-
-#         new_activity_date = ActivityDate(activityID=new_activity, date=date)
-#         new_activity_date.save()
-
-#         return Response({'message': 'Activity added successfully'})
-#     else:
-#         return Response({'error': 'Invalid request method'})
-
-
 # Creates a new activity 
 @api_view(['POST'])
 def create_activity(request):
@@ -658,25 +556,6 @@ def get_all_members_info(request):
     serializer = MembersSerializer(members, many=True)
     return Response(serializer.data)
     
-
-# # Lets a member add additional info about a specific memeber
-# @api_view(['PUT'])
-# def alter_member_info(request, user_id):
-#         try:
-#             member = Members.objects.get(userID=user_id)
-#         except Members.DoesNotExist:
-#              return Response({"error": "Member not found"}, status=404)
-        
-#         new_info = request.data.get("info")
-#         if new_info is None:
-#             return Response({"error": "Missing 'info' field in request data"}, status=400)
-        
-#         member.info = new_info
-#         member.save()
-
-#         serializer = MembersSerializer(member)
-#         return Response(serializer.data)
-        
 
 # Lets an employee adjust the members points total up or down
 @api_view(['PUT'])
@@ -1167,3 +1046,19 @@ def get_future_activities(request):
         future_activities = Activity.objects.filter(date__gte=today)
         serializer = ActivitySerializer(future_activities, many=True)
         return Response(serializer.data)
+    
+
+# Reomves a member that does not pass the verification process in the employee dashboard
+@api_view(['DELETE'])
+def delete_member(request, auth0_id):
+    # Attempts to find member in databse
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+    
+    # Deletes member
+    if request.method == 'DELETE':
+        member.delete()
+        return Response({'message': 'Member deleted successfully'}, status=204)
+
