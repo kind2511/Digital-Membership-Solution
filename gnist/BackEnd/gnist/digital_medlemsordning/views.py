@@ -204,9 +204,16 @@ def undo_sign_up_activity(request):
         auth0_id = data.get('auth0_id')
         activity_id = data.get('activity_id')
 
-        # tryes to fiind correst signup. If found it is deleted
+        # tryes to find the correct signup. If found, it is deleted
         try:
             signup = ActivitySignup.objects.get(userID__auth0ID=auth0_id, activityID__activityID=activity_id)
+            activity = signup.activityID
+
+            # Decrement the sign_up_count by one
+            if activity.signed_up_count > 0:
+                activity.signed_up_count -= 1
+                activity.save()
+
             signup.delete()
             return Response({'message': 'Sign-up undone successfully'}, status=200)
         except ActivitySignup.DoesNotExist:
