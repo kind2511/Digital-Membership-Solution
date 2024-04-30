@@ -148,33 +148,50 @@ def get_one_member_data(request, auth0_id):
     }
     return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
 
+
 #signs up for an activity
 @api_view(['POST'])
 def sign_up_activity(request):
     if request.method == 'POST':
+        # Extract data from the request body
         data = json.loads(request.body)
         auth0_id = data.get('auth0_id')
         activity_id = data.get('activity_id')
 
         try:
+            # Retrieve the user and activity objects from the database
             user = Members.objects.get(auth0ID=auth0_id)
             activity = Activity.objects.get(activityID=activity_id)
         except (Members.DoesNotExist, Activity.DoesNotExist):
+            # Handle case where user or activity does not exist
             return Response({'error': 'User or Activity does not exist'}, status=404)
 
+        # Check if the user is already signed up for the activity
         if ActivitySignup.objects.filter(userID=user, activityID=activity).exists():
             return Response({'message': 'User already signed up for this activity'}, status=400)
 
+        # Check if there's a limit for the activity and if it's already full
+        if activity.limit is not None and activity.signed_up_count >= activity.limit:
+            return Response({'error': 'Activity is already full'}, status=400)
+
+        # Increment the sign-up count by one
+        activity.signed_up_count += 1
+        activity.save()
+
+        # Create a sign-up entry for the user and activity
         signup = ActivitySignup(userID=user, activityID=activity)
         signup.save()
 
+        # Serialize the activity object to include in the response
         activity_serializer = ActivitySerializer(activity)
 
+        # Return success response with the signed-up activity details
         return Response({
             'message': 'User signed up for the activity successfully',
             'activity': activity_serializer.data  
         }, status=201)
     else:
+        # Handle invalid request method
         return Response({'error': 'Invalid request method'})
     
 
