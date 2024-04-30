@@ -10,13 +10,14 @@ class Activity(models.Model):
     description = models.CharField(max_length=500)
     image = models.ImageField(upload_to="activity_pics", default="activity_pics/placeholder-image.png" ,blank=True ,null=True) 
     date = models.DateField(null=True)
+    limit = models.PositiveIntegerField(null=True, blank=True)
+    signed_up_count = models.PositiveIntegerField(default=0)
 
 # The dates of the various activieties
 class ActivityDate(models.Model):
     # Foreign Key. Links to an Activity. Deletes if the assosiated Activity is deleted
     activityID = models.ForeignKey(Activity, on_delete=models.CASCADE)
     date = models.DateField()
-
 
 # Employees
 class Employee(models.Model):
