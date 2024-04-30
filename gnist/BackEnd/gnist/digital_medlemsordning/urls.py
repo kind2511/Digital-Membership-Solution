@@ -29,6 +29,8 @@ urlpatterns = [
     path('get_future_activities/', views.get_future_activities, name='get_future_activities'),
     # Lets member sign up for activity
     path('sign_up_activity/', views.sign_up_activity, name='sign_up_activity'),
+    # Lets user un sign up from activity
+    path('undo_signup_activity/', views.undo_sign_up_activity, name='undo_signup_activity'), 
     # Gets details about a specific activity
     path('get_activity_details/<int:activity_id>/', views.get_activity_details, name='get_activity_details'),
     # Gets all members signed up for a specific activity
