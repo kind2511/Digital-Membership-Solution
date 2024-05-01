@@ -186,7 +186,7 @@
 }
 
 .roed-modal-button-unban {
-  background-color: green;
+  background-color: red;
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -194,7 +194,7 @@
 }
 
 .roed-modal-button-unban:hover {
-  background-color: darkgreen;
+  background-color: darkred;
 }
 
 /* Success message */

@@ -144,7 +144,7 @@ function Rød() {
                 className="roed-modal-button-unban"
                 onClick={() => handleUnbanMember(member.auth0_id)}
               >
-                Grønn
+                Opphev Rød
               </button>
             </div>
           ))}
@@ -171,7 +171,7 @@ function Rød() {
       </div>
       {showUnbanSuccessMessage && (
         <div className="unban-success-banner">
-          Bruker ble avbannet
+          Brukers status endret
         </div>
       )}
 
@@ -198,7 +198,7 @@ function Rød() {
                 className={isExpelledMemberModal ? "roed-modal-button-unban" : "roed-modal-button-ban"}
                 onClick={handleBanMember}
               >
-                {isExpelledMemberModal ? 'Unban' : 'Ban'}
+                {isExpelledMemberModal ? 'Unban' : 'Endre Status'}
               </button>
               <button
                 className="roed-modal-button-close"
@@ -213,7 +213,7 @@ function Rød() {
 
       {showSuccessMessage && (
         <div className="success-banner">
-          Bruker ble bannlyst
+          Brukers status endret
         </div>
       )}
     </div>
