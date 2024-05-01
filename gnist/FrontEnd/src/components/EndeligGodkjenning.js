@@ -47,6 +47,29 @@ function EndeligGodkjenning() {
         setSelectedMember(null);
     };
 
+    // Function to calculate age based on birthdate
+    const calculateAge = (birthdate) => {
+        // Get today's date
+        const today = new Date();
+    
+        // Convert birthdate string to a Date object
+        const birthDate = new Date(birthdate);
+    
+        // Calculate the difference in years between today and birthdate
+        let age = today.getFullYear() - birthDate.getFullYear();
+    
+        // Check if the current month is before the birth month or if it's the same month
+        // but the current day is before the birth day
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            // If so, decrement the age by 1 since the birthday hasn't occurred yet this year
+            age--;
+        }
+    
+        // Return the calculated age
+        return age;
+    };
+
     return (
         <div className="eg-godkjenning-container">
             <h2 className="eg-section-title">Endelig Godkjenning</h2>
@@ -62,8 +85,10 @@ function EndeligGodkjenning() {
             {selectedMember && (
                 <div className="eg-modal-overlay">
                     <div className="eg-modal-content">
-                        <p><strong>Navn:</strong> {selectedMember.first_name} {selectedMember.last_name}</p>
-                        <p><strong>Navn og Tlf for Foresatt:</strong> {selectedMember.guardian_name || 'N/A'} {selectedMember.guardian_phone || 'N/A'}</p>
+                        <p><strong>Medlems Alder:</strong> {calculateAge(selectedMember.birthdate)}</p>
+                        <p><strong>Medlems Navn:</strong> {selectedMember.first_name} {selectedMember.last_name}</p>
+                        <p><strong>Navn Foresatt:</strong> {selectedMember.guardian_name || 'N/A'}</p>
+                        <p><strong>Tlf. Foresatt:</strong> {selectedMember.guardian_phone || 'N/A'}</p>
                         <div className="eg-modal-buttons">
                             <button className="eg-button-lukk" onClick={handleClose}>Lukk</button>
                             <button className="eg-button-godkjent" onClick={() => verifyMember(selectedMember)}>Godkjent</button>
