@@ -6,7 +6,7 @@
 
 .home-page .left {
   width: 50%;
-  background-color: #005A9E;
+  background-color: RGB(19, 182, 253);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,14 +26,14 @@
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -2px;
-  color: #005A9E;
+  color: RGB(19, 182, 253);
   text-transform: uppercase;
   text-decoration: none;
   display: inline-block;
 }
 
 .nav-logo span {
-  color: #005A9E;
+  color: RGB(19, 182, 253);
   text-shadow: 3px 3px 6px #FFFFFF;
 }
 
@@ -41,17 +41,17 @@
   margin: 10px 20px;
   padding: 10px 20px;
   font-size: 16px;
-  border: 2px solid #005A9E;
+  border: 2px solid RGB(19, 182, 253);
   cursor: pointer;
   background-color: #FFFFFF;
   width: 180px;
   text-align: center;
   transition: all 0.3s;
-  color: #005A9E;
+  color: RGB(19, 182, 253);
 }
 
 .home-page .right button:hover {
-  background-color: #005A9E;
+  background-color: RGB(19, 182, 253);
   color: #FFFFFF;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .kontakt-link {
-  color: #005A9E;
+  color: RGB(19, 182, 253);
   font-size: 18px;
   text-decoration: none;
   cursor: pointer;

@@ -84,7 +84,7 @@ input:focus + .slider {
 }
 
 .registration-modal-content button {
-  background-color: #005A9E;
+  background-color: RGB(19, 182, 253);
   color: #FFFFFF;
   border: none;
   padding: 10px 20px;

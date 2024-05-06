@@ -30,7 +30,7 @@
 }
 
 .social-media-links a:hover {
-  color: #005A9E;
+  color: RGB(19, 182, 253);
 }
 
 .contact-info p {
@@ -41,11 +41,11 @@
 
 .contact-detail {
   font-weight: bold;
-  color: #005A9E;
+  color: RGB(19, 182, 253);
 }
 
 .email-link {
-  color: #005A9E;
+  color: RGB(19, 182, 253);
   transition: color 0.3s ease;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .info-link {
-  color: #005A9E;
+  color: RGB(19, 182, 253);
   text-decoration: underline;
   margin-left: 5px;
 }

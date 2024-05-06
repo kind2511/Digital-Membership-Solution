@@ -17,7 +17,7 @@ html, body {
   display: flex;
   justify-content: center; 
   align-items: center;
-  background-color: #005A9E;
+  background-color: RGB(19, 182, 253);
   color: #FFFFFF;
   padding: 20px 0; 
   box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
@@ -169,7 +169,7 @@ html, body {
 }
 
 .logout-confirm-button {
-  background-color: #005A9E;
+  background-color: RGB(19, 182, 253);
   color: #FFFFFF;
   border: none;
   padding: 10px 20px;

@@ -41,7 +41,7 @@
 }
 
 .level-button.edit-button {
-  background-color: #005a9e;
+  background-color: RGB(19, 182, 253);
   padding: 8px 5px;
   color: white;
 }
@@ -52,7 +52,7 @@
 }
 
 .level-button.add-button {
-  background-color: #005a9e;
+  background-color: RGB(19, 182, 253);
   padding: 3px 9px;
   color: white;
 }
@@ -97,7 +97,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
-  background-color: #005a9e;
+  background-color: RGB(19, 182, 253);
   color: white;
 }
 
@@ -124,7 +124,7 @@
 
 /* New styles for "Ja" button */
 .delete-level-confirmation-modal button:first-child {
-  background-color: #005a9e; 
+  background-color: RGB(19, 182, 253); 
   color: white;
   padding: 5px 7px;
 }
