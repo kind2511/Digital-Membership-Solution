@@ -10,6 +10,7 @@ function Aktiviteter() {
     tittel: '',
     bilde: null,
     beskrivelse: '',
+    antallPlasser: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -45,6 +46,7 @@ function Aktiviteter() {
     formData.append('title', activity.tittel);
     formData.append('description', activity.beskrivelse);
     formData.append('date', activity.dato);
+    formData.append('places', activity.antallPlasser);
 
     try {
       await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
@@ -81,9 +83,9 @@ function Aktiviteter() {
 
   const handleDeleteActivity = async (activityId) => {
     try {
-      
+
       const response = await axios.delete(`http://127.0.0.1:8000/digital_medlemsordning/delete_activity/${activityId}/`);
-      console.log(response.data.message); 
+      console.log(response.data.message);
       setActivities(currentActivities => currentActivities.filter(act => act.activityID !== activityId));
       setSelectedActivity(null);
       setSuccessMessage('Aktivitet slettet');
@@ -115,7 +117,7 @@ function Aktiviteter() {
       <div className="activity-success-message-unique" style={{ opacity: showSuccess ? 1 : 0, height: showSuccess ? 'auto' : '0' }}>
         {successMessage}
       </div>
-  
+
       {/* Modal for Registrants */}
       {selectedActivity && (
         <div className="modal-unique">
@@ -135,7 +137,7 @@ function Aktiviteter() {
           </div>
         </div>
       )}
-  
+
       {/* Lag Ny Aktivitet Section */}
       <div className="section-unique lag-ny-aktivitet-unique">
         <h2 className="section-title-unique">Lag Ny Aktivitet</h2>
@@ -144,10 +146,11 @@ function Aktiviteter() {
           <input type="text" name="tittel" placeholder="Tittel" value={activity.tittel} onChange={handleChange} required />
           <input type="file" name="bilde" onChange={handleChange} />
           <textarea name="beskrivelse" placeholder="Beskrivelse" value={activity.beskrivelse} onChange={handleChange} required />
+          <input type="number" name="antallPlasser" placeholder="Antall Plasser" value={activity.antallPlasser} onChange={handleChange} required />
           <button type="submit">Lagre Aktivitet</button>
         </form>
       </div>
-  
+
       {/* Kommende Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
         <h2 className="section-title-unique">Kommende Aktiviteter</h2>
@@ -164,7 +167,7 @@ function Aktiviteter() {
           ))}
         </div>
       </div>
-  
+
       {/* Arkiverte Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
         <h2 className="section-title-unique">Arkiverte Aktiviteter</h2>
@@ -183,7 +186,7 @@ function Aktiviteter() {
       </div>
     </div>
   );
- 
+
 }
 
 export default Aktiviteter;

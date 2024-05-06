@@ -37,11 +37,21 @@
   color: white;
   cursor: pointer;
   border-radius: 5px;
+ 
 }
 
 .activity-form-unique button:hover {
   background-color: #004080;
 }
+
+.activity-form-unique input[type="number"] {
+  width: 99%;
+  padding: 8px;  
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 
 .activity-success-message-unique {
   position: fixed;
