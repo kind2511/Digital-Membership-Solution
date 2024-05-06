@@ -5,46 +5,50 @@ function EndeligGodkjenning() {
     const [unverifiedMembers, setUnverifiedMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
     const [showVerificationSuccessMessage, setShowVerificationSuccessMessage] = useState(false);
+    const [showDeletionSuccessMessage, setShowDeletionSuccessMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         fetchUnverifiedMembers();
     }, []);
 
     const fetchUnverifiedMembers = async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_unverified_members/');
-            if (!response.ok) {
-                throw new Error('Failed to fetch unverified members');
-            }
-            const data = await response.json();
-            setUnverifiedMembers(data);
-        } catch (error) {
-            console.error(error);
-        }
+        const response = await fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_unverified_members/');
+        const data = await response.json();
+        setUnverifiedMembers(data);
     };
 
     const verifyMember = async (member) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/verify_member/${member.auth0ID}/`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                throw new Error('Failed to verify member');
-            }
+        const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/verify_member/${member.auth0ID}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.ok) {
             setShowVerificationSuccessMessage(true);
             setTimeout(() => setShowVerificationSuccessMessage(false), 3000);
             fetchUnverifiedMembers();
-            handleClose();
-        } catch (error) {
-            console.error(error);
         }
+        handleClose();
+    };
+
+    const deleteMember = async (member) => {
+        const encodedAuth0ID = encodeURIComponent(member.auth0ID);
+        const response = await fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_member/${encodedAuth0ID}/`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            setShowDeletionSuccessMessage(true);
+            setTimeout(() => setShowDeletionSuccessMessage(false), 3000);
+            fetchUnverifiedMembers();
+        }
+        handleClose();
     };
 
     const handleClose = () => {
         setSelectedMember(null);
+        setErrorMessage('');
     };
 
     // Function to calculate age based on birthdate
@@ -70,6 +74,7 @@ function EndeligGodkjenning() {
         return age;
     };
 
+
     return (
         <div className="eg-godkjenning-container">
             <h2 className="eg-section-title">Endelig Godkjenning</h2>
@@ -92,6 +97,7 @@ function EndeligGodkjenning() {
                         <div className="eg-modal-buttons">
                             <button className="eg-button-lukk" onClick={handleClose}>Lukk</button>
                             <button className="eg-button-godkjent" onClick={() => verifyMember(selectedMember)}>Godkjent</button>
+                            <button className="eg-button-ikke-godkjent" onClick={() => deleteMember(selectedMember)}>Ikke Godkjent</button>
                         </div>
                     </div>
                 </div>
@@ -101,8 +107,19 @@ function EndeligGodkjenning() {
                     Medlem ble verifisert
                 </div>
             )}
+            {showDeletionSuccessMessage && (
+                <div className="verification-success-banner">
+                    Bruker ble ikke godkjent
+                </div>
+            )}
+            {errorMessage && (
+                <div className="error-message">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
+    
 }
 
 export default EndeligGodkjenning;

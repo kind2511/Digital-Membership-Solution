@@ -87,6 +87,14 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.eg-button-ikke-godkjent {
+  padding: 8px 16px;
+  background-color: #dc3545; /* Red color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 /* New Success message banner */
 .verification-success-banner {
