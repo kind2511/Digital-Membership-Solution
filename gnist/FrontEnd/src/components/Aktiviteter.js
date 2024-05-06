@@ -10,7 +10,7 @@ function Aktiviteter() {
     tittel: '',
     bilde: null,
     beskrivelse: '',
-    limit: '',  
+    limit: '',  // Optional
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -46,7 +46,7 @@ function Aktiviteter() {
     formData.append('title', activity.tittel);
     formData.append('description', activity.beskrivelse);
     formData.append('date', activity.dato);
-    formData.append('limit', activity.limit);
+    if (activity.limit) formData.append('limit', activity.limit); // Optional
 
     try {
       await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
@@ -63,7 +63,7 @@ function Aktiviteter() {
           tittel: '',
           bilde: null,
           beskrivelse: '',
-          limit: '',
+          limit: '',  
         });
       }, 5000);
 
@@ -146,10 +146,10 @@ function Aktiviteter() {
           <input type="text" name="tittel" placeholder="Tittel" value={activity.tittel} onChange={handleChange} required />
           <input type="file" name="bilde" onChange={handleChange} />
           <textarea name="beskrivelse" placeholder="Beskrivelse" value={activity.beskrivelse} onChange={handleChange} required />
-          <input type="number" name="limit" placeholder="Antall Plasser" value={activity.limit} onChange={handleChange} required />
+          <input type="number" name="limit" placeholder="Antall Plasser" value={activity.limit} onChange={handleChange} />
           <button type="submit">Lagre Aktivitet</button>
-        </form>
-      </div>
+        </form
+        >      </div>
 
       {/* Kommende Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
@@ -187,7 +187,6 @@ function Aktiviteter() {
       </div>
     </div>
   );
-
 }
 
 export default Aktiviteter;
