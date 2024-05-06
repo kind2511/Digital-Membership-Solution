@@ -2,32 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './EkstraInfoOmMedlem.css';
 
 function EkstraInfoOmMedlem() {
-    const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
-    const [searchStatus, setSearchStatus] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
     const [showDeleteSuccessMessage, setShowDeleteSuccessMessage] = useState(false);
 
     useEffect(() => {
-        const savedAuth0ID = localStorage.getItem('selectedAuth0ID');
-        if (savedAuth0ID) {
-            const member = results.find(m => m.auth0ID === savedAuth0ID);
-            if (member) {
-                setSelectedMember(member);
-            }
-        }
-    }, [results]);
+        fetchData();
+    }, []);
 
-    const fetchData = (value) => {
-        if (value.trim() === '') {
-            setResults([]);
-            setSearchStatus('');
-            setSelectedMember(null);
-            localStorage.removeItem('selectedAuth0ID');
-            return;
-        }
-        setSearchStatus('Searching...');
-        fetch(`http://127.0.0.1:8000/digital_medlemsordning/search_member/?name=${value}`)
+    const fetchData = () => {
+        fetch('http://127.0.0.1:8000/digital_medlemsordning/get_members_with_info/')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -36,18 +20,10 @@ function EkstraInfoOmMedlem() {
             })
             .then(data => {
                 setResults(data);
-                setSearchStatus(`Found ${data.length} results.`);
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
-                setSearchStatus("Failed to fetch data. Please try again later.");
             });
-    };
-
-    const handleSearchChange = (e) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-        fetchData(value);
     };
 
     const handleSelectMember = (member) => {
@@ -63,8 +39,7 @@ function EkstraInfoOmMedlem() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({})
+                }
             })
             .then(response => {
                 if (!response.ok) {
@@ -75,7 +50,7 @@ function EkstraInfoOmMedlem() {
             .then(() => {
                 setSelectedMember(null);
                 localStorage.removeItem('selectedAuth0ID');
-                fetchData(searchTerm);
+                fetchData();
                 setShowDeleteSuccessMessage(true);
                 setTimeout(() => setShowDeleteSuccessMessage(false), 3000);
             })
@@ -90,14 +65,6 @@ function EkstraInfoOmMedlem() {
     return (
         <div className="eiom-container">
             <h2 className="eiom-title">Ekstra Info om Medlem</h2>
-            <input
-                type="text"
-                className="eiom-search-input"
-                placeholder="Søk etter medlem..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-            />
-            <div className="eiom-search-status">{searchStatus}</div>
             <div className="eiom-section-content">
                 {results.map((member, index) => (
                     <div key={index} className="eiom-search-result" onClick={() => handleSelectMember(member)}>
