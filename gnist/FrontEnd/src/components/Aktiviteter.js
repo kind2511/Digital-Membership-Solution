@@ -10,7 +10,7 @@ function Aktiviteter() {
     tittel: '',
     bilde: null,
     beskrivelse: '',
-    antallPlasser: '',
+    limit: '',  
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -46,7 +46,7 @@ function Aktiviteter() {
     formData.append('title', activity.tittel);
     formData.append('description', activity.beskrivelse);
     formData.append('date', activity.dato);
-    formData.append('places', activity.antallPlasser);
+    formData.append('limit', activity.limit);
 
     try {
       await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
@@ -63,6 +63,7 @@ function Aktiviteter() {
           tittel: '',
           bilde: null,
           beskrivelse: '',
+          limit: '',
         });
       }, 5000);
 
@@ -83,7 +84,6 @@ function Aktiviteter() {
 
   const handleDeleteActivity = async (activityId) => {
     try {
-
       const response = await axios.delete(`http://127.0.0.1:8000/digital_medlemsordning/delete_activity/${activityId}/`);
       console.log(response.data.message);
       setActivities(currentActivities => currentActivities.filter(act => act.activityID !== activityId));
@@ -146,7 +146,7 @@ function Aktiviteter() {
           <input type="text" name="tittel" placeholder="Tittel" value={activity.tittel} onChange={handleChange} required />
           <input type="file" name="bilde" onChange={handleChange} />
           <textarea name="beskrivelse" placeholder="Beskrivelse" value={activity.beskrivelse} onChange={handleChange} required />
-          <input type="number" name="antallPlasser" placeholder="Antall Plasser" value={activity.antallPlasser} onChange={handleChange} required />
+          <input type="number" name="limit" placeholder="Antall Plasser" value={activity.limit} onChange={handleChange} required />
           <button type="submit">Lagre Aktivitet</button>
         </form>
       </div>
@@ -162,6 +162,7 @@ function Aktiviteter() {
                 <h3>{activity.title}</h3>
                 <p className="activity-date-unique">{activity.date}</p>
                 <p className="activity-description-unique">{activity.description}</p>
+                <p className="activity-places-unique">Antall Plasser: {activity.limit}</p>
               </div>
             </div>
           ))}
