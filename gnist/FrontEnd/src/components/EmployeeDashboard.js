@@ -4,7 +4,8 @@ import Tilstede from './Tilstede';
 import Aktiviteter from './Aktiviteter';
 import Undersøkelser from './Undersøkelser';
 import Rød from './Rød';
-import Medleminfo from './Medleminfo'; 
+import Medleminfo from './Medleminfo';
+import FinnBruker from './FinnBruker'; 
 import './EmployeeDashboard.css';
 
 function EmployeeDashboard() {
@@ -41,6 +42,8 @@ function EmployeeDashboard() {
         return <Undersøkelser />;
       case 'Medleminfo': 
         return <Medleminfo />;
+      case 'FinnBruker':
+        return <FinnBruker />; 
       default:
         return <div className="emp-content">Velg et element fra navigasjonslinjen.</div>;
     }
@@ -79,6 +82,12 @@ function EmployeeDashboard() {
             onClick={() => setActiveNavItem('Medleminfo')}
           >
             Medleminfo
+          </div>
+          <div 
+            className={`emp-nav-item ${activeNavItem === 'FinnBruker' ? 'emp-active' : ''}`} 
+            onClick={() => setActiveNavItem('FinnBruker')}
+          >
+            Finn Bruker
           </div>
           <div 
             className="emp-nav-item emp-logout-item" 

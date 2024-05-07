@@ -1,0 +1,89 @@
+.finn-bruker-container {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.finn-bruker-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.finn-bruker-input {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.finn-bruker-status {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.finn-bruker-results {
+  background-color: #fff;
+  width: 95%;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.finn-bruker-result {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.finn-bruker-result:hover {
+  background-color: #f7f7f7;
+}
+
+.finn-bruker-result:last-child {
+  border-bottom: none;
+}
+
+.user-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.user-details h3 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.user-details p {
+  margin-bottom: 8px;
+}
+
+.user-details p:last-child {
+  margin-bottom: 0;
+}
+
+.close-details-button {
+  padding: 8px 16px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-details-button:hover {
+  background-color: #c9302c;
+}
