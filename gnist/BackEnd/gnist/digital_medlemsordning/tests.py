@@ -52,7 +52,7 @@ class GetPastActivitiesTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        # Get expected data of only activites with a date of today or in the future
+        # Get expected data of only activites that has already occured
         today = date.today()
         future_activities = Activity.objects.filter(date__lt=today)
         expected_data = ActivitySerializer(future_activities, many=True).data
@@ -60,9 +60,10 @@ class GetPastActivitiesTestCase(APITestCase):
         self.assertEqual(response.data, expected_data)
 
     def test_get_future_activities_no_data(self):
-        # Test when there are no future activities
+        # Test when there are no past activities
         url = reverse('get_past_activities')
         Activity.objects.filter(date__lt=date.today()).delete()
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
+
