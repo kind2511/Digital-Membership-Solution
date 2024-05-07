@@ -8,6 +8,10 @@ from .serializers import ActivitySerializer
 
 # Create your tests here.
 
+#---------------------------------------------------------------------------------------------------------------------
+# Activites
+#---------------------------------------------------------------------------------------------------------------------
+
 class GetFutureActivitiesTestCase(APITestCase):
     def setUp(self):
         # Create test data
@@ -100,3 +104,38 @@ class GetTodaysActivitiesTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
+
+class GetAllActivitiesTestCase(APITestCase):
+    def setUp(self):
+        # Create test data for activities
+        Activity.objects.create(title="Activity 1", description="Description 1", date=date.today())
+        Activity.objects.create(title="Activity 2", description="Description 2", date=date.today())
+        Activity.objects.create(title="Future Activity", description="Description 3", date=date.today() + timedelta(days=1))
+        Activity.objects.create(title="Past Activity", description="Description 4", date=date.today() - timedelta(days=1))
+
+    def test_get_all_activities(self):
+        url = reverse('get_all_activity')
+        response = self.client.get(url)
+        
+        # Check that the status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Get expected data for all activities
+        all_activities = Activity.objects.all()
+        expected_data = ActivitySerializer(all_activities, many=True).data
+        
+        # Check that the response data matches the expected data
+        self.assertEqual(response.data, expected_data)
+        
+    def test_get_all_activities_no_activities(self):
+        # Clear all activities
+        Activity.objects.all().delete()
+        
+        url = reverse('get_all_activity')
+        response = self.client.get(url)
+        
+        # Check that the status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Check that the response data is an empty list
+        self.assertEqual(response.data, [])
