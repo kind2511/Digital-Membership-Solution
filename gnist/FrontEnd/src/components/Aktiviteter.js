@@ -10,7 +10,7 @@ function Aktiviteter() {
     tittel: '',
     bilde: null,
     beskrivelse: '',
-    limit: '',  // Optional
+    limit: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -46,7 +46,7 @@ function Aktiviteter() {
     formData.append('title', activity.tittel);
     formData.append('description', activity.beskrivelse);
     formData.append('date', activity.dato);
-    if (activity.limit) formData.append('limit', activity.limit); // Optional
+    if (activity.limit) formData.append('limit', activity.limit);
 
     try {
       await axios.post('http://127.0.0.1:8000/digital_medlemsordning/create_activity/', formData, {
@@ -63,7 +63,7 @@ function Aktiviteter() {
           tittel: '',
           bilde: null,
           beskrivelse: '',
-          limit: '',  
+          limit: '',
         });
       }, 5000);
 
@@ -81,6 +81,40 @@ function Aktiviteter() {
       console.error("Error fetching registrants:", error);
     }
   };
+
+  const handleUndoSignup = async (activityId, userId, auth0Id) => {
+    try {
+      const postData = auth0Id ? { auth0_id: auth0Id } : { user_id: userId };
+      postData.activity_id = activityId;
+  
+      const response = await axios.post(
+        'http://127.0.0.1:8000/digital_medlemsordning/undo_signup_activity/',
+        postData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  
+      if (response.status === 200) {
+        setRegistrants(currentRegistrants => 
+          currentRegistrants.filter(registrant => registrant.user_id !== userId)
+        );
+        setSuccessMessage('Påmelding avmeldt');
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Error undoing signup:", error);
+    }
+  };
+  
+  
+  
+ 
 
   const handleDeleteActivity = async (activityId) => {
     try {
@@ -127,6 +161,12 @@ function Aktiviteter() {
               {registrants.map((person, index) => (
                 <li key={index} className="registrant-unique">
                   {person.first_name} {person.last_name}
+                  <button 
+                    onClick={() => handleUndoSignup(selectedActivity, person.user_id)}
+                    style={{ marginLeft: '10px', fontSize: '12px', padding: '5px' }}
+                  >
+                    Meld av
+                  </button>
                 </li>
               ))}
             </ol>
@@ -148,8 +188,8 @@ function Aktiviteter() {
           <textarea name="beskrivelse" placeholder="Beskrivelse" value={activity.beskrivelse} onChange={handleChange} required />
           <input type="number" name="limit" placeholder="Antall Plasser" value={activity.limit} onChange={handleChange} />
           <button type="submit">Lagre Aktivitet</button>
-        </form
-        >      </div>
+        </form>
+      </div>
 
       {/* Kommende Aktiviteter Section */}
       <div className="section-unique alle-aktiviteter-unique">
