@@ -113,16 +113,16 @@ def get_one_member_data(request, auth0_id):
     # Retrieve the highest level
     highest_level = levels.last()
 
-    days_without_incident = member.days_without_incident
+    points = member.points
 
     # Iterate through levels to find the correct level for the member
     for level in levels:
-        if days_without_incident <= level.points:
+        if points <= level.points:
             level_name = level.name
             break
 
     # Check if the member's points exceed the highest level's points
-    if days_without_incident > highest_level.points:
+    if points > highest_level.points:
         level_name = highest_level.name
     
     is_banned = member.banned
@@ -551,25 +551,6 @@ def create_activity(request):
         return Response(serializer.errors, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=405)
-
-
-# Gets all activities
-@api_view(['GET'])
-def get_all_activity(request):
-    if request.method == 'GET':
-        activities = Activity.objects.all()
-        serializer = ActivitySerializer(activities, many=True)
-        return Response(serializer.data)
-
-
-# Gets todays activity
-@api_view(['GET'])
-def get_activity_today(request):
-    if request.method == 'GET':
-        today = date.today()
-        activities = Activity.objects.filter(date=today)
-        serializer = ActivitySerializer(activities, many=True)
-        return Response(serializer.data)
 
 
 # Delete an activity
@@ -1111,7 +1092,7 @@ def search_member(request):
             Q(first_name__icontains=name) | Q(last_name__icontains=name)
         )
         serializer = MembersSerializer(users, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
     else:
         return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
 
@@ -1143,27 +1124,6 @@ def get_member_attendance_stats(request):
         return Response(serializer.data)
 
 
-# Function that gets all past activities
-@api_view(['GET'])
-def get_past_activities(request):
-    if request.method == 'GET':
-        today = date.today()
-        past_activities = Activity.objects.filter(date__lt=today)
-        serializer = ActivitySerializer(past_activities, many=True)
-        return Response(serializer.data)
-    
-
-# Function to get all activites that has not yet occured
-@api_view(['GET'])
-def get_future_activities(request):
-    if request.method == 'GET':
-        today = date.today()
-        future_activities = Activity.objects.filter(date__gte=today)
-        serializer = ActivitySerializer(future_activities, many=True)
-        return Response(serializer.data)
-
-
-
 # Reomves a member that does not pass the verification process in the employee dashboard
 @api_view(['DELETE'])
 def delete_member(request, auth0_id):
@@ -1178,3 +1138,53 @@ def delete_member(request, auth0_id):
         member.delete()
         return Response({'message': 'Member deleted successfully'}, status=204)
 
+
+
+
+
+#---------------------------------------------------------------------------------------------------------------------
+# Tested views
+#---------------------------------------------------------------------------------------------------------------------
+
+# Gets all activites that that happens today or in the future
+@api_view(['GET'])
+def get_future_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        future_activities = Activity.objects.filter(date__gte=today)
+        serializer = ActivitySerializer(future_activities, many=True)
+        return Response(serializer.data)
+
+
+# View that gets all past activities
+@api_view(['GET'])
+def get_past_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        past_activities = Activity.objects.filter(date__lt=today)
+        serializer = ActivitySerializer(past_activities, many=True)
+        return Response(serializer.data)
+    
+
+# Gets todays activity
+@api_view(['GET'])
+def get_activity_today(request):
+    if request.method == 'GET':
+        today = date.today()
+        activities = Activity.objects.filter(date=today)
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+    
+
+
+#---------------------------------------------------------------------------------------------------------------------
+# Tested views (But not currently used in application)
+#---------------------------------------------------------------------------------------------------------------------
+
+# Gets all activities
+@api_view(['GET'])
+def get_all_activity(request):
+    if request.method == 'GET':
+        activities = Activity.objects.all()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
