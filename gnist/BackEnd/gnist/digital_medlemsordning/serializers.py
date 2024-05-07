@@ -8,7 +8,7 @@ from .models import ActivitySignup
 from .models import PollQuestion 
 from .models import PollAnswer
 from .models import MemberAnswer
-# from .models import MemberCertificate
+from .models import MemberCertificate
 
 
 class MembersSerializer(serializers.ModelSerializer):
@@ -86,7 +86,8 @@ class MemberAttendanceSerializer(serializers.Serializer):
     attendance_by_gender = serializers.DictField(child=serializers.IntegerField())
 
 
-# class MemberCertificateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MemberCertificate
-#         fields = ['certificate_image', 'certificateID']
+class MemberCertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberCertificate
+        fields = ['certificateID', 'certificate_image']
+
