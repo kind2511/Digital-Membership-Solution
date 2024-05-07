@@ -4,9 +4,11 @@ from .models import SuggestionBox
 from .models import Level
 from .models import Message
 from .models import Activity
+from .models import ActivitySignup
 from .models import PollQuestion 
 from .models import PollAnswer
 from .models import MemberAnswer
+# from .models import MemberCertificate
 
 
 class MembersSerializer(serializers.ModelSerializer):
@@ -27,10 +29,22 @@ class LevelSerializer(serializers.ModelSerializer):
         fields = ['levelID', 'name', 'points']
 
 
+class ActivitySignupSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='userID.first_name')
+    last_name = serializers.CharField(source='userID.last_name')
+    auth0ID = serializers.CharField(source='userID.auth0ID')
+
+    class Meta:
+        model = ActivitySignup
+        fields = ['first_name', 'last_name', 'auth0ID']
+
+
 class ActivitySerializer(serializers.ModelSerializer):
+    signed_up_members = ActivitySignupSerializer(many=True, source='activitysignup_set')
+
     class Meta:
         model = Activity
-        fields = ['activityID', 'title', 'description', 'image', 'date','limit','signed_up_count']     
+        fields = ['activityID', 'title', 'description', 'image', 'date', 'limit', 'signed_up_count', 'signed_up_members']
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -70,3 +84,9 @@ class MemberAnswerSerializer(serializers.ModelSerializer):
 class MemberAttendanceSerializer(serializers.Serializer):
     total_attendance = serializers.IntegerField()
     attendance_by_gender = serializers.DictField(child=serializers.IntegerField())
+
+
+# class MemberCertificateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MemberCertificate
+#         fields = ['certificate_image', 'certificateID']
