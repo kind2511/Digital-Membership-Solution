@@ -194,18 +194,23 @@ def sign_up_activity(request):
         return Response({'error': 'Invalid request method'})
     
 
-# Lets a user un signup for an activity 
+# Lets a user unregister or be unregistered for an activity 
 @api_view(['POST'])
 def undo_sign_up_activity(request):
     if request.method == 'POST':
         # Gets data from body
         data = request.data
+        user_id = data.get('user_id')
         auth0_id = data.get('auth0_id')
         activity_id = data.get('activity_id')
 
         # tryes to find the correct signup. If found, it is deleted
         try:
-            signup = ActivitySignup.objects.get(userID__auth0ID=auth0_id, activityID__activityID=activity_id)
+            # Querying with OR condition for both user_id and auth0_id
+            signup = ActivitySignup.objects.get(
+                Q(userID__userID=user_id) | Q(userID__auth0ID=auth0_id),
+                activityID__activityID=activity_id
+            )
             activity = signup.activityID
 
             # Decrement the sign_up_count by one
@@ -219,6 +224,7 @@ def undo_sign_up_activity(request):
             return Response({'error': 'Sign-up record not found'}, status=404)
     else:
         return Response({'error': 'Invalid request method'})
+
 
 
 # Get one specific activity
