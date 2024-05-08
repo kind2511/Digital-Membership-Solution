@@ -83,3 +83,24 @@
   background-color: #004080;
   color: #FFFFFF;
 }
+
+.message {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: red;  
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1500;
+}
+
+.confirmation {
+  background-color: red; 
+}
+
+.error {
+  background-color: red;  
+}

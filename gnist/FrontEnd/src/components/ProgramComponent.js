@@ -7,7 +7,8 @@ function ProgramComponent() {
   const { user, isAuthenticated } = useAuth0();
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState(null);
-  const [signupStatus, setSignupStatus] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('confirmation'); // 'confirmation' or 'error'
   const baseApiUrl = 'http://127.0.0.1:8000';
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function ProgramComponent() {
         throw new Error('Failed to fetch activities');
       }
       const data = await response.json();
-      setPrograms(data); 
+      setPrograms(data);
     } catch (error) {
       console.error(error);
       setPrograms([]);
@@ -31,8 +32,8 @@ function ProgramComponent() {
   const handleTitleClick = (program) => {
     setSelectedProgram(program);
     const isUserSignedUp = program.signed_up_members.some(member => member.auth0ID === user.sub);
-    program.isSignedUp = isUserSignedUp; // update local state 
-    setSelectedProgram({...program}); //update
+    program.isSignedUp = isUserSignedUp;
+    setSelectedProgram({ ...program });
   };
 
   const handleSignUp = async (activityId) => {
@@ -41,7 +42,7 @@ function ProgramComponent() {
       return;
     }
 
-    setSelectedProgram(prev => ({...prev, isSignedUp: true})); //update 
+    setSelectedProgram(prev => ({ ...prev, isSignedUp: true }));
 
     try {
       const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
@@ -50,19 +51,21 @@ function ProgramComponent() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        setSignupStatus('Du er registrert nå.');
+        setMessage('Du er registrert nå.');
+        setMessageType('confirmation');
         setTimeout(() => {
-          setSignupStatus('');
+          setMessage('');
         }, 3000);
       } else {
-        throw new Error('Failed to sign up'); 
+        throw new Error('Failed to sign up');
       }
     } catch (error) {
       console.error('Failed to sign up for the activity:', error);
-      setSelectedProgram(prev => ({...prev, isSignedUp: false})); //  update
-      setSignupStatus('Du kan ikke registrere nå, vennligst vent litt.');
+      setSelectedProgram(prev => ({ ...prev, isSignedUp: false }));
+      setMessage('Du kan ikke registrere nå, vennligst vent litt.');
+      setMessageType('error');
       setTimeout(() => {
-        setSignupStatus('');
+        setMessage('');
       }, 3000);
     }
   };
@@ -73,7 +76,7 @@ function ProgramComponent() {
       return;
     }
 
-    setSelectedProgram(prev => ({...prev, isSignedUp: false})); //  update UI
+    setSelectedProgram(prev => ({ ...prev, isSignedUp: false }));
 
     try {
       const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/undo_signup_activity/`, {
@@ -82,19 +85,21 @@ function ProgramComponent() {
       });
 
       if (response.status === 200) {
-        setSignupStatus('Påmelding avmeldt.');
+        setMessage('Påmelding avmeldt.');
+        setMessageType('confirmation');
         setTimeout(() => {
-          setSignupStatus('');
+          setMessage('');
         }, 3000);
       } else {
-        throw new Error('Failed to undo signup'); 
+        throw new Error('Failed to undo signup');
       }
     } catch (error) {
       console.error("Error undoing signup:", error);
-      setSelectedProgram(prev => ({...prev, isSignedUp: true})); 
-      setSignupStatus('Feil ved avmelding, vennligst prøv igjen senere.');
+      setSelectedProgram(prev => ({ ...prev, isSignedUp: true }));
+      setMessage('Feil ved avmelding, vennligst prøv igjen senere.');
+      setMessageType('error');
       setTimeout(() => {
-        setSignupStatus('');
+        setMessage('');
       }, 3000);
     }
   };
@@ -124,9 +129,11 @@ function ProgramComponent() {
                 <button onClick={() => handleSignUp(selectedProgram.activityID)}>Meld på</button>
               )}
             </div>
-            {signupStatus && <div className="signup-status">{signupStatus}</div>}
           </div>
         </div>
+      )}
+      {message && (
+        <div className={`message ${messageType === 'confirmation' ? 'confirmation' : 'error'}`}>{message}</div>
       )}
     </div>
   );
