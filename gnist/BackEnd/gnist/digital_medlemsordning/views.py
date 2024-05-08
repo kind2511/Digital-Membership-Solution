@@ -113,16 +113,16 @@ def get_one_member_data(request, auth0_id):
     # Retrieve the highest level
     highest_level = levels.last()
 
-    points = member.points
+    days_without_incident = member.days_without_incident
 
     # Iterate through levels to find the correct level for the member
     for level in levels:
-        if points <= level.points:
+        if days_without_incident <= level.points:
             level_name = level.name
             break
 
     # Check if the member's points exceed the highest level's points
-    if points > highest_level.points:
+    if days_without_incident > highest_level.points:
         level_name = highest_level.name
     
     is_banned = member.banned
