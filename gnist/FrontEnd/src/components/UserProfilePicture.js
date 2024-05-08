@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import './UserProfilePicture.css';
 
-function UserProfilePicture({ profileImg, setProfileImg }) {
+function UserProfilePicture({ profileImg, setProfileImg, isBanned }) {
   const { user } = useAuth0();
 
   const handleProfileImgChange = (event) => {
@@ -37,10 +37,12 @@ function UserProfilePicture({ profileImg, setProfileImg }) {
       console.error('Failed to upload image:', error);
     }
   };
-  
+
+  // Determine which CSS class to use based on the ban status
+  const borderClass = isBanned ? 'red-border' : 'green-border';
 
   return (
-    <div className="profile-img-container" onClick={() => document.getElementById('profileImgInput').click()}>
+    <div className={`profile-img-container ${borderClass}`} onClick={() => document.getElementById('profileImgInput').click()}>
       {profileImg ? (
         <img src={profileImg} alt="Profile" className="profile-img" />
       ) : (

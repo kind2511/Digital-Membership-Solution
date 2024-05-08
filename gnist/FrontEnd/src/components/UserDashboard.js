@@ -19,9 +19,10 @@ function UserDashboard() {
   const [profileImg, setProfileImg] = useState(localStorage.getItem('profileImg') || '');
   const [firstName, setFirstName] = useState('');
   const [level, setLevel] = useState(0);
+  const [isBanned, setIsBanned] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const baseApiUrl = 'http://localhost:8000';
   const date = new Date().toLocaleDateString();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -33,6 +34,7 @@ function UserDashboard() {
           const fullProfilePicUrl = memberData.profile_pic.startsWith('http') ? memberData.profile_pic : `${baseApiUrl}${memberData.profile_pic}`;
           setProfileImg(fullProfilePicUrl);
           localStorage.setItem('profileImg', fullProfilePicUrl);
+          setIsBanned(memberData.banned_from !== null && memberData.banned_until !== null);
         })
         .catch(error => {
           console.error("Failed to fetch user data:", error);
@@ -58,7 +60,7 @@ function UserDashboard() {
           <div className="profile-content">
             <div className="date-block">{date}</div>
             <RegistrationStatus userSub={user.sub} isRegistered={isRegistered} setIsRegistered={setIsRegistered} />
-            <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} />
+            <UserProfilePicture profileImg={profileImg} setProfileImg={setProfileImg} isBanned={isBanned} />
             <div className="user-info">
               <div className="user-name">{firstName.toUpperCase()}</div>
               <div className="user-level">{level}</div>
@@ -85,7 +87,7 @@ function UserDashboard() {
           <div className={`nav-item ${activeNavItem === 'Program' ? 'active' : ''}`} onClick={() => handleNavItemClick('Program')}>Program</div>
           <div className={`nav-item ${activeNavItem === 'Bevis' ? 'active' : ''}`} onClick={() => handleNavItemClick('Bevis')}>Bevis</div>
           <div className={`nav-item ${activeNavItem === 'MinMening' ? 'active' : ''}`} onClick={() => handleNavItemClick('MinMening')}>Min Mening</div>
-          <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Log Ut</div>
+          <div className="nav-item logout-item" onClick={() => setShowLogoutModal(true)}>Log Out</div>
         </div>
       </div>
       <div className="main-content">
