@@ -30,6 +30,9 @@ function ProgramComponent() {
 
   const handleTitleClick = (program) => {
     setSelectedProgram(program);
+    const isUserSignedUp = program.signed_up_members.some(member => member.auth0ID === user.sub);
+    program.isSignedUp = isUserSignedUp; // update local state 
+    setSelectedProgram({...program}); //update
   };
 
   const handleSignUp = async (activityId) => {
@@ -37,6 +40,8 @@ function ProgramComponent() {
       console.log('User is not authenticated');
       return;
     }
+
+    setSelectedProgram(prev => ({...prev, isSignedUp: true})); //update 
 
     try {
       const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
@@ -48,15 +53,49 @@ function ProgramComponent() {
         setSignupStatus('Du er registrert nå.');
         setTimeout(() => {
           setSignupStatus('');
-          setSelectedProgram(null);
         }, 3000);
+      } else {
+        throw new Error('Failed to sign up'); 
       }
     } catch (error) {
+      console.error('Failed to sign up for the activity:', error);
+      setSelectedProgram(prev => ({...prev, isSignedUp: false})); //  update
       setSignupStatus('Du kan ikke registrere nå, vennligst vent litt.');
       setTimeout(() => {
         setSignupStatus('');
       }, 3000);
-      console.error('Failed to sign up for the activity:', error);
+    }
+  };
+
+  const handleUndoSignup = async (activityId) => {
+    if (!isAuthenticated) {
+      console.log('User is not authenticated');
+      return;
+    }
+
+    setSelectedProgram(prev => ({...prev, isSignedUp: false})); //  update UI
+
+    try {
+      const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/undo_signup_activity/`, {
+        auth0_id: user.sub,
+        activity_id: activityId,
+      });
+
+      if (response.status === 200) {
+        setSignupStatus('Påmelding avmeldt.');
+        setTimeout(() => {
+          setSignupStatus('');
+        }, 3000);
+      } else {
+        throw new Error('Failed to undo signup'); 
+      }
+    } catch (error) {
+      console.error("Error undoing signup:", error);
+      setSelectedProgram(prev => ({...prev, isSignedUp: true})); 
+      setSignupStatus('Feil ved avmelding, vennligst prøv igjen senere.');
+      setTimeout(() => {
+        setSignupStatus('');
+      }, 3000);
     }
   };
 
@@ -79,9 +118,11 @@ function ProgramComponent() {
             <p>{selectedProgram.description}</p>
             <div className="modal-buttons">
               <button onClick={() => setSelectedProgram(null)}>Lukk</button>
-              <button onClick={() => handleSignUp(selectedProgram.activityID)}>
-                Meld på
-              </button>
+              {selectedProgram.isSignedUp ? (
+                <button onClick={() => handleUndoSignup(selectedProgram.activityID)}>Meld av</button>
+              ) : (
+                <button onClick={() => handleSignUp(selectedProgram.activityID)}>Meld på</button>
+              )}
             </div>
             {signupStatus && <div className="signup-status">{signupStatus}</div>}
           </div>
