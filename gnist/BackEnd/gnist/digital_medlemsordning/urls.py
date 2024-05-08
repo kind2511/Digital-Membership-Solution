@@ -68,6 +68,18 @@ urlpatterns = [
     path('adjust_member_points_total/<str:auth0_id>/', views.adjust_member_points_total, name='adjust_member_points_total'),
 
 
+
+    # Adds certificates to a member
+    path('upload_member_certificates/<str:auth0_id>/', views.upload_member_certificates, name='upload_member_certificates'),
+
+    # Retrieves all certificates for a specific member
+    path('get_member_certificates/<str:auth0_id>/', views.get_member_certificates, name='get_member_certificates'),
+
+    # Deletes a specific certificate based on its id
+    path('delete_member_certificate/<int:certificate_id>/', views.delete_member_certificate, name='delete_member_certificate'),
+    
+    
+
     # Lets a user upload a profile picture
     path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
 

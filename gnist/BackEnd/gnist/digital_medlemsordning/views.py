@@ -10,6 +10,7 @@ from .models import Level
 from .models import Message
 from .models import MemberAnswer
 from .models import PollQuestion
+from .models import MemberCertificate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +25,9 @@ from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
 from .serializers import MemberAnswerSerializer
 from .serializers import MemberAttendanceSerializer
+from .serializers import MemberCertificateSerializer
 from django.db.models import Q
+from django.db.models import Prefetch
 
 
 
@@ -706,7 +709,7 @@ def upload_activity_image(request, activity_id):
         return Response({"error": "Activity picture data not provided"}, status=400)
 
 
-# Upload member certificate
+# Upload member certificate --- OLD!!!!!!!!!!!!
 @api_view(['PATCH'])
 def upload_user_certificate(request, auth0_id):
     try:
@@ -726,6 +729,68 @@ def upload_user_certificate(request, auth0_id):
         else:
             return Response({"error": "Member certificate not provided"}, status=400)
         
+
+
+
+# Uploads certificates to member
+@api_view(['POST'])
+def upload_member_certificates(request, auth0_id):
+    if request.method == 'POST':
+        try:
+            # Get the member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=404)
+
+        # Retrieve list of uploaded certificate images
+        member_certificates = request.FILES.getlist('certificate_image')
+
+        # Iterate over each uploaded certificate image
+        for certificate in member_certificates:
+            # Create a MemberCertificate object and associate it with the member
+            member_certificate = MemberCertificate(member=member, certificate_image=certificate)
+
+            # Save the MemberCertificate object
+            member_certificate.save()
+
+        return Response("Certificates uploaded successfully", status=200)
+    else:
+        return Response("Method not allowed", status=405)
+
+
+
+
+@api_view(['GET'])
+def get_member_certificates(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            # Retrieve member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+
+            # Filter certificates belonging to the member
+            certificates = MemberCertificate.objects.filter(member=member)
+            serializer = MemberCertificateSerializer(certificates, many=True)
+            return Response(serializer.data, status=200)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=405)
+    else:
+        return Response("Method not allowed", status=405)
+
+
+# Deletes a specific certificate for one member
+@api_view(['DELETE'])
+def delete_member_certificate(request, certificate_id):
+    try:
+        certificate = MemberCertificate.objects.get(certificateID=certificate_id)
+    except MemberCertificate.DoesNotExist:
+        return Response("Certificate not found", status=404)
+
+    if request.method == 'DELETE':
+        certificate.delete()
+        return Response("Certificate deleted successfully", status=204)
+    else:
+        return Response("Method not allowed", status=405)
+
 #-------------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------------
@@ -1087,6 +1152,7 @@ def get_past_activities(request):
         serializer = ActivitySerializer(past_activities, many=True)
         return Response(serializer.data)
     
+
 # Function to get all activites that has not yet occured
 @api_view(['GET'])
 def get_future_activities(request):
@@ -1095,7 +1161,8 @@ def get_future_activities(request):
         future_activities = Activity.objects.filter(date__gte=today)
         serializer = ActivitySerializer(future_activities, many=True)
         return Response(serializer.data)
-    
+
+
 
 # Reomves a member that does not pass the verification process in the employee dashboard
 @api_view(['DELETE'])
