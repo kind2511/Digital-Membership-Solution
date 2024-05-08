@@ -55,6 +55,8 @@ function ProgramComponent() {
         setMessageType('confirmation');
         setTimeout(() => {
           setMessage('');
+          setSelectedProgram(null); // Close modal
+          fetchActivities(); // Refresh data
         }, 3000);
       } else {
         throw new Error('Failed to sign up');
@@ -89,6 +91,8 @@ function ProgramComponent() {
         setMessageType('confirmation');
         setTimeout(() => {
           setMessage('');
+          setSelectedProgram(null); // Close modal
+          fetchActivities(); // Refresh data
         }, 3000);
       } else {
         throw new Error('Failed to undo signup');
