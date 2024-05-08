@@ -130,3 +130,10 @@
     opacity: 2;
   }
   
+  .message.confirmation {
+    background-color: red; 
+}
+
+.message.error {
+    background-color: red; 
+}

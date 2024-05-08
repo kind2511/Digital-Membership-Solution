@@ -12,52 +12,37 @@ function TodayActivitiesComponent() {
     const [displayedText, setDisplayedText] = useState('');
     const [sentenceIndex, setSentenceIndex] = useState(0);
     const [todayDate, setTodayDate] = useState(null);
-    const [signupStatus, setSignupStatus] = useState('');
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('');
     const baseApiUrl = 'http://127.0.0.1:8000';
 
     useEffect(() => {
-        const fetchTodayActivities = async () => {
-            try {
-                const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
-                const data = await response.json();
-                if (Array.isArray(data)) {
-                    setActivities(data);
-                    setTodayDate(data.length > 0 ? data[0].date : new Date().toISOString().split('T')[0]);
-                } else {
-                    console.error("Unexpected response format:", data);
-                    setActivities([]);
-                }
-            } catch (error) {
-                console.error("Failed to fetch today's activities:", error);
-                setActivities([]);
-            }
-        };
         fetchTodayActivities();
     }, []);
 
     useEffect(() => {
-        let currentTimer;
-        const isCompleteSentence = displayedText === promoSentences[sentenceIndex];
-        if (isCompleteSentence) {
-            currentTimer = setTimeout(() => {
-                const nextIndex = (sentenceIndex + 1) % promoSentences.length;
-                setSentenceIndex(nextIndex);
-                setDisplayedText('');
-            }, 3000);
-        } else {
-            currentTimer = setTimeout(() => {
-                const newText = promoSentences[sentenceIndex].substr(0, displayedText.length + 1);
-                setDisplayedText(newText);
-            }, 50);
-        }
-        return () => clearTimeout(currentTimer);
-    }, [displayedText, sentenceIndex]);
+        const timerId = setInterval(() => {
+            setDisplayedText(promoSentences[sentenceIndex]);
+            setSentenceIndex((sentenceIndex + 1) % promoSentences.length);
+        }, 3000);
+        return () => clearInterval(timerId);
+    }, [sentenceIndex]);
 
-    useEffect(() => {
-        if (signupStatus) {
-            console.log(signupStatus);
+    const fetchTodayActivities = async () => {
+        try {
+            const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
+            const data = await response.json();
+            const updatedActivities = data.map(activity => ({
+                ...activity,
+                isUserSignedUp: activity.signed_up_members.some(member => member.auth0ID === user.sub)
+            }));
+            setActivities(updatedActivities);
+            setTodayDate(data.length > 0 ? data[0].date : new Date().toISOString().split('T')[0]);
+        } catch (error) {
+            console.error("Failed to fetch today's activities:", error);
+            setActivities([]);
         }
-    }, [signupStatus]);
+    };
 
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
@@ -65,38 +50,67 @@ function TodayActivitiesComponent() {
 
     const handleSignUp = async () => {
         if (!isAuthenticated) {
-            console.log('User is not authenticated');
-            setSignupStatus('Du må være logget inn for å melde på.');
-            setTimeout(() => setSignupStatus(''), 3000);
+            setMessage('Du må være logget inn for å melde på.');
+            setMessageType('error');
+            setTimeout(() => setMessage(''), 3000);
             return;
         }
-        if (!selectedActivity) {
-            setSignupStatus('Ingen aktivitet er valgt.');
-            setTimeout(() => setSignupStatus(''), 3000);
-            return;
-        }
+
         try {
             const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/sign_up_activity/`, {
                 auth0_id: user.sub,
                 activity_id: selectedActivity.activityID,
             });
             if (response.status === 200 || response.status === 201) {
-                setSignupStatus('Du er registrert nå.');
+                setMessage('Du er registrert nå.');
+                setMessageType('confirmation');
                 setTimeout(() => {
-                    setSignupStatus('');
+                    setMessage('');
                     setSelectedActivity(null);
+                    fetchTodayActivities();
                 }, 3000);
             }
         } catch (error) {
-            setSignupStatus('Du kan ikke registrere nå, vennligst vent litt.');
-            setTimeout(() => setSignupStatus(''), 3000);
             console.error('Failed to sign up for the activity:', error);
+            setMessage('Du kan ikke registrere nå, vennligst vent litt.');
+            setMessageType('error');
+            setTimeout(() => setMessage(''), 3000);
+        }
+    };
+
+    const handleUndoSignUp = async () => {
+        if (!isAuthenticated) {
+            setMessage('Du må være logget inn for å melde av.');
+            setMessageType('error');
+            setTimeout(() => setMessage(''), 3000);
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${baseApiUrl}/digital_medlemsordning/undo_signup_activity/`, {
+                auth0_id: user.sub,
+                activity_id: selectedActivity.activityID,
+            });
+            if (response.status === 200) {
+                setMessage('Du er avmeldt nå.');
+                setMessageType('confirmation');
+                setTimeout(() => {
+                    setMessage('');
+                    setSelectedActivity(null);
+                    fetchTodayActivities();
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('Failed to undo signup for the activity:', error);
+            setMessage('Feil ved avmelding, vennligst prøv igjen.');
+            setMessageType('error');
+            setTimeout(() => setMessage(''), 3000);
         }
     };
 
     const handleCloseDetails = () => {
         setSelectedActivity(null);
-        setSignupStatus('');
+        setMessage('');
     };
 
     return (
@@ -123,9 +137,15 @@ function TodayActivitiesComponent() {
                         <p>{selectedActivity.description}</p>
                         <div className="today-modal-buttons">
                             <button className="today-modal-button" onClick={handleCloseDetails}>Lukk</button>
-                            <button className="today-modal-button" onClick={handleSignUp}>Meld på</button>
+                            {selectedActivity.isUserSignedUp ? (
+                                <button className="today-modal-button" onClick={handleUndoSignUp}>Meld av</button>
+                            ) : (
+                                <button className="today-modal-button" onClick={handleSignUp}>Meld på</button>
+                            )}
                         </div>
-                        {signupStatus && <div className="signup-status">{signupStatus}</div>}
+                        {message && (
+                            <div className={`message ${messageType === 'confirmation' ? 'confirmation' : 'error'}`}>{message}</div>
+                        )}
                     </div>
                 </div>
             )}
