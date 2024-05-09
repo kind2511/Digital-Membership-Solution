@@ -8,6 +8,7 @@ function LastOppBevis() {
     const [searchStatus, setSearchStatus] = useState('');
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const fileInputRef = useRef(null);
+    const certificateNameRef = useRef(null);
 
     const fetchData = (value) => {
         if (value.trim() === '') {
@@ -48,25 +49,34 @@ function LastOppBevis() {
 
     const handleUpload = () => {
         if (!selectedMember) {
-            alert('Please select a member to upload a certificate for.');
+            alert('Velg et medlem å laste opp et bevis for.');
             return;
         }
         const file = fileInputRef.current.files[0];
-        if (!file) {
-            alert('Please select a file to upload.');
+        const certificateName = certificateNameRef.current.value;
+        if (!file || !certificateName) {
+            alert('Velg en fil og skriv inn et bevis navn for å laste opp..');
             return;
         }
         const formData = new FormData();
-        formData.append('certificate', file);
-
-        fetch(`http://127.0.0.1:8000/digital_medlemsordning/add_user_certificate/${selectedMember.auth0ID}/`, {
-            method: 'PATCH',
+        formData.append('certificate_image', file);
+        formData.append('certificate_name', certificateName); //manually entered certificate name
+    
+        fetch(`http://127.0.0.1:8000/digital_medlemsordning/upload_member_certificates/${selectedMember.auth0ID}/`, {
+            method: 'POST', 
             body: formData,
+            headers: {
+                'Accept': 'application/json',
+            },
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok.');
             }
+            return response.json();  
+        })
+        .then(data => {
+            console.log('Success:', data);
             setUploadSuccess(true);
             setTimeout(() => setUploadSuccess(false), 3000);
             setSelectedMember(null);
@@ -77,6 +87,7 @@ function LastOppBevis() {
             console.error('Error:', error);
         });
     };
+    
 
     const handleClose = () => {
         setSelectedMember(null);
@@ -101,6 +112,7 @@ function LastOppBevis() {
                 <div className="selected-member">
                     <div className="selected-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</div>
                     <input type="file" ref={fileInputRef} className="file-input" />
+                    <input type="text" ref={certificateNameRef} placeholder="Skriv inn bevis navn" className="certificate-name-input"/>
                     <div className="buttons-container">
                         <button className="upload-button" onClick={handleUpload}>Last Opp</button>
                         <button className="close-button" onClick={handleClose}>Lukk</button>
