@@ -72,6 +72,7 @@ class MemberCertificate(models.Model):
     certificateID = models.AutoField(primary_key=True)
     member = models.ForeignKey(Members, on_delete=models.CASCADE)
     certificate_image = models.ImageField(upload_to="certificates")
+    certificate_name = models.CharField(max_length=100, null=True)
 
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus

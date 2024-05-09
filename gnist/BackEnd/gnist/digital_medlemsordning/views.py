@@ -723,13 +723,14 @@ def upload_member_certificates(request, auth0_id):
         except Members.DoesNotExist:
             return Response("Member not found", status=404)
 
-        # Retrieve list of uploaded certificate images
+        # Retrieve list of uploaded certificates and names
         member_certificates = request.FILES.getlist('certificate_image')
+        certificate_names = request.POST.getlist('certificate_name')
 
-        # Iterate over each uploaded certificate image
-        for certificate in member_certificates:
+        # Iterate over each uploaded certificate image and corresponding name
+        for certificate, name in zip(member_certificates, certificate_names):
             # Create a MemberCertificate object and associate it with the member
-            member_certificate = MemberCertificate(member=member, certificate_image=certificate)
+            member_certificate = MemberCertificate(member=member, certificate_image=certificate, certificate_name=name)
 
             # Save the MemberCertificate object
             member_certificate.save()
@@ -737,8 +738,6 @@ def upload_member_certificates(request, auth0_id):
         return Response("Certificates uploaded successfully", status=200)
     else:
         return Response("Method not allowed", status=405)
-
-
 
 
 @api_view(['GET'])

@@ -89,5 +89,5 @@ class MemberAttendanceSerializer(serializers.Serializer):
 class MemberCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberCertificate
-        fields = ['certificateID', 'certificate_image']
+        fields = ['certificateID', 'certificate_image', 'certificate_name']
 
