@@ -107,7 +107,7 @@ urlpatterns = [
     # Gets all members with specific info
     path('get_members_with_info/', views.members_with_info, name='get_members_with_info'),
     # Sets specific member info to ""
-    path('remove_member_info/<str:auth0_id>/', views.remove_member_info, name='update_member_info'),
+    path('remove_member_info/<str:auth0_id>/', views.remove_member_info, name='remove_member_info'),
 
     # Creates a question and corresponding answers
     path('create_question/', views.create_question_with_answers, name='create_question'),

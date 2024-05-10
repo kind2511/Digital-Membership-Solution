@@ -508,3 +508,47 @@ class AddMemberInfoTestCase(APITestCase):
 
         # Verify the response is empty
         self.assertIsNone(response.data)
+
+class RemoveMemberInfoTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test member
+        cls.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member',
+            info='Some information about the member'
+        )
+
+    def test_remove_member_info_success(self):
+        # Test successful removal of info from a member
+        url = reverse('remove_member_info', kwargs={'auth0_id': self.member.auth0ID})
+
+        response = self.client.put(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIn('info', response.data)
+        self.assertEqual(response.data['info'], '')  # Info should be removed
+
+        # Fetch the member from the database to ensure info has been removed
+        updated_member = Members.objects.get(auth0ID=self.member.auth0ID)
+        self.assertEqual(updated_member.info, '')  # Info should be removed
+
+    def test_remove_member_info_not_found(self):
+        # Test when member with provided auth0 ID is not found
+        url = reverse('remove_member_info', kwargs={'auth0_id': 'non_existing_auth0_id'})
+
+        response = self.client.put(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        # Verify the response is empty
+        self.assertIsNone(response.data)
+
+    

@@ -956,39 +956,6 @@ def members_with_info(request):
     return Response(serializer.data)
 
 
-# Removes specific info from a user
-@api_view(['PUT'])
-def remove_member_info(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response(status=404)
-
-    if request.method == 'PUT':
-        serializer = MembersSerializer(member, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.validated_data['info'] = ""
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-    
-
-# Add info to a specific user
-@api_view(['PUT'])
-def add_member_info(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response(status=404)
-
-    if request.method == 'PUT':
-        serializer = MembersSerializer(member, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-    
-
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views
 #---------------------------------------------------------------------------------------------------------------------
@@ -1152,6 +1119,39 @@ def unban_member(request, auth0_id):
     member.save()
 
     return Response({'message': f'Member unbanned successfully'})
+
+
+# Add info to a specific user
+@api_view(['PUT'])
+def add_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    
+    # Removes specific info from a user
+@api_view(['PUT'])
+def remove_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['info'] = ""
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
