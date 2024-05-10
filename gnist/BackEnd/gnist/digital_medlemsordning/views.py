@@ -336,24 +336,6 @@ def ban_member(request, auth0_id):
 
     return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
 
-
-# Unbanns a memebr
-@api_view(['PUT'])
-def unban_member(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    member.banned = False
-    member.banned_from = None
-    member.banned_until = None
-
-    member.save()
-
-    return Response({'message': f'Member unbanned successfully'})
-
-
 # Gets all banned members and their relevant info
 @api_view(['GET'])
 def get_banned_members(request):
@@ -1153,6 +1135,23 @@ def search_member(request):
         return Response(serializer.data, status=200)
     else:
         return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
+    
+
+# Unbans a memebr
+@api_view(['PUT'])
+def unban_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    member.banned = False
+    member.banned_from = None
+    member.banned_until = None
+
+    member.save()
+
+    return Response({'message': f'Member unbanned successfully'})
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
