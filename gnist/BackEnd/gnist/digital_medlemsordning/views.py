@@ -890,49 +890,6 @@ def check_user_registration_status(request):
     else:
         return Response({'error': 'Method not allowed'}, status=405)
     
-
-@api_view(['POST'])
-def send_message(request):
-    if request.method == 'POST':
-      
-        data = request.data
-        sender_id = data.get('sender_id')
-        recipient_id = data.get('recipient_id')
-        subject = data.get('subject')
-        body = data.get('body')
-
-        try:
-         
-            sender = Employee.objects.get(employeeID=sender_id)
-            recipient = Members.objects.get(userID=recipient_id)
-        except (Employee.DoesNotExist, Members.DoesNotExist):
-            return Response({'error': 'Sender or recipient does not exist'}, status=404)
-
-       
-        message = Message.objects.create(
-            sender=sender,
-            recipient=recipient,
-            subject=subject,
-            body=body
-        )
-
-        # Serialize the message data
-        serializer = MessageSerializer(message)
-
-        return Response(serializer.data, status=201)
-    else:
-        return Response({'error': 'Invalid request method'})
-    
-
-# Retrieves all unverfieid members
-@api_view(['GET'])
-def get_all_unverified_members(request):
-    unverified_members = Members.objects.filter(verified=False)
-    serializer = MembersSerializer(unverified_members, many=True)
-    return Response(serializer.data)
-
-
-
     
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views
@@ -1156,6 +1113,12 @@ def verify_member(request, auth0_id):
         return Response(serializer.errors, status=400)
     
 
+# Retrieves all unverfieid members
+@api_view(['GET'])
+def get_all_unverified_members(request):
+    unverified_members = Members.objects.filter(verified=False)
+    serializer = MembersSerializer(unverified_members, many=True)
+    return Response(serializer.data)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
@@ -1169,3 +1132,48 @@ def get_all_activity(request):
         serializer = ActivitySerializer(activities, many=True)
         return Response(serializer.data)
     
+
+
+
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------
+
+# Code not used or tested
+
+@api_view(['POST'])
+def send_message(request):
+    if request.method == 'POST':
+      
+        data = request.data
+        sender_id = data.get('sender_id')
+        recipient_id = data.get('recipient_id')
+        subject = data.get('subject')
+        body = data.get('body')
+
+        try:
+         
+            sender = Employee.objects.get(employeeID=sender_id)
+            recipient = Members.objects.get(userID=recipient_id)
+        except (Employee.DoesNotExist, Members.DoesNotExist):
+            return Response({'error': 'Sender or recipient does not exist'}, status=404)
+
+       
+        message = Message.objects.create(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            body=body
+        )
+
+        # Serialize the message data
+        serializer = MessageSerializer(message)
+
+        return Response(serializer.data, status=201)
+    else:
+        return Response({'error': 'Invalid request method'})
