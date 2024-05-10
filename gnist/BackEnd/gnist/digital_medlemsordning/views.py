@@ -553,19 +553,6 @@ def create_activity(request):
         return Response({'error': 'Invalid request method'}, status=405)
 
 
-# Delete an activity
-@api_view(['DELETE'])
-def delete_activity(request, activity_id):
-    try:
-        activity = Activity.objects.get(activityID=activity_id)
-    except Activity.DoesNotExist:
-        return Response({'error': 'Activity not found'}, status=404)
-
-    if request.method == 'DELETE':
-        activity.delete()
-        return Response({'message': 'Activity deleted successfully'}, status=204)
-
-
 # Get all activities a specific member is signed up to
 @api_view(['GET'])
 def get_member_activities(request, auth0_id):
@@ -1123,22 +1110,6 @@ def get_member_attendance_stats(request):
         return Response(serializer.data)
 
 
-# Reomves a member that does not pass the verification process in the employee dashboard
-@api_view(['DELETE'])
-def delete_member(request, auth0_id):
-    # Attempts to find member in databse
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"message": "Member not found"}, status=404)
-    
-    # Deletes member
-    if request.method == 'DELETE':
-        member.delete()
-        return Response({'message': 'Member deleted successfully'}, status=204)
-
-
-
 
 
 #---------------------------------------------------------------------------------------------------------------------
@@ -1175,6 +1146,32 @@ def get_activity_today(request):
         return Response(serializer.data)
     
 
+# Delete an activity
+@api_view(['DELETE'])
+def delete_activity(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({'error': 'Activity not found'}, status=404)
+
+    if request.method == 'DELETE':
+        activity.delete()
+        return Response({'message': 'Activity deleted successfully'}, status=204)
+
+
+# Reomves a member that does not pass the verification process in the employee dashboard
+@api_view(['DELETE'])
+def delete_member(request, auth0_id):
+    # Attempts to find member in databse
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+    
+    # Deletes member
+    if request.method == 'DELETE':
+        member.delete()
+        return Response({'message': 'Member deleted successfully'}, status=204)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

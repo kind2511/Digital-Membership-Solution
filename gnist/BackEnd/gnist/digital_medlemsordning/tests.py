@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Activity
+from .models import Members
 from .serializers import ActivitySerializer
 
 # Create your tests here.
@@ -168,39 +169,31 @@ class DeleteActivityTestCase(APITestCase):
         self.assertEqual(response.data['error'], 'Activity not found')
 
 
-# class CreateActivityTestCase(APITestCase):
-#     def setUp(self):
-#         self.url = reverse('create_activity')
-#         self.client = Client()  # Use Django's test client for form data
-#         self.valid_payload = {
-#             'title': 'New Activity',
-#             'description': 'Description of the activity',
-#             'image': '../media/activity_pics/81zm9tKLsxL._AC_SL1170__0ncFLPi.jpg',
-#             'date': '2024-05-10',
-#             'limit': 10,
-#         }
+class DeleteMemberTestCase(APITestCase):
+    def setUp(self):
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member'
+        )
+        self.url = reverse('delete_member', kwargs={'auth0_id': self.member.auth0ID})
 
-#     def test_create_activity_success(self):
-#         response = self.client.post(self.url, self.valid_payload, format='multipart')
-#         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_delete_member_success(self):
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-#          # Print the response data for debugging
-#         print("Response data:", response.data)
+        # Check if the member is deleted from the database
+        self.assertFalse(Members.objects.filter(auth0ID=self.member.auth0ID).exists())
 
-#         # Check the response data matches the valid payload
-#         self.assertEqual(response.data['title'], self.valid_payload['title'])
-#         self.assertEqual(response.data['description'], self.valid_payload['description'])
-#         self.assertEqual(response.data['image'], self.valid_payload['image'])
-#         self.assertEqual(response.data['date'], self.valid_payload['date'])
-#         self.assertEqual(response.data['limit'], self.valid_payload['limit'])
-
-#     def test_create_activity_invalid_data(self):
-#         invalid_payload = self.valid_payload.copy()
-#         invalid_payload.pop('title')  # Removing required field
-#         response = self.client.post(self.url, invalid_payload, format='multipart')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-#     def test_create_activity_invalid_method(self):
-#         response = self.client.get(self.url)
-#         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+    def test_delete_member_not_found(self):
+        non_existent_url = reverse('delete_member', kwargs={'auth0_id': 'non_existent_id'})
+        response = self.client.delete(non_existent_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'], 'Member not found')
 
