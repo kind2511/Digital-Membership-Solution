@@ -69,15 +69,11 @@ def get_all_member_data(request):
         elif is_banned == 1:
             profile_color = "red"
 
-        # Check if certificate field is not empty before accessing its URL
-        certificate_url = member.certificate.url if member.certificate else ''
-
         member_info = {
             'first_name': member.first_name.upper(),
             'level': level_name,
             'profile_color': profile_color,
             'profile_pic': member.profile_pic.url,
-            'certificate': certificate_url,
             'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
             'role': member.role,
@@ -336,24 +332,6 @@ def ban_member(request, auth0_id):
 
     return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
 
-
-# Unbanns a memebr
-@api_view(['PUT'])
-def unban_member(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    member.banned = False
-    member.banned_from = None
-    member.banned_until = None
-
-    member.save()
-
-    return Response({'message': f'Member unbanned successfully'})
-
-
 # Gets all banned members and their relevant info
 @api_view(['GET'])
 def get_banned_members(request):
@@ -412,50 +390,6 @@ def register_user(request):
         return Response({'message': 'Added new user'})
     else:
         return Response({'error': 'Invalid request method'})
-
-
-# Gets all members the attendend on a specific date. If no date is provided todays date is the one used
-@api_view(['GET'])
-def get_member_attendance(request):
-    # Looks for provided date in the request body
-    date_str = request.query_params.get('date') # :)
-
-    # If date is provided
-    if date_str:
-        try:
-            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
-    else:
-        # If no date is provided in the request body, set date to today
-        selected_date = date.today()
-
-    try:
-        # Extract all members that registered on selected date
-        datelist = MemberDates.objects.filter(date=selected_date)
-    except MemberDates.DoesNotExist:
-        return Response({'message': 'No one has registered for the specified date.'}, status=404)
-    
-    # Gets the full name and profile picture of the users
-    members_present = []
-    for member_date in datelist:
-        member = member_date.userID
-        member_info = {
-            'name': f"{member.first_name} {member.last_name}",
-            'profile_pic': member.profile_pic.url if member.profile_pic else None
-        }
-        members_present.append(member_info)
-    
-    # Returns the members if there are any
-    if members_present:
-        response_data = {
-            'message': f'Member attendance for {selected_date} retrieved successfully.',
-            'members_present': members_present
-        }
-        return Response(response_data, status=200)
-    else:
-        return Response({'message': 'No members attended on this date.'}, status=200)
-
 
 @api_view(['GET'])
 def get_visit_numbers(request):
@@ -551,38 +485,6 @@ def create_activity(request):
         return Response(serializer.errors, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=405)
-
-
-# Gets all activities
-@api_view(['GET'])
-def get_all_activity(request):
-    if request.method == 'GET':
-        activities = Activity.objects.all()
-        serializer = ActivitySerializer(activities, many=True)
-        return Response(serializer.data)
-
-
-# Gets todays activity
-@api_view(['GET'])
-def get_activity_today(request):
-    if request.method == 'GET':
-        today = date.today()
-        activities = Activity.objects.filter(date=today)
-        serializer = ActivitySerializer(activities, many=True)
-        return Response(serializer.data)
-
-
-# Delete an activity
-@api_view(['DELETE'])
-def delete_activity(request, activity_id):
-    try:
-        activity = Activity.objects.get(activityID=activity_id)
-    except Activity.DoesNotExist:
-        return Response({'error': 'Activity not found'}, status=404)
-
-    if request.method == 'DELETE':
-        activity.delete()
-        return Response({'message': 'Activity deleted successfully'}, status=204)
 
 
 # Get all activities a specific member is signed up to
@@ -709,29 +611,6 @@ def upload_activity_image(request, activity_id):
         return Response({"error": "Activity picture data not provided"}, status=400)
 
 
-# Upload member certificate --- OLD!!!!!!!!!!!!
-@api_view(['PATCH'])
-def upload_user_certificate(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    if request.method == 'PATCH':
-        # Get the profile picture data from the request
-        certificate_data = request.data.get('certificate')
-        
-        # If profile picture data is provided, update the profile picture
-        if certificate_data:
-            member.certificate = certificate_data
-            member.save()
-            return Response({"message": "Member certificate updated successfully"}, status=200)
-        else:
-            return Response({"error": "Member certificate not provided"}, status=400)
-        
-
-
-
 # Uploads certificates to member
 @api_view(['POST'])
 def upload_member_certificates(request, auth0_id):
@@ -742,13 +621,14 @@ def upload_member_certificates(request, auth0_id):
         except Members.DoesNotExist:
             return Response("Member not found", status=404)
 
-        # Retrieve list of uploaded certificate images
+        # Retrieve list of uploaded certificates and names
         member_certificates = request.FILES.getlist('certificate_image')
+        certificate_names = request.POST.getlist('certificate_name')
 
-        # Iterate over each uploaded certificate image
-        for certificate in member_certificates:
+        # Iterate over each uploaded certificate image and corresponding name
+        for certificate, name in zip(member_certificates, certificate_names):
             # Create a MemberCertificate object and associate it with the member
-            member_certificate = MemberCertificate(member=member, certificate_image=certificate)
+            member_certificate = MemberCertificate(member=member, certificate_image=certificate, certificate_name=name)
 
             # Save the MemberCertificate object
             member_certificate.save()
@@ -756,8 +636,6 @@ def upload_member_certificates(request, auth0_id):
         return Response("Certificates uploaded successfully", status=200)
     else:
         return Response("Method not allowed", status=405)
-
-
 
 
 @api_view(['GET'])
@@ -985,6 +863,271 @@ def check_user_registration_status(request):
     else:
         return Response({'error': 'Method not allowed'}, status=405)
     
+    
+#---------------------------------------------------------------------------------------------------------------------
+# Tested views
+#---------------------------------------------------------------------------------------------------------------------
+
+# Gets all activites that that happens today or in the future
+@api_view(['GET'])
+def get_future_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        future_activities = Activity.objects.filter(date__gte=today)
+        serializer = ActivitySerializer(future_activities, many=True)
+        return Response(serializer.data)
+
+
+# View that gets all past activities
+@api_view(['GET'])
+def get_past_activities(request):
+    if request.method == 'GET':
+        today = date.today()
+        past_activities = Activity.objects.filter(date__lt=today)
+        serializer = ActivitySerializer(past_activities, many=True)
+        return Response(serializer.data)
+    
+
+# Gets todays activity
+@api_view(['GET'])
+def get_activity_today(request):
+    if request.method == 'GET':
+        today = date.today()
+        activities = Activity.objects.filter(date=today)
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+    
+
+# Delete an activity
+@api_view(['DELETE'])
+def delete_activity(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+        return Response({'error': 'Activity not found'}, status=404)
+
+    if request.method == 'DELETE':
+        activity.delete()
+        return Response({'message': 'Activity deleted successfully'}, status=204)
+
+
+# Reomves a member that does not pass the verification process in the employee dashboard
+@api_view(['DELETE'])
+def delete_member(request, auth0_id):
+    # Attempts to find member in databse
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+    
+    # Deletes member
+    if request.method == 'DELETE':
+        member.delete()
+        return Response({'message': 'Member deleted successfully'}, status=204)
+
+
+# Gets the stats of all attended members based on gender from one date to another
+@api_view(['GET'])
+def get_member_attendance_stats(request):
+    if request.method == 'GET':
+        # Get start and end dates from query parameters
+        start_date_str = request.query_params.get('start_date')
+        end_date_str = request.query_params.get('end_date')
+
+        # Convert date strings to datetime objects
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        # Query MemberDates model to get counts of different genders
+        attendance_counts = MemberDates.objects.filter(date__range=(start_date, end_date)).values('userID__gender').annotate(count=Count('userID__gender'))
+
+        # Calculate combined total attendance
+        total_attendance = sum(attendance['count'] for attendance in attendance_counts)
+
+        # Serialize data
+        serializer = MemberAttendanceSerializer({
+            'total_attendance': total_attendance,
+            'attendance_by_gender': {attendance['userID__gender']: attendance['count'] for attendance in attendance_counts}
+        })
+
+        return Response(serializer.data)
+
+
+# Gets all members the attendend on a specific date. If no date is provided todays date is the one used
+@api_view(['GET'])
+def get_member_attendance(request):
+    # Looks for provided date in the request body
+    date_str = request.query_params.get('date')
+
+    # If date is provided
+    if date_str:
+        try:
+            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
+    else:
+        # If no date is provided in the request body, set date to today
+        selected_date = date.today()
+
+    try:
+        # Extract all members that registered on selected date
+        datelist = MemberDates.objects.filter(date=selected_date)
+    except MemberDates.DoesNotExist:
+        return Response({'message': 'No one has registered for the specified date.'}, status=404)
+    
+    # Gets the full name and profile picture of the users
+    members_present = []
+    for member_date in datelist:
+        member = member_date.userID
+        member_info = {
+            'name': f"{member.first_name} {member.last_name}",
+            'profile_pic': member.profile_pic.url if member.profile_pic else None
+        }
+        members_present.append(member_info)
+    
+    # Returns the members if there are any
+    if members_present:
+        response_data = {
+            'message': f'Member attendance for {selected_date} retrieved successfully.',
+            'members_present': members_present
+        }
+        return Response(response_data, status=200)
+    else:
+        return Response({'message': 'No members attended on this date.'}, status=200)
+
+
+# Searches for members by first and or last name
+@api_view(['GET'])
+def search_member(request):
+    # looks for name in params
+    if 'name' in request.query_params:
+        name = request.query_params['name']
+        # Perform case-insensitive search by full name
+        users = Members.objects.filter(
+            Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        )
+        serializer = MembersSerializer(users, many=True)
+        return Response(serializer.data, status=200)
+    else:
+        return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
+    
+
+# Unbans a memebr
+@api_view(['PUT'])
+def unban_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    member.banned = False
+    member.banned_from = None
+    member.banned_until = None
+
+    member.save()
+
+    return Response({'message': f'Member unbanned successfully'})
+
+
+# Add info to a specific user
+@api_view(['PUT'])
+def add_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            # Manually construct response data with desired fields
+            response_data = {
+                "auth0ID": serializer.data.get('auth0ID'),
+                "info": serializer.data.get('info')
+            }
+            return Response(response_data, status=200)
+        return Response(serializer.errors, status=400)
+    
+    
+# Removes specific info from a user
+@api_view(['PUT'])
+def remove_member_info(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['info'] = ""
+            serializer.save()
+            # Manually construct response data with desired fields
+            response_data = {
+                "auth0ID": serializer.data.get('auth0ID'),
+                "info": serializer.validated_data.get('info')
+            }
+            return Response(response_data, status=200)
+        return Response(serializer.errors, status=400)
+    
+
+# Get all members with specific info
+@api_view(['GET'])
+def members_with_info(request):
+    members_with_info = Members.objects.exclude(info="")
+    serializer = MembersSerializer(members_with_info, many=True)
+    return Response(serializer.data)
+
+
+# Verifies a member
+@api_view(['PUT'])
+def verify_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"message": "Member not found"}, status=404)
+
+    if request.method == 'PUT':
+        serializer = MembersSerializer(member, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(verified=True)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+
+# Retrieves all unverfieid members
+@api_view(['GET'])
+def get_all_unverified_members(request):
+    unverified_members = Members.objects.filter(verified=False)
+    serializer = MembersSerializer(unverified_members, many=True)
+    return Response(serializer.data)
+
+#---------------------------------------------------------------------------------------------------------------------
+# Tested views (But not currently used in application)
+#---------------------------------------------------------------------------------------------------------------------
+
+# Gets all activities
+@api_view(['GET'])
+def get_all_activity(request):
+    if request.method == 'GET':
+        activities = Activity.objects.all()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+    
+
+
+
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------
+
+# Code not used or tested
 
 @api_view(['POST'])
 def send_message(request):
@@ -1017,164 +1160,3 @@ def send_message(request):
         return Response(serializer.data, status=201)
     else:
         return Response({'error': 'Invalid request method'})
-    
-
-# Retrieves all unverfieid members
-@api_view(['GET'])
-def get_all_unverified_members(request):
-    unverified_members = Members.objects.filter(verified=False)
-    serializer = MembersSerializer(unverified_members, many=True)
-    return Response(serializer.data)
-
-
-# Verifies a member
-@api_view(['PUT'])
-def verify_member(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"message": "Member not found"}, status=404)
-
-    if request.method == 'PUT':
-        serializer = MembersSerializer(member, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save(verified=True)
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-    
-
-# Get all members with specific info
-@api_view(['GET'])
-def members_with_info(request):
-    members_with_info = Members.objects.exclude(info="")
-    serializer = MembersSerializer(members_with_info, many=True)
-    return Response(serializer.data)
-
-
-# Removes specific info from a user
-@api_view(['PUT'])
-def remove_member_info(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response(status=404)
-
-    if request.method == 'PUT':
-        serializer = MembersSerializer(member, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.validated_data['info'] = ""
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-    
-
-# Add info to a specific user
-@api_view(['PUT'])
-def add_member_info(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response(status=404)
-
-    if request.method == 'PUT':
-        serializer = MembersSerializer(member, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-    
-
-# Register an employee
-@api_view(['POST'])
-def register_employee(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        
-        auth0id = data['auth0id']
-        employeeName = data['employeeName']
-
-        new_employee = Employee(auth0ID=auth0id, employee_Name=employeeName)  
-        new_employee.save()
-        return Response({'message': 'Added new employee'})
-    else:
-        return Response({'error': 'Invalid request method'})
-    
-
-# Searches for members by first and or last name
-@api_view(['GET'])
-def search_member(request):
-    # looks for name in params
-    if 'name' in request.query_params:
-        name = request.query_params['name']
-        # Perform case-insensitive search by full name
-        users = Members.objects.filter(
-            Q(first_name__icontains=name) | Q(last_name__icontains=name)
-        )
-        serializer = MembersSerializer(users, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
-
-
-# Gets the stats of all attended members based on gender from one date to another
-@api_view(['GET'])
-def get_member_attendance_stats(request):
-    if request.method == 'GET':
-        # Get start and end dates from query parameters
-        start_date_str = request.query_params.get('start_date')
-        end_date_str = request.query_params.get('end_date')
-
-        # Convert date strings to datetime objects
-        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-
-        # Query MemberDates model to get counts of different genders
-        attendance_counts = MemberDates.objects.filter(date__range=(start_date, end_date)).values('userID__gender').annotate(count=Count('userID__gender'))
-
-        # Calculate combined total attendance
-        total_attendance = sum(attendance['count'] for attendance in attendance_counts)
-
-        # Serialize data
-        serializer = MemberAttendanceSerializer({
-            'total_attendance': total_attendance,
-            'attendance_by_gender': {attendance['userID__gender']: attendance['count'] for attendance in attendance_counts}
-        })
-
-        return Response(serializer.data)
-
-
-# Function that gets all past activities
-@api_view(['GET'])
-def get_past_activities(request):
-    if request.method == 'GET':
-        today = date.today()
-        past_activities = Activity.objects.filter(date__lt=today)
-        serializer = ActivitySerializer(past_activities, many=True)
-        return Response(serializer.data)
-    
-
-# Function to get all activites that has not yet occured
-@api_view(['GET'])
-def get_future_activities(request):
-    if request.method == 'GET':
-        today = date.today()
-        future_activities = Activity.objects.filter(date__gte=today)
-        serializer = ActivitySerializer(future_activities, many=True)
-        return Response(serializer.data)
-
-
-
-# Reomves a member that does not pass the verification process in the employee dashboard
-@api_view(['DELETE'])
-def delete_member(request, auth0_id):
-    # Attempts to find member in databse
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"message": "Member not found"}, status=404)
-    
-    # Deletes member
-    if request.method == 'DELETE':
-        member.delete()
-        return Response({'message': 'Member deleted successfully'}, status=204)
-

@@ -38,9 +38,7 @@ class Members(models.Model):
     birthdate = models.DateField()
 
     profile_pic = models.ImageField(upload_to="profile_pics", default="profile_pics/default_profile_picture.png", null=True, blank=True)
-    certificate = models.ImageField(upload_to="certificates", default="certificates/placeholder-image.png" ,null=True, blank=True)
 
-    
 
     # Enum for gender possibilities
     GENDER_CHOICES = [
@@ -72,6 +70,7 @@ class MemberCertificate(models.Model):
     certificateID = models.AutoField(primary_key=True)
     member = models.ForeignKey(Members, on_delete=models.CASCADE)
     certificate_image = models.ImageField(upload_to="certificates")
+    certificate_name = models.CharField(max_length=100, null=True)
 
 
 # The dates in which a member has physically attended Fyrverkeriet ungdomshus

@@ -40,7 +40,7 @@ class ActivitySignupSerializer(serializers.ModelSerializer):
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    signed_up_members = ActivitySignupSerializer(many=True, source='activitysignup_set')
+    signed_up_members = ActivitySignupSerializer(many=True, source='activitysignup_set', required=False)
 
     class Meta:
         model = Activity
@@ -89,5 +89,5 @@ class MemberAttendanceSerializer(serializers.Serializer):
 class MemberCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberCertificate
-        fields = ['certificateID', 'certificate_image']
+        fields = ['certificateID', 'certificate_image', 'certificate_name']
 

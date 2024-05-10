@@ -48,8 +48,6 @@ urlpatterns = [
     # Create a new member
     path('register_user/', views.register_user, name='register_user'),
 
-    # Gets all members who registered their attendance on a specific date
-    path('get_member_attendance/', views.get_member_attendance, name='get_member_today'),
 
     path('get_visit_numbers/', views.get_visit_numbers, name='get_visit_numbers'),
     path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
@@ -92,8 +90,6 @@ urlpatterns = [
     # Deletes a spescific suggestion
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
 
-    path('add_user_certificate/<str:auth0_id>/', views.upload_user_certificate, name="add_user_certificate"),
-
     # Creates a new level
     path('create_level/', views.create_level, name='create_level'),
 
@@ -109,7 +105,7 @@ urlpatterns = [
     # Gets all members with specific info
     path('get_members_with_info/', views.members_with_info, name='get_members_with_info'),
     # Sets specific member info to ""
-    path('remove_member_info/<str:auth0_id>/', views.remove_member_info, name='update_member_info'),
+    path('remove_member_info/<str:auth0_id>/', views.remove_member_info, name='remove_member_info'),
 
     # Creates a question and corresponding answers
     path('create_question/', views.create_question_with_answers, name='create_question'),
@@ -130,11 +126,8 @@ urlpatterns = [
     path('send_message/', views.send_message, name='send_message'),
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 
-    # Register a new employee
-    path('register_employee/', views.register_employee, name='register_employee'),
-
     # Get all unverified members
-    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members'),
+    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified_members'),
     path('verify_member/<str:auth0_id>/', views.verify_member, name='verify_member'),
 
     # Searches for a member by name
@@ -142,6 +135,8 @@ urlpatterns = [
 
     # Gets stats about member attendence
     path('member_attendance_stats/', views.get_member_attendance_stats, name='member_attendance_stats'),
+    # Gets all members who registered their attendance on a specific date
+    path('get_member_attendance/', views.get_member_attendance, name='get_member_attendance'),
 
     # Deletes a member that does not pass the verification stage
     path('delete_member/<str:auth0_id>/', views.delete_member, name='delete_member'),
