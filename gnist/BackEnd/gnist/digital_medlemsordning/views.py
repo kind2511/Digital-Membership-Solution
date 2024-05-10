@@ -1077,8 +1077,11 @@ def remove_member_info(request, auth0_id):
 def members_with_info(request):
     members_with_info = Members.objects.exclude(info="")
     serializer = MembersSerializer(members_with_info, many=True)
-    return Response(serializer.data)
+    
+    # Extracting only auth0ID and info from the serializer data
+    response_data = [{"auth0ID": member['auth0ID'], "info": member['info']} for member in serializer.data]
 
+    return Response(response_data, status=200)
 
 # Verifies a member
 @api_view(['PUT'])
