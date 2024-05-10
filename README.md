@@ -94,4 +94,32 @@ To get started, you'll need to install:
 
 ## Credits
 
-T
+## API Documentation
+
+<details>
+<summary><h4>Retrieve all activities that has not yet occured:</h4></summary>
+
+```http
+  GET digital_medlemsordning/get_future_activities/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "activityID": "81",
+        "title": "Football night",
+        "description": "Manchester United vs Liverpool 18:00",
+        "image": "/media/activity_pics/placeholder-image.png",
+        "date": "2025-05-29",
+        "limit": 40,
+        "signed_up_count": 31,
+        "signed_up_members": []
+    },
+]
