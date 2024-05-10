@@ -48,8 +48,6 @@ urlpatterns = [
     # Create a new member
     path('register_user/', views.register_user, name='register_user'),
 
-    # Gets all members who registered their attendance on a specific date
-    path('get_member_attendance/', views.get_member_attendance, name='get_member_today'),
 
     path('get_visit_numbers/', views.get_visit_numbers, name='get_visit_numbers'),
     path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
@@ -142,6 +140,8 @@ urlpatterns = [
 
     # Gets stats about member attendence
     path('member_attendance_stats/', views.get_member_attendance_stats, name='member_attendance_stats'),
+    # Gets all members who registered their attendance on a specific date
+    path('get_member_attendance/', views.get_member_attendance, name='get_member_attendance'),
 
     # Deletes a member that does not pass the verification stage
     path('delete_member/<str:auth0_id>/', views.delete_member, name='delete_member'),

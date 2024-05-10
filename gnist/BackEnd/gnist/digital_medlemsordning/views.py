@@ -1134,7 +1134,7 @@ def delete_member(request, auth0_id):
 @api_view(['GET'])
 def get_member_attendance(request):
     # Looks for provided date in the request body
-    date_str = request.query_params.get('date') # :)
+    date_str = request.query_params.get('date')
 
     # If date is provided
     if date_str:
