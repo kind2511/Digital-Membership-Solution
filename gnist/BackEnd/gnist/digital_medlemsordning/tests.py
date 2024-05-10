@@ -345,7 +345,69 @@ class GetMemberAttendanceTestCase(APITestCase):
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], 'No members attended on this date.')
 
-    
+
+class SearchMemberTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test Members
+        cls.member1 = Members.objects.create(
+            auth0ID='test_auth0_id_1',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member'
+        )
+        cls.member2 = Members.objects.create(
+            auth0ID='test_auth0_id_2',
+            first_name='Jane',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='jente',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='jane.doe@example.com',
+            role='member'
+        )
+
+    def test_search_member_success(self):
+        # Test successful search for members by name
+        url = reverse('search_member')
+        name = 'John'  # Searching for members with first name 'John'
+
+        response = self.client.get(url, {'name': name})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+
+        # Add more assertions to check the response data
+
+    def test_search_member_case_insensitive(self):
+        # Test case-insensitive search for members by name
+        url = reverse('search_member')
+        name = 'doe'  # Searching for members with last name 'Doe' (case-insensitive)
+
+        response = self.client.get(url, {'name': name})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+
+        # Add more assertions to check the response data
+
+    def test_search_member_no_name_param(self):
+        # Test when 'name' parameter is not provided in the query
+        url = reverse('search_member')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Verify the structure of the response
+        self.assertIn('message', response.data)
 
 
     
