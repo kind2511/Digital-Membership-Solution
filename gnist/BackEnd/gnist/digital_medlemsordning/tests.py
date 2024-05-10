@@ -632,3 +632,50 @@ class MembersWithInfoTestCase(APITestCase):
         # Verify the structure of the response
         self.assertIsInstance(response.data, list)
         self.assertEqual(len(response.data), 0)  # No members should be returned
+
+class VerifyMemberTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test member
+        cls.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member',
+            verified=False  # Member initially not verified
+        )
+
+    def test_verify_member_success(self):
+        # Test successful verification of a member
+        url = reverse('verify_member', kwargs={'auth0_id': self.member.auth0ID})
+
+        response = self.client.put(url, data={'verified': True})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIn('verified', response.data)
+        self.assertTrue(response.data['verified'])  # Member should be verified
+
+        # Fetch the member from the database to ensure verification status has been updated
+        updated_member = Members.objects.get(auth0ID=self.member.auth0ID)
+        self.assertTrue(updated_member.verified)  # Member should be verified
+
+    def test_verify_member_not_found(self):
+        # Test when member with provided auth0 ID is not found
+        url = reverse('verify_member', kwargs={'auth0_id': 'non_existing_auth0_id'})
+
+        response = self.client.put(url, data={'verified': True})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Member not found')
+
+        # Ensure other fields are not present
+        self.assertNotIn('verified', response.data)
+
