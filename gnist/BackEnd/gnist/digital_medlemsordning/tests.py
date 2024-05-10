@@ -679,3 +679,86 @@ class VerifyMemberTestCase(APITestCase):
         # Ensure other fields are not present
         self.assertNotIn('verified', response.data)
 
+
+class GetAllUnverifiedMembersTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test members with and without verification
+        cls.verified_member = Members.objects.create(
+            auth0ID='verified_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member',
+            verified=True  # Member initially verified
+        )
+        cls.unverified_member = Members.objects.create(
+            auth0ID='unverified_auth0_id',
+            first_name='Jane',
+            last_name='Doe',
+            birthdate='1995-05-15',
+            gender='jente',
+            days_without_incident=0,
+            phone_number='5551234567',
+            email='jane.doe@example.com',
+            role='member',
+            verified=False  # Member initially not verified
+        )
+
+    def test_get_all_unverified_members(self):
+        # Test retrieving all unverified members
+        url = reverse('get_all_unverified_members')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 1)  # Only one member should be unverified
+        self.assertEqual(response.data[0]['auth0ID'], self.unverified_member.auth0ID)
+
+    def test_get_all_unverified_members_no_unverified_members(self):
+        # Test when there are no unverified members
+        # Update the unverified member to be verified
+        self.unverified_member.verified = True
+        self.unverified_member.save()
+
+        url = reverse('get_all_unverified_members')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 0)  # No unverified members should be returned
+
+    def test_get_all_unverified_members_multiple_unverified_members(self):
+        # Test when there are multiple unverified members
+        another_unverified_member = Members.objects.create(
+        auth0ID='another_unverified_auth0_id',
+        first_name='Alice',
+         last_name='Smith',
+        birthdate='1990-01-01',
+        gender='jente',
+        days_without_incident=0,
+        phone_number='987654321',
+        email='alice.smith@example.com',
+        role='member',
+        verified=False
+        )
+
+        url = reverse('get_all_unverified_members')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 2)  # Both unverified members should be returned
+        # Ensure both member IDs are present in the response
+        self.assertIn(self.unverified_member.auth0ID, [member['auth0ID'] for member in response.data])
+        self.assertIn(another_unverified_member.auth0ID, [member['auth0ID'] for member in response.data])
