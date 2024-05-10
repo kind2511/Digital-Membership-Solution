@@ -306,7 +306,7 @@ To get started, you'll need to install:
         "title": "Yoga Retreat",
         "description": "Enjoy the tranquility of yoga in a serene setting, focusing on breath control, flexibility, and strength. Ideal for all levels, this session promotes mental clarity and physical wellness.",
         "image": "/media/activity_pics/YougaYogaSeaWall.jpg",
-        "date": "2024-05-09",
+        "date": "2025-05-09",
         "limit": null,
         "signed_up_count": 0,
         "signed_up_members": []
@@ -316,7 +316,7 @@ To get started, you'll need to install:
         "title": "Hiking Adventure",
         "description": "Hiking Adventure",
         "image": "/media/activity_pics/Hiking_Adventure_zHouiE5.jpeg",
-        "date": "2024-05-09",
+        "date": "2024-03-12",
         "limit": 20,
         "signed_up_count": 1,
         "signed_up_members": [
@@ -332,3 +332,20 @@ To get started, you'll need to install:
 
 </details>
 
+<details>
+<summary><h4>Delete a specific activity:</h4></summary>
+
+```http
+  DELETE /digital_medlemsordning/delete_activity/{ID}/
+```
+
+| Parameter | Type     | Description                       |
+|:----------|:---------|:----------------------------------|
+| `ID`      | `string` | **Required**. The Activity ID     |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+</details>
