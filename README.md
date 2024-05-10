@@ -512,6 +512,13 @@ To get started, you'll need to install:
 |:----------|:---------|:--------------------------------|
 | `auth0ID` | `string` | **Required**. Auth0ID of member |
 
+##### Example PUT-Body:
+```json
+{
+    "info": "Ability to acces club on saturdays"
+}
+```
+
 #### Response:
 
 | Status Code  | Content-Type       |
