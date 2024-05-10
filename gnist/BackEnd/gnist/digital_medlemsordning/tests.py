@@ -169,35 +169,11 @@ class DeleteActivityTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Activity not found')
 
+#---------------------------------------------------------------------------------------------------------------------
 
-class DeleteMemberTestCase(APITestCase):
-    def setUp(self):
-        self.member = Members.objects.create(
-            auth0ID='test_auth0_id',
-            first_name='John',
-            last_name='Doe',
-            birthdate='1990-01-01',
-            gender='gutt',
-            days_without_incident=0,
-            phone_number='123456789',
-            email='john.doe@example.com',
-            role='member'
-        )
-        self.url = reverse('delete_member', kwargs={'auth0_id': self.member.auth0ID})
-
-    def test_delete_member_success(self):
-        response = self.client.delete(self.url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-        # Check if the member is deleted from the database
-        self.assertFalse(Members.objects.filter(auth0ID=self.member.auth0ID).exists())
-
-    def test_delete_member_not_found(self):
-        non_existent_url = reverse('delete_member', kwargs={'auth0_id': 'non_existent_id'})
-        response = self.client.delete(non_existent_url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data['message'], 'Member not found')
-
+#---------------------------------------------------------------------------------------------------------------------
+# Member Attendence
+#---------------------------------------------------------------------------------------------------------------------
 
 class GetMemberAttendanceStatsTestCase(APITestCase):
     @classmethod
@@ -345,6 +321,7 @@ class GetMemberAttendanceTestCase(APITestCase):
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], 'No members attended on this date.')
 
+#---------------------------------------------------------------------------------------------------------------------
 
 class SearchMemberTestCase(APITestCase):
     @classmethod
@@ -410,4 +387,31 @@ class SearchMemberTestCase(APITestCase):
         self.assertIn('message', response.data)
 
 
-    
+class DeleteMemberTestCase(APITestCase):
+    def setUp(self):
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member'
+        )
+        self.url = reverse('delete_member', kwargs={'auth0_id': self.member.auth0ID})
+
+    def test_delete_member_success(self):
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # Check if the member is deleted from the database
+        self.assertFalse(Members.objects.filter(auth0ID=self.member.auth0ID).exists())
+
+    def test_delete_member_not_found(self):
+        non_existent_url = reverse('delete_member', kwargs={'auth0_id': 'non_existent_id'})
+        response = self.client.delete(non_existent_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'], 'Member not found')
+
