@@ -154,6 +154,7 @@ To get started, you'll need to install:
             }
         ]
     },
+    ...
 ]
 ```
 
@@ -217,6 +218,7 @@ To get started, you'll need to install:
             }
         ]
     },
+    ...
 ]
 ```
 
@@ -280,6 +282,7 @@ To get started, you'll need to install:
             }
         ]
     },
+    ...
 ]
 ```
 
@@ -327,6 +330,7 @@ To get started, you'll need to install:
             }
         ]
     },
+    ...
 ]
 ```
 
@@ -347,5 +351,56 @@ To get started, you'll need to install:
 
 | Status Code   | `204 No Content`   |
 |:--------------|:-------------------|
+
+</details>
+
+<details>
+<summary><h4>Delete a specific member:</h4></summary>
+
+```http
+  DELETE /digital_medlemsordning/delete_member/auth0|663178016ecfcf104f5008cd/
+```
+
+| Parameter | Type     | Description                        |
+|:----------|:---------|:-----------------------------------|
+| `Auth0ID` | `string` | **Required**. The Members Auth0ID  |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+</details>
+
+<details>
+<summary><h4>Get Member attendence for a given time period:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/member_attendance_stats/?start_date={start_date}&end_date={end_date}
+```
+
+| Parameter | Type     | Description                        |
+|:----------|:---------|:-----------------------------------|
+| `start_date` | `string` | **Optional**. Starting date     |
+| `end_date`   | `string` | **Optional**. End date          |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "total_attendance": 19,
+    "attendance_by_gender": {
+        "vil ikke si": 3,
+        "jente": 6,
+        "gutt": 9,
+        "ikke-binær": 1
+    }
+}
+```
 
 </details>
