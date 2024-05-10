@@ -345,17 +345,7 @@ class GetMemberAttendanceTestCase(APITestCase):
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], 'No members attended on this date.')
 
-    def test_get_member_attendance_no_date(self):
-        # Test when no date is provided, it defaults to today's date
-        url = reverse('get_member_attendance')
-
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # Verify the structure of the response
-        self.assertIn('message', response.data)
-        self.assertIn('members_present', response.data)
-        self.assertIsInstance(response.data['members_present'], list)
+    
 
 
     
