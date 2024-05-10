@@ -129,7 +129,7 @@ urlpatterns = [
     path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 
     # Get all unverified members
-    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified-members'),
+    path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified_members'),
     path('verify_member/<str:auth0_id>/', views.verify_member, name='verify_member'),
 
     # Searches for a member by name
