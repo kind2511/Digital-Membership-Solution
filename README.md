@@ -559,3 +559,33 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Retrieve all members with info:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_members_with_info/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "info": "Key to clubhouse"
+    },
+    {
+        "auth0ID": "auth0|661711a8bdf844868576402b",
+        "info": "Allowed to access clubhouse on saturdays"
+    },
+    ...
+]
+```
+
+</details>
