@@ -40,7 +40,7 @@ class ActivitySignupSerializer(serializers.ModelSerializer):
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    signed_up_members = ActivitySignupSerializer(many=True, source='activitysignup_set')
+    signed_up_members = ActivitySignupSerializer(many=True, source='activitysignup_set', required=False)
 
     class Meta:
         model = Activity
