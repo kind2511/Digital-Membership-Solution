@@ -247,3 +247,17 @@ class GetMemberAttendanceStatsTestCase(APITestCase):
         # Verify the structure of the response
         self.assertIn('total_attendance', response.data)
         self.assertIn('attendance_by_gender', response.data)
+
+
+    def test_get_member_attendance_stats_no_data(self):
+        # Test when there is no data in the specified date range
+        url = reverse('member_attendance_stats')
+        start_date = '2024-06-01'
+        end_date = '2024-06-30'
+
+        response = self.client.get(url, {'start_date': start_date, 'end_date': end_date})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['total_attendance'], 0)
+        self.assertEqual(response.data['attendance_by_gender'], {})
+
+    

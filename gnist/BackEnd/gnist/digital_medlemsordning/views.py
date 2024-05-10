@@ -413,50 +413,6 @@ def register_user(request):
     else:
         return Response({'error': 'Invalid request method'})
 
-
-# Gets all members the attendend on a specific date. If no date is provided todays date is the one used
-@api_view(['GET'])
-def get_member_attendance(request):
-    # Looks for provided date in the request body
-    date_str = request.query_params.get('date') # :)
-
-    # If date is provided
-    if date_str:
-        try:
-            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
-    else:
-        # If no date is provided in the request body, set date to today
-        selected_date = date.today()
-
-    try:
-        # Extract all members that registered on selected date
-        datelist = MemberDates.objects.filter(date=selected_date)
-    except MemberDates.DoesNotExist:
-        return Response({'message': 'No one has registered for the specified date.'}, status=404)
-    
-    # Gets the full name and profile picture of the users
-    members_present = []
-    for member_date in datelist:
-        member = member_date.userID
-        member_info = {
-            'name': f"{member.first_name} {member.last_name}",
-            'profile_pic': member.profile_pic.url if member.profile_pic else None
-        }
-        members_present.append(member_info)
-    
-    # Returns the members if there are any
-    if members_present:
-        response_data = {
-            'message': f'Member attendance for {selected_date} retrieved successfully.',
-            'members_present': members_present
-        }
-        return Response(response_data, status=200)
-    else:
-        return Response({'message': 'No members attended on this date.'}, status=200)
-
-
 @api_view(['GET'])
 def get_visit_numbers(request):
     try:
@@ -1172,6 +1128,50 @@ def delete_member(request, auth0_id):
     if request.method == 'DELETE':
         member.delete()
         return Response({'message': 'Member deleted successfully'}, status=204)
+
+
+# Gets all members the attendend on a specific date. If no date is provided todays date is the one used
+@api_view(['GET'])
+def get_member_attendance(request):
+    # Looks for provided date in the request body
+    date_str = request.query_params.get('date') # :)
+
+    # If date is provided
+    if date_str:
+        try:
+            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return Response({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
+    else:
+        # If no date is provided in the request body, set date to today
+        selected_date = date.today()
+
+    try:
+        # Extract all members that registered on selected date
+        datelist = MemberDates.objects.filter(date=selected_date)
+    except MemberDates.DoesNotExist:
+        return Response({'message': 'No one has registered for the specified date.'}, status=404)
+    
+    # Gets the full name and profile picture of the users
+    members_present = []
+    for member_date in datelist:
+        member = member_date.userID
+        member_info = {
+            'name': f"{member.first_name} {member.last_name}",
+            'profile_pic': member.profile_pic.url if member.profile_pic else None
+        }
+        members_present.append(member_info)
+    
+    # Returns the members if there are any
+    if members_present:
+        response_data = {
+            'message': f'Member attendance for {selected_date} retrieved successfully.',
+            'members_present': members_present
+        }
+        return Response(response_data, status=200)
+    else:
+        return Response({'message': 'No members attended on this date.'}, status=200)
+
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
