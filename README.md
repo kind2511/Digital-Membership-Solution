@@ -9,7 +9,7 @@ Welcome to GNIST. This project is developed by Gruppe 208 for PROG2900 at NTNU.
    - [Prerequisites](#prerequisites)
    - [Local Setup](#local-setup)
 3. [Running the Application](#running-the-application)
-4. [Credits](#credits)
+4. [API Documentation](#api-documentation)
 
 ## Project Structure
 
@@ -480,7 +480,7 @@ To get started, you'll need to install:
 <summary><h4>Unban a member:</h4></summary>
 
 ```http
-  PUT /digital_medlemsordning/{auth0ID}/
+  PUT /digital_medlemsordning/unban_member/{auth0ID}/
 ```
 
 | Parameter | Type        | Description               |
