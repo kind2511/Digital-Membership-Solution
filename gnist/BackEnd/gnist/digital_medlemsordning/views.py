@@ -1041,7 +1041,12 @@ def add_member_info(request, auth0_id):
         serializer = MembersSerializer(member, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            # Manually construct response data with desired fields
+            response_data = {
+                "auth0ID": serializer.data.get('auth0ID'),
+                "info": serializer.data.get('info')
+            }
+            return Response(response_data, status=200)
         return Response(serializer.errors, status=400)
     
     
