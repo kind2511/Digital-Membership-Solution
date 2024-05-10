@@ -410,15 +410,15 @@ To get started, you'll need to install:
 <summary><h4>Search for a member based on first or last name:</h4></summary>
 
 ```http
-  GET /digital_medlemsordning/search_member/?name=John
+  GET /digital_medlemsordning/search_member/?name={name}
 ```
 
 | Parameter | Type        | Description               |
 |:----------|:---------|:-----------------------------|
 | `name`    | `string` | **Required**. Name of member |
 
-* Case insensitive. 
-* Retrievs any member whos first or last name contains the required string paramater.
+Case insensitive. 
+Retrievs any member whos first or last name contains the required string paramater.
 
 #### Response:
 
