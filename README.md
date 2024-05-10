@@ -135,6 +135,8 @@ To get started, you'll need to install:
     },
 ]
 
+</details>
+
 <details>
 <summary><h4>Retrieve all past activities:</h4></summary>
 
