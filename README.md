@@ -358,12 +358,12 @@ To get started, you'll need to install:
 <summary><h4>Delete a specific member:</h4></summary>
 
 ```http
-  DELETE /digital_medlemsordning/delete_member/{Auth0ID}/
+  DELETE /digital_medlemsordning/delete_member/{auth0ID}/
 ```
 
 | Parameter | Type     | Description                        |
 |:----------|:---------|:-----------------------------------|
-| `Auth0ID` | `string` | **Required**. The Members Auth0ID  |
+| `auth0ID` | `string` | **Required**. The Members Auth0ID  |
 
 #### Response:
 
@@ -405,7 +405,7 @@ To get started, you'll need to install:
 
 </details>
 
-<detail>
+<details>
 
 <summary><h4>Search for a member based on first or last name:</h4></summary>
 
@@ -417,8 +417,8 @@ To get started, you'll need to install:
 |:----------|:---------|:-----------------------------|
 | `name`    | `string` | **Required**. Name of member |
 
-Case insensitive. 
-Retrievs any member whos first or last name contains the required string paramater.
+* Case insensitive. 
+* Retrievs any member whos first or last name contains the required string paramater.
 
 #### Response:
 
@@ -471,6 +471,33 @@ Retrievs any member whos first or last name contains the required string paramat
     },
     ...
 ]
+```
+
+</details>
+
+<details>
+
+<summary><h4>Unban a member:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/{auth0ID}/
+```
+
+| Parameter | Type        | Description               |
+|:----------|:---------|:-----------------------------|
+| `auth0ID` | `string` | **Required**. Name of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member unbanned successfully"
+}
 ```
 
 </details>
