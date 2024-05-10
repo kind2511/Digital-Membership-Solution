@@ -551,4 +551,32 @@ class RemoveMemberInfoTestCase(APITestCase):
         # Verify the response is empty
         self.assertIsNone(response.data)
 
+    def test_remove_member_info_already_empty_info(self):
+        # Test when the member already has an empty 'info' field
+        empty_info_member = Members.objects.create(
+        auth0ID='empty_info_auth0_id',
+        first_name='Jane',
+        last_name='Doe',
+        birthdate='1990-01-01',
+        gender='jente',
+        days_without_incident=0,
+        phone_number='987654321',
+        email='jane.doe@example.com',
+        role='member',
+        info=''  # Empty 'info' field
+        )
+
+        url = reverse('remove_member_info', kwargs={'auth0_id': empty_info_member.auth0ID})
+
+        response = self.client.put(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIn('info', response.data)
+        self.assertEqual(response.data['info'], '')  # Info should remain empty
+
+        # Fetch the member from the database to ensure 'info' remains empty
+        updated_member = Members.objects.get(auth0ID=empty_info_member.auth0ID)
+        self.assertEqual(updated_member.info, '')  # Info should remain empty
+
     
