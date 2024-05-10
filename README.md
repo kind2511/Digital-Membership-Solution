@@ -380,9 +380,11 @@ To get started, you'll need to install:
 ```
 
 | Parameter | Type     | Description                        |
-|:----------|:---------|:-----------------------------------|
+|:-------------|:---------|:--------------------------------|
 | `start_date` | `string` | **Optional**. Starting date     |
 | `end_date`   | `string` | **Optional**. End date          |
+
+`Default values`: `Todays date`
 
 #### Response:
 
