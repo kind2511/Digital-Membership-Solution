@@ -1006,27 +1006,6 @@ def add_member_info(request, auth0_id):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     
-    
-# Searches for members by first and or last name
-@api_view(['GET'])
-def search_member(request):
-    # looks for name in params
-    if 'name' in request.query_params:
-        name = request.query_params['name']
-        # Perform case-insensitive search by full name
-        users = Members.objects.filter(
-            Q(first_name__icontains=name) | Q(last_name__icontains=name)
-        )
-        serializer = MembersSerializer(users, many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
-
-
-
-
-
-
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views
@@ -1159,6 +1138,21 @@ def get_member_attendance(request):
     else:
         return Response({'message': 'No members attended on this date.'}, status=200)
 
+
+# Searches for members by first and or last name
+@api_view(['GET'])
+def search_member(request):
+    # looks for name in params
+    if 'name' in request.query_params:
+        name = request.query_params['name']
+        # Perform case-insensitive search by full name
+        users = Members.objects.filter(
+            Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        )
+        serializer = MembersSerializer(users, many=True)
+        return Response(serializer.data, status=200)
+    else:
+        return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

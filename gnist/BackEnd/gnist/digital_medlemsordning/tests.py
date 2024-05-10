@@ -415,3 +415,49 @@ class DeleteMemberTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['message'], 'Member not found')
 
+class UnbanMemberTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a test member
+        cls.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member',
+            banned=True,
+            banned_from='2025-01-01',
+            banned_until='2025-12-31'
+        )
+
+    def test_unban_member_success(self):
+        # Test successful unbanning of a member
+        url = reverse('unban_member', kwargs={'auth0_id': self.member.auth0ID})
+
+        response = self.client.put(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Member unbanned successfully')
+
+        # Fetch the member from the database to ensure it has been unbanned
+        updated_member = Members.objects.get(auth0ID=self.member.auth0ID)
+        self.assertFalse(updated_member.banned)
+        self.assertIsNone(updated_member.banned_from)
+        self.assertIsNone(updated_member.banned_until)
+
+    def test_unban_member_not_found(self):
+        # Test when member with provided auth0 ID is not found
+        url = reverse('unban_member', kwargs={'auth0_id': 'non_existing_auth0_id'})
+
+        response = self.client.put(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        # Verify the structure of the response
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'Member not found')
