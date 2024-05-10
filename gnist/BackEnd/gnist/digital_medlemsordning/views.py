@@ -1039,31 +1039,7 @@ def search_member(request):
         return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
 
 
-# Gets the stats of all attended members based on gender from one date to another
-@api_view(['GET'])
-def get_member_attendance_stats(request):
-    if request.method == 'GET':
-        # Get start and end dates from query parameters
-        start_date_str = request.query_params.get('start_date')
-        end_date_str = request.query_params.get('end_date')
 
-        # Convert date strings to datetime objects
-        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-
-        # Query MemberDates model to get counts of different genders
-        attendance_counts = MemberDates.objects.filter(date__range=(start_date, end_date)).values('userID__gender').annotate(count=Count('userID__gender'))
-
-        # Calculate combined total attendance
-        total_attendance = sum(attendance['count'] for attendance in attendance_counts)
-
-        # Serialize data
-        serializer = MemberAttendanceSerializer({
-            'total_attendance': total_attendance,
-            'attendance_by_gender': {attendance['userID__gender']: attendance['count'] for attendance in attendance_counts}
-        })
-
-        return Response(serializer.data)
 
 
 
@@ -1128,6 +1104,33 @@ def delete_member(request, auth0_id):
     if request.method == 'DELETE':
         member.delete()
         return Response({'message': 'Member deleted successfully'}, status=204)
+
+
+# Gets the stats of all attended members based on gender from one date to another
+@api_view(['GET'])
+def get_member_attendance_stats(request):
+    if request.method == 'GET':
+        # Get start and end dates from query parameters
+        start_date_str = request.query_params.get('start_date')
+        end_date_str = request.query_params.get('end_date')
+
+        # Convert date strings to datetime objects
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        # Query MemberDates model to get counts of different genders
+        attendance_counts = MemberDates.objects.filter(date__range=(start_date, end_date)).values('userID__gender').annotate(count=Count('userID__gender'))
+
+        # Calculate combined total attendance
+        total_attendance = sum(attendance['count'] for attendance in attendance_counts)
+
+        # Serialize data
+        serializer = MemberAttendanceSerializer({
+            'total_attendance': total_attendance,
+            'attendance_by_gender': {attendance['userID__gender']: attendance['count'] for attendance in attendance_counts}
+        })
+
+        return Response(serializer.data)
 
 
 # Gets all members the attendend on a specific date. If no date is provided todays date is the one used
