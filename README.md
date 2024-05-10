@@ -381,8 +381,8 @@ To get started, you'll need to install:
 
 | Parameter | Type        | Description                     | Default value  |
 |:-------------|:---------|:--------------------------------|:---------------| 
-| `start_date` | `string` | **Optional**. Starting date     | `Current Date`  |
-| `end_date`   | `string` | **Optional**. End date          | `Current Date`  |             
+| `start_date` | `string` | **Optional**. Starting date     | `Current Date` |
+| `end_date`   | `string` | **Optional**. End date          | `Current Date` |             
 
 #### Response:
 
@@ -405,3 +405,72 @@ To get started, you'll need to install:
 
 </details>
 
+<detail>
+
+<summary><h4>Search for a member based on first or last name:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/search_member/?name=John
+```
+
+| Parameter | Type        | Description               |
+|:----------|:---------|:-----------------------------|
+| `name`    | `string` | **Required**. Name of member |
+
+* Case insensitive. 
+* Retrievs any member whos first or last name contains the required string paramater.
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "userID": 69,
+        "auth0ID": "auth0|65e06e072cc8113ba2d5cdea",
+        "first_name": "John",
+        "last_name": "Smith",
+        "birthdate": "2002-09-05",
+        "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+        "gender": "gutt",
+        "days_without_incident": 101,
+        "phone_number": "12345678",
+        "email": "testing@gmail.com",
+        "guardian_name": null,
+        "guardian_phone": null,
+        "verified": true,
+        "banned": true,
+        "banned_from": "2024-05-10",
+        "banned_until": "2024-05-12",
+        "info": "",
+        "role": "member"
+    },
+    {
+        "userID": 119,
+        "auth0ID": "auth0|65f9cb6b6b09e9bfdc447d30",
+        "first_name": "Larry",
+        "last_name": "Johnsen",
+        "birthdate": "2006-03-06",
+        "profile_pic": "/media/profile_pics/81zm9tKLsxL._AC_SL1170__JIVQUhu.jpg",
+        "gender": "gutt",
+        "days_without_incident": 5,
+        "phone_number": "12345678",
+        "email": "chrisa2511@gmail.com",
+        "guardian_name": "",
+        "guardian_phone": "",
+        "verified": false,
+        "banned": false,
+        "banned_from": null,
+        "banned_until": null,
+        "info": "",
+        "role": "member"
+    },
+    ...
+]
+```
+
+</details>
