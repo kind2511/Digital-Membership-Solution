@@ -1050,7 +1050,23 @@ def add_member_info(request, auth0_id):
         return Response(serializer.errors, status=400)
     
     
-    # Removes specific info from a user
+# Removes specific info from a user
+# @api_view(['PUT'])
+# def remove_member_info(request, auth0_id):
+#     try:
+#         member = Members.objects.get(auth0ID=auth0_id)
+#     except Members.DoesNotExist:
+#         return Response(status=404)
+
+#     if request.method == 'PUT':
+#         serializer = MembersSerializer(member, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.validated_data['info'] = ""
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=400)
+
+# Removes specific info from a user
 @api_view(['PUT'])
 def remove_member_info(request, auth0_id):
     try:
@@ -1063,7 +1079,12 @@ def remove_member_info(request, auth0_id):
         if serializer.is_valid():
             serializer.validated_data['info'] = ""
             serializer.save()
-            return Response(serializer.data)
+            # Manually construct response data with desired fields
+            response_data = {
+                "auth0ID": serializer.data.get('auth0ID'),
+                "info": serializer.validated_data.get('info')
+            }
+            return Response(response_data, status=200)
         return Response(serializer.errors, status=400)
     
 
