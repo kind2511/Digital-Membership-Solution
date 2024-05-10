@@ -223,7 +223,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Retrieve all of todays activites:</h4></summary>
+<summary><h4>Retrieve all curent date activites:</h4></summary>
 
 ```http
   GET /digital_medlemsordning/get_activity_today/
@@ -277,6 +277,53 @@ To get started, you'll need to install:
                 "first_name": "Howard",
                 "last_name": "Linus",
                 "auth0ID": "auth0|661a52a2cad534c6e30e3c37"
+            }
+        ]
+    },
+]
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve all activites:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_activity/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "activityID": 55,
+        "title": "Yoga Retreat",
+        "description": "Enjoy the tranquility of yoga in a serene setting, focusing on breath control, flexibility, and strength. Ideal for all levels, this session promotes mental clarity and physical wellness.",
+        "image": "/media/activity_pics/YougaYogaSeaWall.jpg",
+        "date": "2024-05-09",
+        "limit": null,
+        "signed_up_count": 0,
+        "signed_up_members": []
+    },
+    {
+        "activityID": 75,
+        "title": "Hiking Adventure",
+        "description": "Hiking Adventure",
+        "image": "/media/activity_pics/Hiking_Adventure_zHouiE5.jpeg",
+        "date": "2024-05-09",
+        "limit": 20,
+        "signed_up_count": 1,
+        "signed_up_members": [
+            {
+                "first_name": "soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
             }
         ]
     },
