@@ -1098,13 +1098,26 @@ def verify_member(request, auth0_id):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     
-
 # Retrieves all unverfieid members
 @api_view(['GET'])
 def get_all_unverified_members(request):
     unverified_members = Members.objects.filter(verified=False)
     serializer = MembersSerializer(unverified_members, many=True)
-    return Response(serializer.data)
+    
+    # Extracting only the desired fields from the serializer data
+    response_data = []
+    for member in serializer.data:
+        member_data = {
+            "birthdate": member['birthdate'],
+            "auth0ID": member['auth0ID'],
+            "first_name": member['first_name'],
+            "last_name": member['last_name'],
+            "guardian_name": member['guardian_name'],
+            "guardian_phone": member['guardian_phone']
+        }
+        response_data.append(member_data)
+
+    return Response(response_data, status=200)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
