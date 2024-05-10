@@ -138,7 +138,7 @@ To get started, you'll need to install:
         "title": "Skydive",
         "description": "Skydive lessons at 5 PM in Copenhagen.",
         "image": "/media/activity_pics/skydive.jpeg",
-        "date": "2024-05-09",
+        "date": "2025-05-09",
         "limit": null,
         "signed_up_count": 2,
         "signed_up_members": [
@@ -218,3 +218,70 @@ To get started, you'll need to install:
         ]
     },
 ]
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve all of todays activites:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_activity_today/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "activityID": 77,
+        "title": "Skydive",
+        "description": "Skydive lessons at 5 PM in Copenhagen.",
+        "image": "/media/activity_pics/skydive.jpeg",
+        "date": "2024-05-10",
+        "limit": null,
+        "signed_up_count": 2,
+        "signed_up_members": [
+            {
+                "first_name": "Soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+            },
+            {
+                "first_name": "Howard",
+                "last_name": "Linus",
+                "auth0ID": "auth0|661a52a2cad534c6e30e3c37"
+            }
+        ]
+    },
+    {
+        "activityID": "81",
+        "title": "Football night",
+        "description": "Manchester United vs Liverpool 18:00",
+        "image": "/media/activity_pics/football_image3.png",
+        "date": "2024-05-10",
+        "limit": 40,
+        "signed_up_count": 2,
+        "signed_up_members": [
+            {
+                "first_name": "Soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+            },
+            {
+                "first_name": "Howard",
+                "last_name": "Linus",
+                "auth0ID": "auth0|661a52a2cad534c6e30e3c37"
+            }
+        ]
+    },
+]
+```
+
+</details>
+
