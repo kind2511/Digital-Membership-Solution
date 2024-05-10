@@ -100,7 +100,7 @@ To get started, you'll need to install:
 <summary><h4>Retrieve all activities that has not yet occured:</h4></summary>
 
 ```http
-  GET digital_medlemsordning/get_future_activities/
+  GET /digital_medlemsordning/get_future_activities/
 ```
 
 #### Response:
@@ -119,7 +119,18 @@ To get started, you'll need to install:
         "image": "/media/activity_pics/placeholder-image.png",
         "date": "2025-05-29",
         "limit": 40,
-        "signed_up_count": 31,
-        "signed_up_members": []
+        "signed_up_count": 2,
+        "signed_up_members": [
+            {
+                "first_name": "Soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+            },
+            {
+                "first_name": "Howard",
+                "last_name": "Linus",
+                "auth0ID": "auth0|661a52a2cad534c6e30e3c37"
+            }
+        ]
     },
 ]
