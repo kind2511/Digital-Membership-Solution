@@ -589,3 +589,41 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Retrieve all unverified members:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_unverified_members/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "birthdate": "2007-01-01",
+        "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "first_name": "James",
+        "last_name": " Kahn",
+        "guardian_name": "",
+        "guardian_phone": ""
+    },
+    {
+        "birthdate": "2008-01-07",
+        "auth0ID": "auth0|65ef289190350a753bf985ae",
+        "first_name": "Lisa",
+        "last_name": "Danilson",
+        "guardian_name": "",
+        "guardian_phone": ""
+    },
+    ...
+]
+```
+
+</details>
