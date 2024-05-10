@@ -358,7 +358,7 @@ To get started, you'll need to install:
 <summary><h4>Delete a specific member:</h4></summary>
 
 ```http
-  DELETE /digital_medlemsordning/delete_member/auth0|663178016ecfcf104f5008cd/
+  DELETE /digital_medlemsordning/delete_member/{Auth0ID}/
 ```
 
 | Parameter | Type     | Description                        |
@@ -381,8 +381,8 @@ To get started, you'll need to install:
 
 | Parameter | Type        | Description                     | Default value  |
 |:-------------|:---------|:--------------------------------|:---------------| 
-| `start_date` | `string` | **Optional**. Starting date     | `Todays Date`  |
-| `end_date`   | `string` | **Optional**. End date          | `Todays Date`  |             
+| `start_date` | `string` | **Optional**. Starting date     | `Current Date`  |
+| `end_date`   | `string` | **Optional**. End date          | `Current Date`  |             
 
 #### Response:
 
@@ -404,3 +404,6 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<detail>
+
