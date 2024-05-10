@@ -69,15 +69,11 @@ def get_all_member_data(request):
         elif is_banned == 1:
             profile_color = "red"
 
-        # Check if certificate field is not empty before accessing its URL
-        certificate_url = member.certificate.url if member.certificate else ''
-
         member_info = {
             'first_name': member.first_name.upper(),
             'level': level_name,
             'profile_color': profile_color,
             'profile_pic': member.profile_pic.url,
-            'certificate': certificate_url,
             'banned_from': member.banned_from,  
             'banned_until': member.banned_until,
             'role': member.role,
@@ -613,29 +609,6 @@ def upload_activity_image(request, activity_id):
         return Response({"message": "Activity picture updated successfully"}, status=200)
     else:
         return Response({"error": "Activity picture data not provided"}, status=400)
-
-
-# Upload member certificate --- OLD!!!!!!!!!!!!
-@api_view(['PATCH'])
-def upload_user_certificate(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    if request.method == 'PATCH':
-        # Get the profile picture data from the request
-        certificate_data = request.data.get('certificate')
-        
-        # If profile picture data is provided, update the profile picture
-        if certificate_data:
-            member.certificate = certificate_data
-            member.save()
-            return Response({"message": "Member certificate updated successfully"}, status=200)
-        else:
-            return Response({"error": "Member certificate not provided"}, status=400)
-        
-
 
 
 # Uploads certificates to member

@@ -90,8 +90,6 @@ urlpatterns = [
     # Deletes a spescific suggestion
     path('delete_suggestion/<int:suggestion_id>/', views.delete_suggestion, name='delete_suggestion'),
 
-    path('add_user_certificate/<str:auth0_id>/', views.upload_user_certificate, name="add_user_certificate"),
-
     # Creates a new level
     path('create_level/', views.create_level, name='create_level'),
 

@@ -405,5 +405,3 @@ To get started, you'll need to install:
 
 </details>
 
-<detail>
-
