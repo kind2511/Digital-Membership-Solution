@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Activity
 from .models import Members
+from .models import MemberDates
 from .serializers import ActivitySerializer
 
 # Create your tests here.
@@ -197,3 +198,52 @@ class DeleteMemberTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['message'], 'Member not found')
 
+
+class GetMemberAttendanceStatsTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test Members
+        cls.member1 = Members.objects.create(
+            auth0ID='test_auth0_id_1',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member'
+        )
+        cls.member2 = Members.objects.create(
+            auth0ID='test_auth0_id_2',
+            first_name='Jane',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='jente',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='jane.doe@example.com',
+            role='member'
+        )
+
+        # Create test MemberDates
+        MemberDates.objects.create(
+            userID=cls.member1,
+            date='2024-05-10'
+        )
+        MemberDates.objects.create(
+            userID=cls.member2,
+            date='2024-05-10'
+        )
+
+    def test_get_member_attendance_stats_success(self):
+        url = reverse('member_attendance_stats')
+        start_date = '2024-05-01'
+        end_date = '2024-05-31'
+
+        response = self.client.get(url, {'start_date': start_date, 'end_date': end_date})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIn('total_attendance', response.data)
+        self.assertIn('attendance_by_gender', response.data)
