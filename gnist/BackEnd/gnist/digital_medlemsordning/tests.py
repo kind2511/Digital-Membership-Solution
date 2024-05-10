@@ -579,4 +579,56 @@ class RemoveMemberInfoTestCase(APITestCase):
         updated_member = Members.objects.get(auth0ID=empty_info_member.auth0ID)
         self.assertEqual(updated_member.info, '')  # Info should remain empty
 
-    
+class MembersWithInfoTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test members with and without info
+        cls.member_with_info = Members.objects.create(
+            auth0ID='test_auth0_id_with_info',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            days_without_incident=0,
+            phone_number='123456789',
+            email='john.doe@example.com',
+            role='member',
+            info='Some information about the member'
+        )
+        cls.member_without_info = Members.objects.create(
+            auth0ID='test_auth0_id_without_info',
+            first_name='Jane',
+            last_name='Doe',
+            birthdate='1995-05-15',
+            gender='jente',
+            days_without_incident=0,
+            phone_number='5551234567',
+            email='jane.doe@example.com',
+            role='member'
+        )
+
+    def test_members_with_info(self):
+        # Test retrieving members with info
+        url = reverse('get_members_with_info')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 1)  # Only one member should have info
+        self.assertEqual(response.data[0]['auth0ID'], self.member_with_info.auth0ID)
+
+    def test_members_with_info_no_members(self):
+        # Test when there are no members with info
+        # Remove the member with info
+        self.member_with_info.delete()
+
+        url = reverse('get_members_with_info')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 0)  # No members should be returned

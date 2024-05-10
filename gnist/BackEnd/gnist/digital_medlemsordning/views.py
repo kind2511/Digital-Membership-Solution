@@ -947,15 +947,6 @@ def verify_member(request, auth0_id):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     
-
-# Get all members with specific info
-@api_view(['GET'])
-def members_with_info(request):
-    members_with_info = Members.objects.exclude(info="")
-    serializer = MembersSerializer(members_with_info, many=True)
-    return Response(serializer.data)
-
-
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views
 #---------------------------------------------------------------------------------------------------------------------
@@ -1152,6 +1143,14 @@ def remove_member_info(request, auth0_id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+
+# Get all members with specific info
+@api_view(['GET'])
+def members_with_info(request):
+    members_with_info = Members.objects.exclude(info="")
+    serializer = MembersSerializer(members_with_info, many=True)
+    return Response(serializer.data)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
