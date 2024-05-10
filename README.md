@@ -379,12 +379,10 @@ To get started, you'll need to install:
   GET /digital_medlemsordning/member_attendance_stats/?start_date={start_date}&end_date={end_date}
 ```
 
-| Parameter | Type     | Description                        |
-|:-------------|:---------|:--------------------------------|
-| `start_date` | `string` | **Optional**. Starting date     |
-| `end_date`   | `string` | **Optional**. End date          |
-
-`Default values`: `Todays date`
+| Parameter | Type        | Description                     | Default value  |
+|:-------------|:---------|:--------------------------------|:---------------| 
+| `start_date` | `string` | **Optional**. Starting date     | `Todays Date`  |
+| `end_date`   | `string` | **Optional**. End date          | `Todays Date`  |             
 
 #### Response:
 
