@@ -404,7 +404,6 @@ To get started, you'll need to install:
 </details>
 
 <details>
-
 <summary><h4>Search for a member based on first or last name:</h4></summary>
 
 ```http
@@ -474,7 +473,6 @@ To get started, you'll need to install:
 </details>
 
 <details>
-
 <summary><h4>Unban a member:</h4></summary>
 
 ```http
@@ -530,6 +528,33 @@ To get started, you'll need to install:
 {
     "auth0ID": "auth0|661a52a2cad534c6e30e3c37",
     "info": "Ability to acces club on saturdays"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Remove info from a specific memmber:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/remove_member_info/{auth0ID}/
+```
+
+| Parameter | Type        | Description                  |
+|:----------|:---------|:--------------------------------|
+| `auth0ID` | `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "auth0ID": "auth0|661a52a2cad534c6e30e3c37",
+    "info": ""
 }
 ```
 
