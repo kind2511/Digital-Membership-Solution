@@ -1,5 +1,4 @@
-from django.test import Client, TestCase
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -1059,3 +1058,60 @@ class SuggestionBoxDeleteSuggestionsTests(APITestCase):
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Suggestion not found')
 
+class BanMemberTests(APITestCase):
+    def setUp(self):
+        # Create a sample member for testing
+        self.member = Members.objects.create(
+            auth0ID="test_auth0_id",
+            first_name="Test",
+            last_name="Member",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=0,
+            phone_number="1234567890",
+            email="test@example.com"
+        )
+    
+    def test_ban_existing_member(self):
+        """
+        Test banning an existing member.
+        """
+        url = reverse('ban_member', kwargs={'auth0_id': self.member.auth0ID})
+        data = {
+            'banned_from': '2024-05-10',
+            'banned_until': '2024-05-20'
+        }
+        response = self.client.put(url, data, format='json')
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert ban details
+        self.assertTrue(Members.objects.get(auth0ID=self.member.auth0ID).banned)
+        self.assertEqual(str(Members.objects.get(auth0ID=self.member.auth0ID).banned_from), '2024-05-10')
+        self.assertEqual(str(Members.objects.get(auth0ID=self.member.auth0ID).banned_until), '2024-05-20')
+        
+        # Assert success message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], f'Member banned successfully from 2024-05-10 until 2024-05-20')
+    
+    def test_ban_non_existing_member(self):
+        """
+        Test banning a non-existing member.
+        """
+        # Generate a non-existing Auth0 ID
+        non_existing_auth0_id = "non_existing_auth0_id"
+        
+        url = reverse('ban_member', kwargs={'auth0_id': non_existing_auth0_id})
+        data = {
+            'banned_from': '2024-05-10',
+            'banned_until': '2024-05-20'
+        }
+        response = self.client.put(url, data, format='json')
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        # Assert error message
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'Member not found')
