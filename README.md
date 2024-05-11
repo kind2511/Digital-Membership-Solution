@@ -549,7 +549,6 @@ To get started, you'll need to install:
 </details>
 
 <details>
-
 <summary><h4>Add info to specific member:</h4></summary>
 
 ```http
@@ -788,6 +787,41 @@ To get started, you'll need to install:
     },
     ...
 ]
+```
+
+</details>
+
+<details>
+
+<summary><h4>Edit a specific level:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/edit_level/{levelID}/
+```
+
+| Parameter | Type        | Description                  |
+|:----------|:------------|:-----------------------------|
+| `levelID` | `string`    | **Required**. ID of a level  |
+
+##### Example PUT-Body:
+```json
+{
+    "name": "Invincible",
+    "points": 110
+}
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Level updated successfully"
+}
 ```
 
 </details>
