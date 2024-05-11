@@ -825,3 +825,21 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Delete a specific level</h4></summary>
+
+```http
+  DELETE /digital_medlemsordning/delete_level/{levelID}/
+```
+
+| Parameter | Type        | Description                  |
+|:----------|:------------|:-----------------------------|
+| `levelID` | `string`    | **Required**. ID of a level  |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+</details>
