@@ -711,7 +711,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Remove info from a specific memmber:</h4></summary>
+<summary><h4>Remove info from a specific member:</h4></summary>
 
 ```http
   PUT /digital_medlemsordning/remove_member_info/{auth0ID}/
