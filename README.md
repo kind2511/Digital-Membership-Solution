@@ -936,7 +936,7 @@ To get started, you'll need to install:
 <summary><h4>Delete a specific suggestion:</h4></summary>
 
 ```http
-  DELETE /digital_medlemsordning/delete_asuggestion/{ID}/
+  DELETE /digital_medlemsordning/delete_suggestion/{ID}/
 ```
 
 | Parameter | Type     | Description                       |
