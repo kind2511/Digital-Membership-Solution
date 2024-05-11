@@ -480,8 +480,8 @@ To get started, you'll need to install:
 
 | Parameter | Type        | Description                     | Default value  |
 |:-------------|:---------|:--------------------------------|:---------------| 
-| `start_date` | `string` | **Optional**. Starting date     | `Current Date` |
-| `end_date`   | `string` | **Optional**. End date          | `Current Date` |             
+| `start_date` | `string` | **Required**. Starting date     | `Current Date` |
+| `end_date`   | `string` | **Required**. End date          | `Current Date` |             
 
 #### Response:
 
