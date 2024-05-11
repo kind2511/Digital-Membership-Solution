@@ -19,7 +19,6 @@ import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
 from .serializers import LevelSerializer
-from .authurization import authorize_user
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
@@ -27,8 +26,6 @@ from .serializers import MemberAnswerSerializer
 from .serializers import MemberAttendanceSerializer
 from .serializers import MemberCertificateSerializer
 from django.db.models import Q
-
-
 
 
 # Create your views here.
@@ -200,88 +197,6 @@ def register_user(request):
     else:
         return Response({'error': 'Invalid request method'})
 
-@api_view(['GET'])
-def get_visit_numbers(request):
-    try:
-        dates = MemberDates.objects.all().values('date').annotate(visits=Count('userID', distinct=True)).order_by()
-    except:
-        return Response({'error':'No dates exist'}, status=404)
-    
-    return Response(dates)
-
-@api_view(['GET'])
-def get_visit_by_gender(request):
-    try:
-        dates = MemberDates.objects.all()
-    except:
-        return Response({'error':'No dates exist'}, status=404)
-    
-
-    response_data = []
-
-    for date in dates:
-        male = 0
-        female = 0
-        non_binary = 0
-        pref_not_say = 0
-
-        gender = date.userID.gender
-
-        match gender:
-            case 'gutt':
-                male += 1
-            case 'jente':
-                female += 1
-            case 'ikke-binær':
-                non_binary += 1
-            case 'vil ikke si':
-                pref_not_say += 1
-
-        gender_data = {
-            'date':date.date,
-            'gutter':male,
-            'jenter':female,
-            'ikke-binære':non_binary,
-            'vil ikke si':pref_not_say
-        }
-        response_data.append(gender_data)
-    
-    return Response(response_data)
-
-@api_view(['GET'])
-def get_visit_by_gender_one_day(request, one_date):
-    try:
-        current_date = MemberDates.objects.filter(date=one_date)
-    except:
-        return Response({'error':'No dates exist'},status=404)
-    
-    male = 0
-    female = 0
-    non_binary = 0
-    pref_not_say = 0
-
-    for users in current_date:
-        gender = users.userID.gender
-
-        match gender:
-            case 'gutt':
-                male += 1
-            case 'jente':
-                female += 1
-            case 'ikke-binær':
-                non_binary += 1
-            case 'vil ikke si':
-                pref_not_say += 1
-
-    gender_data = {
-        'gutter':male,
-        'jenter':female,
-        'ikke-binære':non_binary,
-        'vil ikke si':pref_not_say
-    }
-    
-    return Response(gender_data)
-
 
 # Creates a new activity 
 @api_view(['POST'])
@@ -362,25 +277,6 @@ def upload_member_profile_pic(request, auth0_id):
         else:
             return Response({"error": "Profile picture data not provided"}, status=400)
     
-
-# Upload activity image
-@api_view(['PATCH'])
-def upload_activity_image(request, activity_id):
-    try:
-        activity = Activity.objects.get(activityID=activity_id)
-    except Activity.DoesNotExist:
-        return Response({"error": "Activity not found"}, status=404)
-    
-    if request.method == 'PATCH':
-        activity_pic_data = request.data.get('image')
-
-    if activity_pic_data:
-        activity.image = activity_pic_data
-        activity.save()
-        return Response({"message": "Activity picture updated successfully"}, status=200)
-    else:
-        return Response({"error": "Activity picture data not provided"}, status=400)
-
 
 # Uploads certificates to member
 @api_view(['POST'])
@@ -1170,3 +1066,5 @@ def get_sent_messages(request, sender_id):
         return Response(serializer.data)
     except Message.DoesNotExist:
         return Response({'error': 'No messages found for the sender'}, status=404)
+    
+

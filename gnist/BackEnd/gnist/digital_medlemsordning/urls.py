@@ -37,8 +37,7 @@ urlpatterns = [
     path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
     # Gets all the activities that a specific member has signed up for
     path('get_member_activites/<str:auth0_id>/', views.get_member_activities, name='get_member_activity'),
-    # Uploade activity image
-    path('add_activity_image/<int:activity_id>/', views.upload_activity_image, name="add_activity_image"),
+
 
     
 
@@ -47,11 +46,6 @@ urlpatterns = [
 
     # Create a new member
     path('register_user/', views.register_user, name='register_user'),
-
-
-    path('get_visit_numbers/', views.get_visit_numbers, name='get_visit_numbers'),
-    path('get_visit_by_gender/', views.get_visit_by_gender, name='get_visit_by_gender'),
-    path('get_visit_by_gender_one_day/<str:one_date>/',views.get_visit_by_gender_one_day, name='get_visit_by_gender_one_day'),
 
     # Gets all bannes members
     path('get_banned_members/', views.get_banned_members, name='get_banned_members'),
@@ -122,9 +116,6 @@ urlpatterns = [
     # Check Registration status
     path('check_user_registration_status/', views.check_user_registration_status, name='check_user_registration_status'),
 
-    # Messages
-    path('send_message/', views.send_message, name='send_message'),
-    path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 
     # Get all unverified members
     path('get_all_unverified_members/', views.get_all_unverified_members, name='get_all_unverified_members'),
@@ -140,4 +131,16 @@ urlpatterns = [
 
     # Deletes a member that does not pass the verification stage
     path('delete_member/<str:auth0_id>/', views.delete_member, name='delete_member'),
+
+
+
+
+
+    #----------------------------------------------------------------------------------------------------
+    # Code not used or tested
+    #----------------------------------------------------------------------------------------------------
+
+    # Messages
+    path('send_message/', views.send_message, name='send_message'),
+    path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 ]
