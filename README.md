@@ -805,7 +805,6 @@ To get started, you'll need to install:
 </details>
 
 <details>
-
 <summary><h4>Edit a specific level:</h4></summary>
 
 ```http
@@ -897,6 +896,38 @@ To get started, you'll need to install:
     "title": "Trip to Tekninsk Museum",
     "description": "It would be great if we could go and visit Teknisk museum during the summer"
 }
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve all future suggestions:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_suggestions/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "suggestionID": 15,
+        "title": "Celebrate birthday",
+        "description": "Marcus has his birthay comming up. I want us to have a party for him."
+    },
+    {
+    "suggestionID": 56,
+    "title": "Trip to Tekninsk Museum",
+    "description": "It would be great if we could go and visit Teknisk museum during the summer."
+    }
+    ...
+]
 ```
 
 </details>
