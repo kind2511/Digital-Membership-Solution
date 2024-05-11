@@ -426,7 +426,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Get Member attendence for specific date: </h4></summary>
+<summary><h4>Retrieve Member attendence for specific date: </h4></summary>
 
 ```http
   GET /digital_medlemsordning/get_member_attendance/?date={date}
@@ -474,7 +474,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Get member attendence statistics for a given time period:</h4></summary>
+<summary><h4>Retrieve member attendence statistics for a given time period:</h4></summary>
 
 ```http
   GET /digital_medlemsordning/member_attendance_stats/?start_date={start_date}&end_date={end_date}
@@ -632,6 +632,45 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Member unbanned successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve all banned members:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_banned_members/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Banned members retrieved successfully.",
+    "banned_members": [
+        {
+            "full_name": "John Smith",
+            "profile_picture": "/media/profile_pics/Default_Profile_Picture.jpg",
+            "banned_from": "2024-05-11",
+            "banned_until": "2024-05-26",
+            "auth0_id": "auth0|65f9cv6b6b0ee9bfdc447d25"
+        },
+        {
+            "full_name": "Lilly Hammond",
+            "profile_picture": "/media/profile_pics/Default_Profile_Picture.jpg",
+            "banned_from": "2024-05-07",
+            "banned_until": "2024-05-14",
+            "auth0_id": "auth0|65f9cb6b6b09e9bfdc447d30"
+        },
+        ...
+    ]
 }
 ```
 
