@@ -668,19 +668,7 @@ def delete_member_certificate(request, certificate_id):
     else:
         return Response("Method not allowed", status=405)
 
-#-------------------------------------------------------------------------------------------------------
-
-
-# get messages sent from a specific employee
-@api_view(['GET'])
-def get_sent_messages(request, sender_id):
-    try:
-        sent_messages = Message.objects.filter(sender_id=sender_id)
-        serializer = MessageSerializer(sent_messages, many=True)
-        return Response(serializer.data)
-    except Message.DoesNotExist:
-        return Response({'error': 'No messages found for the sender'}, status=404)
-    
+#-------------------------------------------------------------------------------------------------------    
 
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
@@ -1153,6 +1141,7 @@ def get_all_activity(request):
 
 # Code not used or tested
 
+# send message from employee to member
 @api_view(['POST'])
 def send_message(request):
     if request.method == 'POST':
@@ -1184,3 +1173,14 @@ def send_message(request):
         return Response(serializer.data, status=201)
     else:
         return Response({'error': 'Invalid request method'})
+    
+
+# get messages sent from a specific employee
+@api_view(['GET'])
+def get_sent_messages(request, sender_id):
+    try:
+        sent_messages = Message.objects.filter(sender_id=sender_id)
+        serializer = MessageSerializer(sent_messages, many=True)
+        return Response(serializer.data)
+    except Message.DoesNotExist:
+        return Response({'error': 'No messages found for the sender'}, status=404)
