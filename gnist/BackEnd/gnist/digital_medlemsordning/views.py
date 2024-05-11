@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from .models import Members
 from .models import Employee
 from .models import MemberDates
@@ -27,7 +27,7 @@ from .serializers import MemberAnswerSerializer
 from .serializers import MemberAttendanceSerializer
 from .serializers import MemberCertificateSerializer
 from django.db.models import Q
-from django.db.models import Prefetch
+
 
 
 
