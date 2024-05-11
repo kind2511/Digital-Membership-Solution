@@ -739,30 +739,19 @@ def get_one_member_data(request, auth0_id):
     # Check if the member's points exceed the highest level's points
     if days_without_incident > highest_level.points:
         level_name = highest_level.name
-    
-    is_banned = member.banned
-    if is_banned:
-        profile_color = "red"
-    else:
-        profile_color = "green"
 
     member_info = {
         'first_name': member.first_name.upper(),
         'level': level_name,
-        'profile_color': profile_color,
         'profile_pic': member.profile_pic.url,
         'banned_from': member.banned_from,  
         'banned_until': member.banned_until,
-        'role': member.role, 
     }
-    
-    today_date = date.today().strftime("%Y-%m-%d")
 
     response_data = {
-        'date': today_date,
         'member': member_info
     }
-    return Response({"data": response_data}, status=200)
+    return Response(response_data, status=200)
 
 #-------------------------------------------------------------------------------------------------------
 # Levels

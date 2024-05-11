@@ -28,7 +28,7 @@ function UserDashboard() {
     if (isAuthenticated && user) {
       axios.get(`${baseApiUrl}/digital_medlemsordning/get_member/${user.sub}`)
         .then(response => {
-          const memberData = response.data.data.member;
+          const memberData = response.data.member;
           setFirstName(memberData.first_name);
           setLevel(memberData.level);
           const fullProfilePicUrl = memberData.profile_pic.startsWith('http') ? memberData.profile_pic : `${baseApiUrl}${memberData.profile_pic}`;

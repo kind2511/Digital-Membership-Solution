@@ -524,17 +524,14 @@ To get started, you'll need to install:
 ##### Example Response Body:
 ```json
 {
-    "data": {
-        "date": "2024-05-11",
-        "member": {
-            "first_name": "CHRIS",
-            "level": "Invincible",
-            "profile_color": "red",
-            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
-            "banned_from": "2024-05-10",
-            "banned_until": "2024-05-12",
-            "role": "member"
-        }
+    "member": {
+        "first_name": "CHRIS",
+        "level": "Invincible",
+        "profile_color": "red",
+        "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+        "banned_from": "2024-05-10",
+        "banned_until": "2024-05-12",
+        "role": "member"
     }
 }
 ```
