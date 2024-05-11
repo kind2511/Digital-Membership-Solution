@@ -718,7 +718,6 @@ To get started, you'll need to install:
 </details>
 
 <details>
-
 <summary><h4>Create a new level:</h4></summary>
 
 ```http
@@ -860,6 +859,43 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Level deleted successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Create a new suggestion:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/create_suggestion/
+```
+
+| Parameter      | Type     | Description                              |
+|:---------------|:---------|:-----------------------------------------|
+| `title`        | `string` | **Required**. Ttile of suggestion        |
+| `description`  | `string` | **Required**. Description of suggestion  |
+
+##### Example POST-Body:
+```json
+{
+    "title": "Trip to Tekninsk Museum",
+    "description": "It would be great if we could go and visit Teknisk museum during the summer"
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "suggestionID": 56,
+    "title": "Trip to Tekninsk Museum",
+    "description": "It would be great if we could go and visit Teknisk museum during the summer"
 }
 ```
 
