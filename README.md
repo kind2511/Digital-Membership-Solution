@@ -739,3 +739,55 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Retrieve all levels:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_levels/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "levelID": 49,
+        "name": "Legend",
+        "points": 100
+    },
+    {
+        "levelID": 50,
+        "name": "Pro",
+        "points": 80
+    },
+    {
+        "levelID": 51,
+        "name": "Intermediate",
+        "points": 60
+    },
+    {
+        "levelID": 52,
+        "name": "Rookie",
+        "points": 40
+    },
+    {
+        "levelID": 53,
+        "name": "Noob",
+        "points": 20
+    },
+    {
+        "levelID": 56,
+        "name": "Invincible",
+        "points": 120
+    },
+    ...
+]
+```
+
+</details>
