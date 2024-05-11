@@ -8,7 +8,7 @@ urlpatterns = [
     # Get member data for dashboard for all members
     path('get_all_members/', views.get_all_member_data, name='all_member_data'),
     # Get member data for dashboard for one specific member
-    path('get_member/<str:auth0_id>/', views.get_one_member_data, name='member_data'),
+    path('get_member/<str:auth0_id>/', views.get_one_member_data, name='get_member'),
     # Gets all info about a member
     path('get_all_members_info/', views.get_all_members_info, name='get_all_members_info'),
 

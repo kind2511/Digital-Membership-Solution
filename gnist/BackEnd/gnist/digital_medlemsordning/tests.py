@@ -1202,3 +1202,57 @@ class GetBannedMemberTests(APITestCase):
         # Assert message
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], "No banned members found.")
+
+class GetMemberDashboardDataTests(APITestCase):
+    def setUp(self):
+        # Create a sample member and levels for testing
+        self.member = Members.objects.create(
+            auth0ID="test_auth0_id",
+            first_name="Test",
+            last_name="Member",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=0,
+            phone_number="1234567890",
+            email="test@example.com",
+            role="member"
+        )
+        Level.objects.create(name="Level 1", points=10)
+        Level.objects.create(name="Level 2", points=20)
+    
+    def test_get_one_member_data_existing_member(self):
+        """
+        Test retrieving data of an existing member.
+        """
+        url = reverse('get_member', kwargs={'auth0_id': self.member.auth0ID})
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert data
+        self.assertIn('date', response.data)
+        self.assertIn('member', response.data)
+        member_info = response.data['member']
+        self.assertEqual(member_info['first_name'], "TEST")
+        # Assuming level name is "Level 1"
+        self.assertEqual(member_info['level'], "Level 1")
+        self.assertEqual(member_info['profile_color'], "green")
+        # Add more assertions for other fields as needed
+    
+    def test_get_one_member_data_non_existing_member(self):
+        """
+        Test retrieving data of a non-existing member.
+        """
+        # Generate a non-existing Auth0 ID
+        non_existing_auth0_id = "non_existing_auth0_id"
+        
+        url = reverse('get_member', kwargs={'auth0_id': non_existing_auth0_id})
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        # Assert error message
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'User does not exist')

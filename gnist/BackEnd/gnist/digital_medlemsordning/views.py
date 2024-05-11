@@ -89,63 +89,6 @@ def get_all_member_data(request):
     return Response(response_data)
 
 
-# Gets certain member data about a specific user
-@api_view(['GET'])
-def get_one_member_data(request, auth0_id):
-
-    # Authorization check using validate_access_token function
-    auth_result = authorize_user(auth0_id)
-    if auth_result.status_code != 200:
-        return auth_result  # Return the response from validate_access_token if not authorized
-
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
-
-     # Get all levels ordered by points in ascending order
-    levels = Level.objects.order_by('points')
-
-    # Retrieve the highest level
-    highest_level = levels.last()
-
-    days_without_incident = member.days_without_incident
-
-    # Iterate through levels to find the correct level for the member
-    for level in levels:
-        if days_without_incident <= level.points:
-            level_name = level.name
-            break
-
-    # Check if the member's points exceed the highest level's points
-    if days_without_incident > highest_level.points:
-        level_name = highest_level.name
-    
-    is_banned = member.banned
-    if is_banned:
-        profile_color = "red"
-    else:
-        profile_color = "green"
-
-    member_info = {
-        'first_name': member.first_name.upper(),
-        'level': level_name,
-        'profile_color': profile_color,
-        'profile_pic': member.profile_pic.url,
-        'banned_from': member.banned_from,  
-        'banned_until': member.banned_until,
-        'role': member.role, 
-    }
-    
-    today_date = date.today().strftime("%Y-%m-%d")
-
-    response_data = {
-        'date': today_date,
-        'member': member_info
-    }
-    return Response({"message": "Authorization Granted!", "data": response_data}, status=200)
-
-
 #signs up for an activity
 @api_view(['POST'])
 def sign_up_activity(request):
@@ -921,6 +864,58 @@ def get_all_unverified_members(request):
         }
         response_data.append(member_data)
 
+    return Response(response_data, status=200)
+
+
+# Gets certain member data about a specific user
+@api_view(['GET'])
+def get_one_member_data(request, auth0_id):
+
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({'error': 'User does not exist'}, status=404)
+
+     # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
+    days_without_incident = member.days_without_incident
+
+    # Iterate through levels to find the correct level for the member
+    for level in levels:
+        if days_without_incident <= level.points:
+            level_name = level.name
+            break
+
+    # Check if the member's points exceed the highest level's points
+    if days_without_incident > highest_level.points:
+        level_name = highest_level.name
+    
+    is_banned = member.banned
+    if is_banned:
+        profile_color = "red"
+    else:
+        profile_color = "green"
+
+    member_info = {
+        'first_name': member.first_name.upper(),
+        'level': level_name,
+        'profile_color': profile_color,
+        'profile_pic': member.profile_pic.url,
+        'banned_from': member.banned_from,  
+        'banned_until': member.banned_until,
+        'role': member.role, 
+    }
+    
+    today_date = date.today().strftime("%Y-%m-%d")
+
+    response_data = {
+        'date': today_date,
+        'member': member_info
+    }
     return Response(response_data, status=200)
 
 #-------------------------------------------------------------------------------------------------------
