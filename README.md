@@ -922,9 +922,9 @@ To get started, you'll need to install:
         "description": "Marcus has his birthay comming up. I want us to have a party for him."
     },
     {
-    "suggestionID": 56,
-    "title": "Trip to Tekninsk Museum",
-    "description": "It would be great if we could go and visit Teknisk museum during the summer."
+        "suggestionID": 56,
+        "title": "Trip to Tekninsk Museum",
+        "description": "It would be great if we could go and visit Teknisk museum during the summer."
     }
     ...
 ]
