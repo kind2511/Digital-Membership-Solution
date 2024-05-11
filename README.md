@@ -628,3 +628,28 @@ To get started, you'll need to install:
 
 </details>
 
+<details>
+<summary><h4>Verify a member:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/verify_member/{auth0ID}/
+```
+
+| Parameter | Type        | Description                  |
+|:----------|:---------|:--------------------------------|
+| `auth0ID` | `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member successfully verified"
+}
+```
+
+</details>
