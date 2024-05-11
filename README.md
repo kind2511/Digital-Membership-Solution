@@ -355,6 +355,7 @@ To get started, you'll need to install:
 {
     "message": "Activity deleted successfully"
 }
+```
 
 </details>
 
