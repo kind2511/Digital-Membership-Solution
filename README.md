@@ -607,23 +607,24 @@ To get started, you'll need to install:
 ```json
 [
     {
-        "birthdate": "2007-01-01",
-        "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+       "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "birthdate": "2004-01-01",
         "first_name": "James",
         "last_name": " Kahn",
         "guardian_name": "",
         "guardian_phone": ""
     },
     {
-        "birthdate": "2008-01-07",
-        "auth0ID": "auth0|65ef289190350a753bf985ae",
+       "auth0ID": "auth0|65ef289190350a753bf985ae",
+        "birthdate": "2011-05-07",
         "first_name": "Lisa",
         "last_name": "Danilson",
-        "guardian_name": "",
-        "guardian_phone": ""
+        "guardian_name": "Laila Danilson",
+        "guardian_phone": "43892312"
     },
     ...
 ]
 ```
 
 </details>
+
