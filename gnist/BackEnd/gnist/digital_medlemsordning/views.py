@@ -537,12 +537,6 @@ def adjust_member_points_total(request, auth0_id):
 
 
 
-# Gets all the suggestions
-@api_view(['GET'])
-def get_all_suggestions(request):
-    suggestions = SuggestionBox.objects.all()
-    serializer = SuggestionBoxSerializer(suggestions, many=True)
-    return Response(serializer.data)
 
 
 # Deletes a suggestion
@@ -1122,7 +1116,14 @@ def create_suggestion(request):
             return Response(serializer.data, status=201)
         else:
             return Response(serializer.errors, status=400)
+        
 
+# Gets all the suggestions
+@api_view(['GET'])
+def get_all_suggestions(request):
+    suggestions = SuggestionBox.objects.all()
+    serializer = SuggestionBoxSerializer(suggestions, many=True)
+    return Response(serializer.data)
 
 
 #---------------------------------------------------------------------------------------------------------------------
@@ -1138,18 +1139,11 @@ def get_all_activity(request):
         return Response(serializer.data)
     
 
-
-
-
-
-
-
-
-
-
 #-------------------------------------------------------------------------------------------------------------------------------
 
-# Code not used or tested
+#-------------------------------------------------------------------------------------------------------------------------------
+# Code not used or tested or used by the application
+#-------------------------------------------------------------------------------------------------------------------------------
 
 # send message from employee to member
 @api_view(['POST'])

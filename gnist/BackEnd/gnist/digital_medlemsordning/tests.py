@@ -8,6 +8,7 @@ from .models import Members
 from .models import MemberDates
 from .models import Level
 from .models import SuggestionBox
+from .serializers import SuggestionBoxSerializer
 from .serializers import ActivitySerializer
 
 # Create your tests here.
@@ -944,4 +945,43 @@ class SuggestionBoxTests(APITestCase):
         # Check that no suggestion was created
         self.assertEqual(SuggestionBox.objects.count(), 0)
 
+class SuggestionBoxTests(APITestCase):
+    def setUp(self):
+        # Create some sample suggestions for testing
+        self.suggestion1 = SuggestionBox.objects.create(title="Suggestion 1", description="Description 1")
+        self.suggestion2 = SuggestionBox.objects.create(title="Suggestion 2", description="Description 2")
     
+    def test_get_all_suggestions(self):
+        """
+        Test retrieving all suggestions.
+        """
+        url = reverse('get_all_suggestions')  # Assuming you have configured your URL patterns
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert correct number of suggestions returned
+        suggestions_count = SuggestionBox.objects.count()
+        self.assertEqual(len(response.data), suggestions_count)
+        
+        # Assert that all suggestions are returned
+        expected_data = SuggestionBoxSerializer(SuggestionBox.objects.all(), many=True).data
+        self.assertEqual(response.data, expected_data)
+        
+    def test_get_all_suggestions_empty(self):
+        """
+        Test retrieving all suggestions when no suggestions exist.
+        """
+        # Delete all existing suggestions
+        SuggestionBox.objects.all().delete()
+        
+        url = reverse('get_all_suggestions')  # Assuming you have configured your URL patterns
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert that no suggestions are returned
+        self.assertEqual(len(response.data), 0)
+        
