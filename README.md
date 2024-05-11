@@ -1016,7 +1016,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Retrieve all future suggestions:</h4></summary>
+<summary><h4>Retrieve all suggestions:</h4></summary>
 
 ```http
   GET /digital_medlemsordning/get_all_suggestions/
