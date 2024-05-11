@@ -537,7 +537,7 @@ To get started, you'll need to install:
 }
 ```
 
-</DETAILS>
+</details>
 
 <details>
 <summary><h4>Search for a member based on first or last name:</h4></summary>
