@@ -576,6 +576,42 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Ban a member:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/ban_member/{auth0ID}/
+```
+
+| Parameter     | Type     | Description                             |
+|:--------------|:---------|:----------------------------------------|
+| `auth0ID`     | `string` | **Required**. Auth0ID of member         |
+| `banned_from` | `string` | **Required**. Start date of member ban  |
+| `banned_until`| `string` | **Required**. End date of member ban    |
+
+##### Example PUT-Body:
+```json
+{
+    "banned_from": "2024-05-11",
+    "banned_until": "2024-05-26"
+}
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member banned successfully from 2024-05-11 until 2024-05-26"
+}
+```
+
+</details>
+
+<details>
 <summary><h4>Unban a member:</h4></summary>
 
 ```http
@@ -997,38 +1033,3 @@ To get started, you'll need to install:
 
 </details>
 
-<details>
-<summary><h4>Ban a member:</h4></summary>
-
-```http
-  PUT /digital_medlemsordning/ban_member/{auth0ID}/
-```
-
-| Parameter     | Type     | Description                             |
-|:--------------|:---------|:----------------------------------------|
-| `auth0ID`     | `string` | **Required**. Auth0ID of member         |
-| `banned_from` | `string` | **Required**. Start date of member ban  |
-| `banned_until`| `string` | **Required**. End date of member ban    |
-
-##### Example PUT-Body:
-```json
-{
-    "banned_from": "2024-05-11",
-    "banned_until": "2024-05-26"
-}
-```
-
-#### Response:
-
-| Status Code  | Content-Type       |
-|:-------------|:-------------------|
-| `200 OK`     | `application/json` |
-
-##### Example Response Body:
-```json
-{
-    "message": "Member banned successfully from 2024-05-11 until 2024-05-26"
-}
-```
-
-</details>
