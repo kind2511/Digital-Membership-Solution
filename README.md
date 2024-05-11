@@ -1027,8 +1027,7 @@ To get started, you'll need to install:
 ##### Example Response Body:
 ```json
 {
-    "auth0ID": "auth0|661a52a2cad534c6e30e3c37",
-    "info": "Ability to acces club on saturdays"
+    "message": "Member banned successfully from 2024-05-11 until 2024-05-26"
 }
 ```
 
