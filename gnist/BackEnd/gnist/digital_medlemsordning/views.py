@@ -224,22 +224,6 @@ def undo_sign_up_activity(request):
         return Response({'error': 'Invalid request method'})
 
 
-
-# Get one specific activity
-@api_view(['GET'])
-def get_activity_details(request, activity_id):
-    try:
-       
-        activity = Activity.objects.get(activityID=activity_id)
-    except Activity.DoesNotExist:
-      
-        return Response({'error': 'Activity not found'}, status=404)
-    
-    serializer = ActivitySerializer(activity)
-    
-    return Response(serializer.data)
-
-
 # Get signed up members for a specific activity
 @api_view(['GET'])
 def get_signed_up_members(request, activity_id):
@@ -1125,6 +1109,19 @@ def get_all_activity(request):
         serializer = ActivitySerializer(activities, many=True)
         return Response(serializer.data)
     
+
+# Get one specific activity
+@api_view(['GET'])
+def get_activity_details(request, activity_id):
+    try:
+        activity = Activity.objects.get(activityID=activity_id)
+    except Activity.DoesNotExist:
+      
+        return Response({'error': 'Activity not found'}, status=404)
+    
+    serializer = ActivitySerializer(activity)
+    
+    return Response(serializer.data)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 

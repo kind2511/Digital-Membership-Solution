@@ -335,6 +335,45 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Retrieve specific activity:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_activity_details/{activityID}/
+```
+
+| Parameter | Type     | Description                       |
+|:----------|:---------|:----------------------------------|
+| `ID`      | `string` | **Required**. The Activity ID     |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "activityID": 75,
+    "title": "Hiking Adventure",
+    "description": "Hiking Adventure",
+    "image": "/media/activity_pics/Hiking_Adventure_zHouiE5.jpeg",
+    "date": "2024-03-12",
+    "limit": 20,
+    "signed_up_count": 1,
+    "signed_up_members": [
+        {
+            "first_name": "soso",
+            "last_name": "Larote",
+            "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+        }
+    ]
+}
+```
+
+</details>
+
+<details>
 <summary><h4>Delete a specific activity:</h4></summary>
 
 ```http
