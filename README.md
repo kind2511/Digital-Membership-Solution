@@ -350,6 +350,12 @@ To get started, you'll need to install:
 | Status Code   | `204 No Content`   |
 |:--------------|:-------------------|
 
+##### Example Response Body:
+```json
+{
+    "message": "Activity deleted successfully"
+}
+
 </details>
 
 <details>
@@ -362,6 +368,13 @@ To get started, you'll need to install:
 | Parameter | Type     | Description                        |
 |:----------|:---------|:-----------------------------------|
 | `auth0ID` | `string` | **Required**. The Members Auth0ID  |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member deleted successfully"
+}
+```
 
 #### Response:
 
@@ -841,5 +854,12 @@ To get started, you'll need to install:
 
 | Status Code   | `204 No Content`   |
 |:--------------|:-------------------|
+
+##### Example Response Body:
+```json
+{
+    "message": "Level deleted successfully"
+}
+```
 
 </details>
