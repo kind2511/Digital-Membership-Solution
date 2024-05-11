@@ -423,8 +423,6 @@ To get started, you'll need to install:
 
 </details>
 
-</details>
-
 <details>
 <summary><h4>Retrieve Member attendence for specific date: </h4></summary>
 
