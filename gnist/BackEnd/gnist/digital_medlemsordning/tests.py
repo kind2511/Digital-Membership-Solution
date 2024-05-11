@@ -658,8 +658,11 @@ class VerifyMemberTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Verify the structure of the response
-        self.assertIn('verified', response.data)
-        self.assertTrue(response.data['verified'])  # Member should be verified
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Member successfully verified')  # Check the success message
+
+        # Verify that 'verified' field is not present in the response
+        self.assertNotIn('verified', response.data)
 
         # Fetch the member from the database to ensure verification status has been updated
         updated_member = Members.objects.get(auth0ID=self.member.auth0ID)
@@ -674,7 +677,7 @@ class VerifyMemberTestCase(APITestCase):
 
         # Verify the response message
         self.assertIn('message', response.data)
-        self.assertEqual(response.data['message'], 'Member not found')
+        self.assertEqual(response.data['message'], 'Member not found')  # Check the not found message
 
         # Ensure other fields are not present
         self.assertNotIn('verified', response.data)
