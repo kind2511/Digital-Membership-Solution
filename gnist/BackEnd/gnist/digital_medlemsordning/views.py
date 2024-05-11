@@ -762,7 +762,7 @@ def get_one_member_data(request, auth0_id):
         'date': today_date,
         'member': member_info
     }
-    return Response({"message": "Successful retriveal of data!", "data": response_data}, status=200)
+    return Response({"data": response_data}, status=200)
 
 #-------------------------------------------------------------------------------------------------------
 # Levels
