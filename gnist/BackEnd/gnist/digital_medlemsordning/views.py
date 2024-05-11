@@ -282,39 +282,6 @@ def add_day(request, auth0_id):
         return Response({'message': 'Cannot add one extra day'})
 
 
-# Bans a member
-@api_view(['PUT'])
-def ban_member(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    banned_from = request.data.get('banned_from')
-    banned_until = request.data.get('banned_until')
-
-    # Check if both banned_from and banned_until are provided
-    if not (banned_from and banned_until):
-        return Response({"error": "Both banned_from and banned_until dates are required"}, status=400)
-
-    try:
-        banned_from_date = datetime.strptime(banned_from, '%Y-%m-%d').date()
-        banned_until_date = datetime.strptime(banned_until, '%Y-%m-%d').date()
-    except ValueError:
-        return Response({"error": "Invalid date format"}, status=400)
-
-    # Banned from must be earlier than banned unitl
-    if banned_from_date >= banned_until_date:
-        return Response({"error": "banned_from must be earlier than banned_until"}, status=400)
-
-    # Ban the member
-    member.banned = True
-    member.banned_from = banned_from_date
-    member.banned_until = banned_until_date
-    member.save()
-
-    return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
-
 # Gets all banned members and their relevant info
 @api_view(['GET'])
 def get_banned_members(request):
@@ -1096,6 +1063,41 @@ def delete_suggestion(request, suggestion_id):
     
     except SuggestionBox.DoesNotExist:
         return Response({"error": "Suggestion not found"}, status=404)
+    
+#-------------------------------------------------------------------------------------------------------
+
+# Bans a member
+@api_view(['PUT'])
+def ban_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    banned_from = request.data.get('banned_from')
+    banned_until = request.data.get('banned_until')
+
+    # Check if both banned_from and banned_until are provided
+    if not (banned_from and banned_until):
+        return Response({"error": "Both banned_from and banned_until dates are required"}, status=400)
+
+    try:
+        banned_from_date = datetime.strptime(banned_from, '%Y-%m-%d').date()
+        banned_until_date = datetime.strptime(banned_until, '%Y-%m-%d').date()
+    except ValueError:
+        return Response({"error": "Invalid date format"}, status=400)
+
+    # Banned from must be earlier than banned unitl
+    if banned_from_date >= banned_until_date:
+        return Response({"error": "banned_from must be earlier than banned_until"}, status=400)
+
+    # Ban the member
+    member.banned = True
+    member.banned_from = banned_from_date
+    member.banned_until = banned_until_date
+    member.save()
+
+    return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

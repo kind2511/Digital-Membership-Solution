@@ -850,9 +850,10 @@ To get started, you'll need to install:
   PUT /digital_medlemsordning/edit_level/{levelID}/
 ```
 
-| Parameter | Type        | Description                  |
-|:----------|:------------|:-----------------------------|
-| `levelID` | `string`    | **Required**. ID of a level  |
+| Parameter | Type        | Description                     |
+|:----------|:------------|:--------------------------------|
+| `auth0ID` | `string`    | **Required**. Auth0ID of member |
+| `levelID` | `string`    | **Required**. ID of a level     |
 
 ##### Example PUT-Body:
 ```json
@@ -991,6 +992,43 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Suggestion deleted successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Ban a member:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/ban_member/{auth0ID}/
+```
+
+| Parameter     | Type     | Description                             |
+|:--------------|:---------|:----------------------------------------|
+| `auth0ID`     | `string` | **Required**. Auth0ID of member         |
+| `banned_from` | `string` | **Required**. Start date of member ban  |
+| `banned_until`| `string` | **Required**. End date of member ban    |
+
+##### Example PUT-Body:
+```json
+{
+    "banned_from": "2024-05-11",
+    "banned_until": "2024-05-26"
+}
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "auth0ID": "auth0|661a52a2cad534c6e30e3c37",
+    "info": "Ability to acces club on saturdays"
 }
 ```
 
