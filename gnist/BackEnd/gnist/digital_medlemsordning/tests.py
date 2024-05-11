@@ -1133,3 +1133,72 @@ class BanMemberTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Invalid date format')
+
+class GetBannedMemberTests(APITestCase):
+    def setUp(self):
+        # Create sample banned and non-banned members for testing
+        self.banned_member = Members.objects.create(
+            auth0ID="banned_auth0_id",
+            first_name="Banned",
+            last_name="Member",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=0,
+            phone_number="1234567890",
+            email="banned@example.com",
+            banned=True,
+            banned_from=datetime.strptime("2024-05-10", "%Y-%m-%d").date(),
+            banned_until=datetime.strptime("2024-05-20", "%Y-%m-%d").date()
+        )
+        self.non_banned_member = Members.objects.create(
+            auth0ID="non_banned_auth0_id",
+            first_name="Non",
+            last_name="Banned",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=0,
+            phone_number="1234567890",
+            email="nonbanned@example.com",
+            banned=False
+        )
+    
+    def test_get_banned_members(self):
+        """
+        Test retrieving all banned members.
+        """
+        url = reverse('get_banned_members')
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], "Banned members retrieved successfully.")
+        
+        # Assert banned members data
+        self.assertIn('banned_members', response.data)
+        self.assertTrue(len(response.data['banned_members']) > 0)
+        banned_member_data = response.data['banned_members'][0]
+        self.assertEqual(banned_member_data['full_name'], "Banned Member")
+        self.assertEqual(str(banned_member_data['banned_from']), '2024-05-10')
+        self.assertEqual(str(banned_member_data['banned_until']), '2024-05-20')
+        self.assertEqual(banned_member_data['auth0_id'], "banned_auth0_id")
+    
+    def test_get_banned_members_no_banned_members(self):
+        """
+        Test retrieving banned members when there are no banned members.
+        """
+        # Unban the member to simulate no banned members
+        self.banned_member.banned = False
+        self.banned_member.save()
+        
+        url = reverse('get_banned_members')
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        # Assert message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], "No banned members found.")
