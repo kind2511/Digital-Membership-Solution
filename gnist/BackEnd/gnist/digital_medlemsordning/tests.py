@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase
 from .models import Activity
 from .models import Members
 from .models import MemberDates
+from .models import Level
 from .serializers import ActivitySerializer
 
 # Create your tests here.
@@ -765,3 +766,47 @@ class GetAllUnverifiedMembersTestCase(APITestCase):
         # Ensure both member IDs are present in the response
         self.assertIn(self.unverified_member.auth0ID, [member['auth0ID'] for member in response.data])
         self.assertIn(another_unverified_member.auth0ID, [member['auth0ID'] for member in response.data])
+
+class GetAllLevelsTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test levels
+        cls.level1 = Level.objects.create(levelID=1, name='Bronze', points=100)
+        cls.level2 = Level.objects.create(levelID=2, name='Silver', points=200)
+        cls.level3 = Level.objects.create(levelID=3, name='Gold', points=300)
+
+    def test_get_all_levels(self):
+        # Test retrieving all user levels
+        url = reverse('get_all_levels')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the structure of the response
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 3)  # All three levels should be returned
+
+        # Verify the content of each level
+        self.assertEqual(response.data[0]['levelID'], self.level1.levelID)
+        self.assertEqual(response.data[0]['name'], self.level1.name)
+        self.assertEqual(response.data[0]['points'], self.level1.points)
+
+        self.assertEqual(response.data[1]['levelID'], self.level2.levelID)
+        self.assertEqual(response.data[1]['name'], self.level2.name)
+        self.assertEqual(response.data[1]['points'], self.level2.points)
+
+        self.assertEqual(response.data[2]['levelID'], self.level3.levelID)
+        self.assertEqual(response.data[2]['name'], self.level3.name)
+        self.assertEqual(response.data[2]['points'], self.level3.points)
+
+    def test_get_all_levels_empty(self):
+        # Test when there are no levels in the database
+        Level.objects.all().delete()  # Delete all levels
+
+        url = reverse('get_all_levels')
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the response is an empty list
+        self.assertEqual(response.data, [])
