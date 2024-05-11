@@ -381,8 +381,7 @@ To get started, you'll need to install:
 
 | Parameter    | Type     | Description          | Default value  |
 |:-------------|:---------|:---------------------|:---------------| 
-| `date`       | `string` | **Optional**. Date   | `Current Date` |
-|         
+| `date`       | `string` | **Optional**. Date   | `Current Date` | 
 
 #### Response:
 
