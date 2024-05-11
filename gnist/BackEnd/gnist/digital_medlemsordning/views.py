@@ -1108,8 +1108,8 @@ def get_all_unverified_members(request):
     response_data = []
     for member in serializer.data:
         member_data = {
-            "birthdate": member['birthdate'],
             "auth0ID": member['auth0ID'],
+            "birthdate": member['birthdate'],
             "first_name": member['first_name'],
             "last_name": member['last_name'],
             "guardian_name": member['guardian_name'],
