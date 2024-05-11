@@ -529,30 +529,6 @@ def adjust_member_points_total(request, auth0_id):
     return Response(serializer.data)
 
 
-#------------------------------------------------------------------------------------------------------
-# Suggestions
-
-
-
-
-
-
-
-
-# Deletes a suggestion
-@api_view(['GET','DELETE'])
-def delete_suggestion(request, suggestion_id):
-    try:
-        suggestion = SuggestionBox.objects.get(suggestionID=suggestion_id)
-        suggestion.delete()
-        return Response({"message": "Suggestion successfully deleted"}, status=204)
-    
-    except SuggestionBox.DoesNotExist:
-        return Response({"error": "Suggestion not found"}, status=404)
-
-#------------------------------------------------------------------------------------------------------
-
-
 # Duplicate Code
 #-------------------------------------------------------------------------------------------------------
 
@@ -1125,6 +1101,17 @@ def get_all_suggestions(request):
     serializer = SuggestionBoxSerializer(suggestions, many=True)
     return Response(serializer.data)
 
+
+# Deletes a suggestion
+@api_view(['DELETE'])
+def delete_suggestion(request, suggestion_id):
+    try:
+        suggestion = SuggestionBox.objects.get(suggestionID=suggestion_id)
+        suggestion.delete()
+        return Response({"message": "Suggestion successfully deleted"}, status=204)
+    
+    except SuggestionBox.DoesNotExist:
+        return Response({"error": "Suggestion not found"}, status=404)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

@@ -920,7 +920,7 @@ class EditLevelTestCase(APITestCase):
         self.assertIn('points', response.data)
         self.assertEqual(response.data['points'][0], 'A valid integer is required.')
 
-class SuggestionBoxTests(APITestCase):
+class SuggestionBoxCreateSuggestion(APITestCase):
     def test_create_valid_suggestion(self):
         #Test creating a valid suggestion.
         url = reverse('create_suggestion')  # Assuming you have configured your URL patterns
@@ -945,7 +945,7 @@ class SuggestionBoxTests(APITestCase):
         # Check that no suggestion was created
         self.assertEqual(SuggestionBox.objects.count(), 0)
 
-class SuggestionBoxTests(APITestCase):
+class SuggestionBoxGetSuggestionsTests(APITestCase):
     def setUp(self):
         # Create some sample suggestions for testing
         self.suggestion1 = SuggestionBox.objects.create(title="Suggestion 1", description="Description 1")
@@ -985,3 +985,42 @@ class SuggestionBoxTests(APITestCase):
         # Assert that no suggestions are returned
         self.assertEqual(len(response.data), 0)
         
+class SuggestionBoxDeleteSuggestionsTests(APITestCase):
+    def setUp(self):
+        # Create a sample suggestion for testing
+        self.suggestion = SuggestionBox.objects.create(title="Test Suggestion", description="Test Description")
+    
+    def test_delete_existing_suggestion(self):
+        """
+        Test deleting an existing suggestion.
+        """
+        url = reverse('delete_suggestion', kwargs={'suggestion_id': self.suggestion.suggestionID})
+        response = self.client.delete(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        
+        # Assert success message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Suggestion successfully deleted')
+        
+        # Assert that the suggestion is deleted
+        with self.assertRaises(SuggestionBox.DoesNotExist):
+            SuggestionBox.objects.get(suggestionID=self.suggestion.suggestionID)
+    
+    def test_delete_non_existing_suggestion(self):
+        """
+        Test deleting a non-existing suggestion.
+        """
+        # Generate a non-existing suggestion ID
+        non_existing_suggestion_id = self.suggestion.suggestionID + 1
+        
+        url = reverse('delete_suggestion', kwargs={'suggestion_id': non_existing_suggestion_id})
+        response = self.client.delete(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        # Assert error message
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'Suggestion not found')
