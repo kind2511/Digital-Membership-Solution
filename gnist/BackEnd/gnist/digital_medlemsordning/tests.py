@@ -810,3 +810,34 @@ class GetAllLevelsTestCase(APITestCase):
 
         # Verify the response is an empty list
         self.assertEqual(response.data, [])
+
+class DeleteLevelTestCase(APITestCase):
+    def setUp(self):
+        # Create a test level for each test method
+        self.level = Level.objects.create(levelID=1, name='Bronze', points=100)
+
+    def test_delete_level_success(self):
+        # Test deleting an existing level
+        url = reverse('delete_level', kwargs={'level_id': self.level.levelID})
+
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+     # Verify the level is deleted from the database
+        with self.assertRaises(Level.DoesNotExist):
+            Level.objects.get(levelID=self.level.levelID)
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Level deleted successfully')
+
+    def test_delete_level_not_found(self):
+        # Test deleting a non-existent level
+        url = reverse('delete_level', kwargs={'level_id': 999})
+
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Level not found')
