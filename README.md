@@ -703,3 +703,39 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+
+<summary><h4>Create a new level:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/create_level/
+```
+
+| Parameter | Type     | Description                       |
+|:----------|:---------|:----------------------------------|
+| `name`    | `string` | **Required**. Name of the level   |
+| `points`  | `string` | **Required**. Points of the level |
+
+##### Example POST-Body:
+```json
+{
+    "name": "Invincible",
+    "points": 120
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Level successfully created"
+}
+```
+
+</details>
