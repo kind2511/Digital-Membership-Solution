@@ -1256,3 +1256,72 @@ class GetMemberDashboardDataTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'User does not exist')
+
+class GetAllMemberDashboardDataTests(APITestCase):
+    def setUp(self):
+        # Create sample members and levels for testing
+        self.member1 = Members.objects.create(
+            auth0ID="test_auth0_id_1",
+            first_name="Test1",
+            last_name="Member1",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=5,
+            phone_number="1234567890",
+            email="test1@example.com",
+            role="member",
+            banned=False
+        )
+        self.member2 = Members.objects.create(
+            auth0ID="test_auth0_id_2",
+            first_name="Test2",
+            last_name="Member2",
+            birthdate=datetime.strptime("2000-01-01", "%Y-%m-%d").date(),
+            gender="gutt",
+            days_without_incident=15,
+            phone_number="1234567890",
+            email="test2@example.com",
+            role="member",
+            banned=True,
+            banned_from=datetime.strptime("2024-05-10", "%Y-%m-%d").date(),
+            banned_until=datetime.strptime("2024-05-20", "%Y-%m-%d").date()
+        )
+        Level.objects.create(name="Level 1", points=10)
+        Level.objects.create(name="Level 2", points=20)
+        # Add more levels as needed
+    
+    def test_get_all_member_data_success(self):
+        """
+        Test retrieving data of all members successfully.
+        """
+        url = reverse('get_all_members')
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert data
+        self.assertIn('date', response.data)
+        self.assertIn('members', response.data)
+        members_data = response.data['members']
+        self.assertEqual(len(members_data), 2)  # Two members created in setup
+        # Add more assertions if needed
+    
+    def test_get_all_member_data_no_members(self):
+        """
+        Test retrieving data when there are no members.
+        """
+        # Delete all members
+        Members.objects.all().delete()
+        
+        url = reverse('get_all_members')
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert data
+        self.assertIn('date', response.data)
+        self.assertIn('members', response.data)
+        members_data = response.data['members']
+        self.assertEqual(len(members_data), 0)  # No members
