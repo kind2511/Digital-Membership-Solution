@@ -464,6 +464,7 @@ def check_user_registration_status(request):
     
     else:
         return Response({'error': 'Method not allowed'}, status=405)
+
     
     
 #----------------------------------------------------------------------------------------------------------------------------
@@ -761,7 +762,7 @@ def get_one_member_data(request, auth0_id):
         'date': today_date,
         'member': member_info
     }
-    return Response(response_data, status=200)
+    return Response({"message": "Successful retriveal of data!", "data": response_data}, status=200)
 
 #-------------------------------------------------------------------------------------------------------
 # Levels
