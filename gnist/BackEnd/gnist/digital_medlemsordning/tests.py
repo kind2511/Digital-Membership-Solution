@@ -172,6 +172,44 @@ class DeleteActivityTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Activity not found')
 
+class GetSpecificActivityDetailsTests(APITestCase):
+    def setUp(self):
+        # Create a sample activity for testing
+        self.activity = Activity.objects.create(title="Test Activity", description="Test Description", date="2024-05-09")
+    
+    def test_get_existing_activity_details(self):
+        """
+        Test retrieving details of an existing activity.
+        """
+        url = reverse('get_activity_details', kwargs={'activity_id': self.activity.activityID})
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Assert activity details
+        self.assertEqual(response.data['title'], self.activity.title)
+        self.assertEqual(response.data['description'], self.activity.description)
+        self.assertEqual(response.data['date'], self.activity.date)
+        
+    
+    def test_get_non_existing_activity_details(self):
+        """
+        Test retrieving details of a non-existing activity.
+        """
+        # Generate a non-existing activity ID
+        non_existing_activity_id = self.activity.activityID + 1
+        
+        url = reverse('get_activity_details', kwargs={'activity_id': non_existing_activity_id})
+        response = self.client.get(url)
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        # Assert error message
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'Activity not found')
+
 #---------------------------------------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------------------------------------
@@ -364,8 +402,6 @@ class SearchMemberTestCase(APITestCase):
         # Verify the structure of the response
         self.assertIsInstance(response.data, list)
 
-        # Add more assertions to check the response data
-
     def test_search_member_case_insensitive(self):
         # Test case-insensitive search for members by name
         url = reverse('search_member')
@@ -376,8 +412,6 @@ class SearchMemberTestCase(APITestCase):
 
         # Verify the structure of the response
         self.assertIsInstance(response.data, list)
-
-        # Add more assertions to check the response data
 
     def test_search_member_no_name_param(self):
         # Test when 'name' parameter is not provided in the query
@@ -1024,3 +1058,4 @@ class SuggestionBoxDeleteSuggestionsTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Suggestion not found')
+
