@@ -1115,3 +1115,21 @@ class BanMemberTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Member not found')
+
+    def test_ban_member_invalid_date_format(self):
+        """
+        Test banning a member with an invalid date format.
+        """
+        url = reverse('ban_member', kwargs={'auth0_id': self.member.auth0ID})
+        data = {
+            'banned_from': '2024/05/10',  # Invalid date format
+            'banned_until': '2024-05-20'
+        }
+        response = self.client.put(url, data, format='json')
+        
+        # Assert status code
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+        # Assert error message
+        self.assertIn('error', response.data)
+        self.assertEqual(response.data['error'], 'Invalid date format')
