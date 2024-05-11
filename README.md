@@ -370,17 +370,17 @@ To get started, you'll need to install:
 |:----------|:---------|:-----------------------------------|
 | `auth0ID` | `string` | **Required**. The Members Auth0ID  |
 
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
 ##### Example Response Body:
 ```json
 {
     "message": "Member deleted successfully"
 }
 ```
-
-#### Response:
-
-| Status Code   | `204 No Content`   |
-|:--------------|:-------------------|
 
 </details>
 
