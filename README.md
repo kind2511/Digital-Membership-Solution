@@ -607,7 +607,7 @@ To get started, you'll need to install:
 ```json
 [
     {
-       "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
         "birthdate": "2004-01-01",
         "first_name": "James",
         "last_name": " Kahn",
@@ -615,7 +615,7 @@ To get started, you'll need to install:
         "guardian_phone": ""
     },
     {
-       "auth0ID": "auth0|65ef289190350a753bf985ae",
+        "auth0ID": "auth0|65ef289190350a753bf985ae",
         "birthdate": "2011-05-07",
         "first_name": "Lisa",
         "last_name": "Danilson",
