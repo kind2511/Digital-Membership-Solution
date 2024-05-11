@@ -507,6 +507,41 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Retrieve member dashboard information about a specific member:</h4></summary>
+
+```http
+  GET digital_medlemsordning/get_member/{auth0ID}/
+```
+
+| Parameter | Type     | Description                     |
+|:----------|:---------|:--------------------------------|
+| `auth0ID` | `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "date": "2024-05-11",
+    "member": {
+        "first_name": "JOHN",
+        "level": "Invincible",
+        "profile_color": "red",
+        "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+        "banned_from": "2024-05-10",
+        "banned_until": "2024-05-12",
+        "role": "member"
+    }
+}
+```
+
+</DETAILS>
+
+<details>
 <summary><h4>Search for a member based on first or last name:</h4></summary>
 
 ```http
