@@ -370,8 +370,59 @@ To get started, you'll need to install:
 
 </details>
 
+</details>
+
 <details>
-<summary><h4>Get Member attendence for a given time period:</h4></summary>
+<summary><h4>Get Member attendence </h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_member_attendance/?date={date}
+```
+
+| Parameter    | Type     | Description          | Default value  |
+|:-------------|:---------|:---------------------|:---------------| 
+| `date`       | `string` | **Optional**. Date   | `Current Date` |
+|         
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member attendance for 2024-04-06 retrieved successfully.",
+    "members_present": [
+        {
+            "name": "Rodger Smith",
+            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg"
+        },
+        {
+            "name": "Lisa Stevens",
+            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg"
+        },
+        {
+            "name": "John Conway",
+            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg"
+        },
+        {
+            "name": "Norm Sandington",
+            "profile_pic": "/media/profile_pics/portofino_2464491k_qiVdymd.jpg"
+        },
+        {
+            "name": "Samantha Pilkington",
+            "profile_pic": "/media/profile_pics/81zm9tKLsxL._AC_SL1170__JIVQUhu.jpg"
+        }
+    ]
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Get member attendence statistics for a given time period:</h4></summary>
 
 ```http
   GET /digital_medlemsordning/member_attendance_stats/?start_date={start_date}&end_date={end_date}
