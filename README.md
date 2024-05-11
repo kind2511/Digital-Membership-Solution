@@ -539,6 +539,50 @@ To get started, you'll need to install:
 
 </details>
 
+
+<details>
+<summary><h4>Retrieve member dashboard information for all members:</h4></summary>
+
+```http
+  GET digital_medlemsordning/get_all_members/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "date": "2024-05-11",
+    "members": [
+        {
+            "first_name": "JOHN",
+            "level": "Invincible",
+            "profile_color": "green",
+            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+            "banned_from": null,
+            "banned_until": null,
+            "role": "member"
+        },
+        {
+            "first_name": "SALLY",
+            "level": "Rookie",
+            "profile_color": "green",
+            "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+            "banned_from": null,
+            "banned_until": null,
+            "role": "member"
+        },
+        ...
+    ]
+}
+```
+
+</details>
+
 <details>
 <summary><h4>Search for a member based on first or last name:</h4></summary>
 
