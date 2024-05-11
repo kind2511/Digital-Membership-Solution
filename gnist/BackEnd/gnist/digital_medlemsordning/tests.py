@@ -841,3 +841,79 @@ class DeleteLevelTestCase(APITestCase):
         # Verify the response message
         self.assertIn('message', response.data)
         self.assertEqual(response.data['message'], 'Level not found')
+
+class CreateLevelTestCase(APITestCase):
+    def test_create_level_success(self):
+        # Test creating a level with valid data
+        url = reverse('create_level')
+        valid_payload = {'levelID': 1, 'name': 'Gold', 'points': 300}
+
+        response = self.client.post(url, valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Verify the level is created in the database
+        created_level = Level.objects.get(levelID=1)
+        self.assertEqual(created_level.name, valid_payload['name'])
+        self.assertEqual(created_level.points, valid_payload['points'])
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Level successfully created')
+
+    def test_create_level_invalid_data(self):
+        # Test creating a level with invalid data
+        url = reverse('create_level')
+        invalid_payload = {'levelID': 1, 'name': 'Invalid Level', 'points': 'invalid'}
+
+        response = self.client.post(url, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Verify the response contains validation errors
+        self.assertIn('points', response.data)
+        self.assertEqual(response.data['points'][0], 'A valid integer is required.')
+
+class EditLevelTestCase(APITestCase):
+    def setUp(self):
+        # Create a test level for each test method
+        self.level = Level.objects.create(levelID=1, name='Bronze', points=100)
+
+    def test_edit_level_success(self):
+        # Test updating an existing level with valid data
+        url = reverse('edit_level', kwargs={'level_id': self.level.levelID})
+        valid_payload = {'name': 'Gold', 'points': 200}
+
+        response = self.client.put(url, valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify the level is updated in the database
+        updated_level = Level.objects.get(levelID=self.level.levelID)
+        self.assertEqual(updated_level.name, valid_payload['name'])
+        self.assertEqual(updated_level.points, valid_payload['points'])
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Level updated successfully')
+
+    def test_edit_level_not_found(self):
+        # Test updating a non-existent level
+        url = reverse('edit_level', kwargs={'level_id': 999})
+        invalid_payload = {'name': 'Gold', 'points': 200}
+
+        response = self.client.put(url, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        # Verify the response message
+        self.assertIn('message', response.data)
+        self.assertEqual(response.data['message'], 'Level not found')
+
+    def test_edit_level_invalid_data(self):
+        # Test updating a level with invalid data
+        url = reverse('edit_level', kwargs={'level_id': self.level.levelID})
+        invalid_payload = {'points': 'invalid'}
+
+        response = self.client.put(url, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Verify the response contains validation errors
+        self.assertIn('points', response.data)
+        self.assertEqual(response.data['points'][0], 'A valid integer is required.')

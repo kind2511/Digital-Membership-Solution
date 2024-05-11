@@ -670,37 +670,6 @@ def delete_member_certificate(request, certificate_id):
 
 #-------------------------------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------------------------------
-# Levels
-
-# Create a user level
-@api_view(['POST'])
-def create_level(request):
-    if request.method == 'POST':
-        serializer = LevelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Level successfully created'}, status=201)
-        return Response(serializer.errors, status=400)
-        
-
-# Edit a user level
-@api_view(['PUT'])
-def edit_level(request, level_id):
-    try:
-        level = Level.objects.get(levelID=level_id)
-    except Level.DoesNotExist:
-        return Response({'message': 'Level not found'}, status=404)
-
-    if request.method == 'PUT':
-        # Partial allows us not to update only selected fields, and not all
-        serializer = LevelSerializer(level, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Level updated successfully'}, status=200)
-        return Response(serializer.errors, status=400)
-    
-#-------------------------------------------------------------------------------------------------------------------------------
 
 # get messages sent from a specific employee
 @api_view(['GET'])
@@ -841,9 +810,13 @@ def check_user_registration_status(request):
         return Response({'error': 'Method not allowed'}, status=405)
     
     
-#---------------------------------------------------------------------------------------------------------------------
-# Tested views
-#---------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------
+# TETED VIEWS
+#----------------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------------
+# Activities
+#----------------------------------------------------------------------------------------------------------------------------
 
 # Gets all activites that that happens today or in the future
 @api_view(['GET'])
@@ -887,6 +860,7 @@ def delete_activity(request, activity_id):
         activity.delete()
         return Response({'message': 'Activity deleted successfully'}, status=204)
 
+#----------------------------------------------------------------------------------------------------------------------------
 
 # Reomves a member that does not pass the verification process in the employee dashboard
 @api_view(['DELETE'])
@@ -1098,6 +1072,9 @@ def get_all_unverified_members(request):
 
     return Response(response_data, status=200)
 
+#-------------------------------------------------------------------------------------------------------
+# Levels
+#-------------------------------------------------------------------------------------------------------
 
 # Get all user levels
 @api_view(['GET'])
@@ -1120,6 +1097,35 @@ def delete_level(request, level_id):
         level.delete()
         return Response({'message': 'Level deleted successfully'}, status=204)
 
+
+# Create a user level
+@api_view(['POST'])
+def create_level(request):
+    if request.method == 'POST':
+        serializer = LevelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Level successfully created'}, status=201)
+        return Response(serializer.errors, status=400)
+
+
+# Edit a user level
+@api_view(['PUT'])
+def edit_level(request, level_id):
+    try:
+        level = Level.objects.get(levelID=level_id)
+    except Level.DoesNotExist:
+        return Response({'message': 'Level not found'}, status=404)
+
+    if request.method == 'PUT':
+        # Partial allows us not to update only selected fields, and not all
+        serializer = LevelSerializer(level, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Level updated successfully'}, status=200)
+        return Response(serializer.errors, status=400)
+
+#-------------------------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
