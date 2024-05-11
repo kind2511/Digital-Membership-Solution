@@ -373,7 +373,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Get Member attendence </h4></summary>
+<summary><h4>Get Member attendence for specific date </h4></summary>
 
 ```http
   GET /digital_medlemsordning/get_member_attendance/?date={date}
