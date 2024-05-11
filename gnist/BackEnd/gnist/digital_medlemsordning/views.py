@@ -282,39 +282,6 @@ def add_day(request, auth0_id):
         return Response({'message': 'Cannot add one extra day'})
 
 
-# Gets all banned members and their relevant info
-@api_view(['GET'])
-def get_banned_members(request):
-    # Retrieve all members where banned is True
-    banned_members = Members.objects.filter(banned=True)
-
-    # Extracting relevand data about the banned users
-    members_data = []
-    for member in banned_members:
-        member_data = {
-            'full_name': f"{member.first_name} {member.last_name}",
-            'profile_picture': member.profile_pic.url if member.profile_pic else None,
-            'banned_from': member.banned_from,
-            'banned_until': member.banned_until,
-            'auth0_id': member.auth0ID,
-        }
-        members_data.append(member_data)
-
-    if members_data:
-        message = "Banned members retrieved successfully."
-        status_code = 200  # OK
-    else:
-        message = "No banned members found."
-        status_code = 404  # Not Found
-
-    response_data = {
-        'message': message,
-        'banned_members': members_data
-    }
-
-    return Response(response_data, status=status_code)
-
-
 # Registering a new user
 @api_view(['POST'])
 @csrf_exempt
@@ -864,23 +831,6 @@ def search_member(request):
         return Response({"message": "Please provide a 'name' parameter in the query."}, status=400)
     
 
-# Unbans a memebr
-@api_view(['PUT'])
-def unban_member(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    member.banned = False
-    member.banned_from = None
-    member.banned_until = None
-
-    member.save()
-
-    return Response({'message': f'Member unbanned successfully'})
-
-
 # Add info to a specific user
 @api_view(['PUT'])
 def add_member_info(request, auth0_id):
@@ -1098,6 +1048,56 @@ def ban_member(request, auth0_id):
     member.save()
 
     return Response({'message': f'Member banned successfully from {member.banned_from} until {member.banned_until}'}, status=200)
+
+
+# Unbans a memebr
+@api_view(['PUT'])
+def unban_member(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    member.banned = False
+    member.banned_from = None
+    member.banned_until = None
+
+    member.save()
+
+    return Response({'message': f'Member unbanned successfully'})
+
+
+# Gets all banned members and their relevant info
+@api_view(['GET'])
+def get_banned_members(request):
+    # Retrieve all members where banned is True
+    banned_members = Members.objects.filter(banned=True)
+
+    # Extracting relevand data about the banned users
+    members_data = []
+    for member in banned_members:
+        member_data = {
+            'full_name': f"{member.first_name} {member.last_name}",
+            'profile_picture': member.profile_pic.url if member.profile_pic else None,
+            'banned_from': member.banned_from,
+            'banned_until': member.banned_until,
+            'auth0_id': member.auth0ID,
+        }
+        members_data.append(member_data)
+
+    if members_data:
+        message = "Banned members retrieved successfully."
+        status_code = 200  # OK
+    else:
+        message = "No banned members found."
+        status_code = 404  # Not Found
+
+    response_data = {
+        'message': message,
+        'banned_members': members_data
+    }
+
+    return Response(response_data, status=status_code)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
