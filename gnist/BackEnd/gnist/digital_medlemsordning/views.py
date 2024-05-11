@@ -532,17 +532,9 @@ def adjust_member_points_total(request, auth0_id):
 #------------------------------------------------------------------------------------------------------
 # Suggestions
 
-# Lets a user create a new suggestion
-@api_view(['POST'])
-def create_suggestion(request):
-    if request.method == 'POST':
-        serializer = SuggestionBoxSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        else:
-            return Response(serializer.errors, status=400)
+
+
+
 
 
 # Gets all the suggestions
@@ -1114,6 +1106,24 @@ def edit_level(request, level_id):
         return Response(serializer.errors, status=400)
 
 #-------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------
+# Suggestions
+#-------------------------------------------------------------------------------------------------------
+
+# Lets a user create a new suggestion
+@api_view(['POST'])
+def create_suggestion(request):
+    if request.method == 'POST':
+        serializer = SuggestionBoxSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else:
+            return Response(serializer.errors, status=400)
+
+
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

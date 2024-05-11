@@ -7,6 +7,7 @@ from .models import Activity
 from .models import Members
 from .models import MemberDates
 from .models import Level
+from .models import SuggestionBox
 from .serializers import ActivitySerializer
 
 # Create your tests here.
@@ -917,3 +918,30 @@ class EditLevelTestCase(APITestCase):
         # Verify the response contains validation errors
         self.assertIn('points', response.data)
         self.assertEqual(response.data['points'][0], 'A valid integer is required.')
+
+class SuggestionBoxTests(APITestCase):
+    def test_create_valid_suggestion(self):
+        #Test creating a valid suggestion.
+        url = reverse('create_suggestion')  # Assuming you have configured your URL patterns
+        data = {'title': 'Test Suggestion', 'description': 'This is a test suggestion.'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(SuggestionBox.objects.count(), 1)
+        
+        # Check that the suggestionID is assigned automatically
+        suggestion_id = response.data.get('suggestionID')
+        self.assertIsNotNone(suggestion_id)
+        self.assertEqual(SuggestionBox.objects.get().suggestionID, suggestion_id)
+
+    def test_create_invalid_suggestion(self):
+        #Test creating an invalid suggestion.
+        url = reverse('create_suggestion')  # Assuming you have configured your URL patterns
+        data = {'title': '', 'description': ''}  # Invalid data
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('title', response.data)  # Assuming the title field error message is returned
+        
+        # Check that no suggestion was created
+        self.assertEqual(SuggestionBox.objects.count(), 0)
+
+    
