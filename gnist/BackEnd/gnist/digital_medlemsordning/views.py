@@ -38,57 +38,6 @@ def index(request):
     return HttpResponse("Hello, from the root path of digital_medlemsording.")
 
 
-# Gets certain member data about all members
-@api_view(['GET'])
-def get_all_member_data(request):
-    members = Members.objects.all()
-    member_data = []
-
-    # Get all levels ordered by points in ascending order
-    levels = Level.objects.order_by('points')
-
-    # Retrieve the highest level
-    highest_level = levels.last()
-
-    for member in members:
-        days_without_incident = member.days_without_incident
-
-        # Iterate through levels to find the correct level for the member
-        for level in levels:
-            if days_without_incident <= level.points:
-                level_name = level.name
-                break
-
-        # Check if the member's points exceed the highest level's points
-        if days_without_incident > highest_level.points:
-            level_name = highest_level.name
-        
-        is_banned = member.banned
-        if is_banned == 0:
-            profile_color = "green"
-        elif is_banned == 1:
-            profile_color = "red"
-
-        member_info = {
-            'first_name': member.first_name.upper(),
-            'level': level_name,
-            'profile_color': profile_color,
-            'profile_pic': member.profile_pic.url,
-            'banned_from': member.banned_from,  
-            'banned_until': member.banned_until,
-            'role': member.role,
-        }
-        member_data.append(member_info)
-    
-    today_date = date.today().strftime("%Y-%m-%d")
-
-    response_data = {
-        'date': today_date,
-        'members': member_data,
-    }
-    return Response(response_data)
-
-
 #signs up for an activity
 @api_view(['POST'])
 def sign_up_activity(request):
@@ -867,7 +816,7 @@ def get_all_unverified_members(request):
     return Response(response_data, status=200)
 
 
-# Gets certain member data about a specific user
+# Gets dashboard information about a specific member
 @api_view(['GET'])
 def get_one_member_data(request, auth0_id):
 
@@ -1119,6 +1068,58 @@ def get_activity_details(request, activity_id):
     serializer = ActivitySerializer(activity)
     
     return Response(serializer.data)
+
+
+# Gets dashboard information about all members
+@api_view(['GET'])
+def get_all_member_data(request):
+    members = Members.objects.all()
+    member_data = []
+
+    # Get all levels ordered by points in ascending order
+    levels = Level.objects.order_by('points')
+
+    # Retrieve the highest level
+    highest_level = levels.last()
+
+    for member in members:
+        days_without_incident = member.days_without_incident
+
+        # Iterate through levels to find the correct level for the member
+        for level in levels:
+            if days_without_incident <= level.points:
+                level_name = level.name
+                break
+
+        # Check if the member's points exceed the highest level's points
+        if days_without_incident > highest_level.points:
+            level_name = highest_level.name
+        
+        is_banned = member.banned
+        if is_banned == 0:
+            profile_color = "green"
+        elif is_banned == 1:
+            profile_color = "red"
+
+        member_info = {
+            'first_name': member.first_name.upper(),
+            'level': level_name,
+            'profile_color': profile_color,
+            'profile_pic': member.profile_pic.url,
+            'banned_from': member.banned_from,  
+            'banned_until': member.banned_until,
+            'role': member.role,
+        }
+        member_data.append(member_info)
+    
+    today_date = date.today().strftime("%Y-%m-%d")
+
+    response_data = {
+        'date': today_date,
+        'members': member_data,
+    }
+    return Response(response_data)
+
 
 #-------------------------------------------------------------------------------------------------------------------------------
 

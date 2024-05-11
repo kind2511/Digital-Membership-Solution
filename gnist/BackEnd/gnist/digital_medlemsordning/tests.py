@@ -1288,7 +1288,6 @@ class GetAllMemberDashboardDataTests(APITestCase):
         )
         Level.objects.create(name="Level 1", points=10)
         Level.objects.create(name="Level 2", points=20)
-        # Add more levels as needed
     
     def test_get_all_member_data_success(self):
         """
