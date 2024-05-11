@@ -1083,6 +1083,7 @@ def members_with_info(request):
 
     return Response(response_data, status=200)
 
+
 # Verifies a member
 @api_view(['PUT'])
 def verify_member(request, auth0_id):
@@ -1095,8 +1096,9 @@ def verify_member(request, auth0_id):
         serializer = MembersSerializer(member, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save(verified=True)
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+            return Response({"message": "Member successfully verified"}, status=200)
+        return Response({"message": "Verification unsuccessful"}, status=400)
+    
     
 # Retrieves all unverfieid members
 @api_view(['GET'])
