@@ -931,3 +931,28 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Delete a specific suggestion:</h4></summary>
+
+```http
+  DELETE /digital_medlemsordning/delete_activity/{ID}/
+```
+
+| Parameter | Type     | Description                       |
+|:----------|:---------|:----------------------------------|
+| `ID`      | `string` | **Required**. The Suggestion ID   |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+##### Example Response Body:
+```json
+{
+    "message": "Suggestion deleted successfully"
+}
+```
+
+</details>
