@@ -132,7 +132,6 @@ def get_one_member_data(request, auth0_id):
         'level': level_name,
         'profile_color': profile_color,
         'profile_pic': member.profile_pic.url,
-        'certificate': member.certificate.url,
         'banned_from': member.banned_from,  
         'banned_until': member.banned_until,
         'role': member.role, 
