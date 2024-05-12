@@ -569,7 +569,6 @@ To get started, you'll need to install:
 
 </details>
 
-
 <details>
 <summary><h4>Retrieve all activites a specific member is registered for:</h4></summary>
 
@@ -613,8 +612,8 @@ To get started, you'll need to install:
     },
     {
         "activityID": 79,
-        "title": "new",
-        "description": "basket",
+        "title": "Basketball",
+        "description": "Tournement in Oslo at 5 PM",
         "image": "/media/activity_pics/basket.jpeg",
         "date": "2024-05-09",
         "limit": 20,
@@ -632,7 +631,6 @@ To get started, you'll need to install:
 ```
 
 </details>
-
 
 <details>
 <summary><h4>Delete a specific member:</h4></summary>
@@ -1124,7 +1122,7 @@ To get started, you'll need to install:
   PUT /digital_medlemsordning/verify_member/{auth0ID}/
 ```
 
-| Parameter | Type        | Description                  |
+| Parameter | Type     | Description                     |
 |:----------|:---------|:--------------------------------|
 | `auth0ID` | `string` | **Required**. Auth0ID of member |
 
@@ -1138,6 +1136,36 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Member successfully verified"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Upload member porfile picture:</h4></summary>
+
+```http
+  PATCH /digital_medlemsordning/upload-profile-picture/{auth0ID}/
+```
+
+| Content-Type                      |
+|-----------------------------------|
+|`application/multipart/form-data`  |
+
+| Parameter | Type     | Description                     |
+|:----------|:---------|:--------------------------------|
+| `auth0ID` | `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Profile picture updated successfully"
 }
 ```
 
