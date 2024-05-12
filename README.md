@@ -1631,7 +1631,6 @@ To get started, you'll need to install:
 
 </details>
 
-
 <details>
 <summary><h4>Answer a question:</h4></summary>
 
@@ -1663,6 +1662,37 @@ To get started, you'll need to install:
 ```json
 {
     "message": "User response submitted successfully."
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve answer count for specific question:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_question_responses/{questionID}/
+```
+
+| Parameter    | Type         | Description                  |
+|:-------------|:-------------|:-----------------------------|
+| `questionID` | `string`   | **Required**. ID of question   |
+
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Answer counts retrieved successfully",
+    "question": "Which month",
+    "answer_counts": {
+        "January": 1
+    }
 }
 ```
 
