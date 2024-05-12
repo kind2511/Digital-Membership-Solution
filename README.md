@@ -341,9 +341,9 @@ To get started, you'll need to install:
   GET /digital_medlemsordning/get_activity_details/{activityID}/
 ```
 
-| Parameter | Type     | Description                       |
-|:----------|:---------|:----------------------------------|
-| `ID`      | `string` | **Required**. The Activity ID     |
+| Parameter   | Type     | Description                       |
+|:------------|:---------|:----------------------------------|
+| `activityID`| `string` | **Required**. The Activity ID     |
 
 #### Response:
 
@@ -380,9 +380,9 @@ To get started, you'll need to install:
   DELETE /digital_medlemsordning/delete_activity/{ID}/
 ```
 
-| Parameter | Type     | Description                       |
-|:----------|:---------|:----------------------------------|
-| `ID`      | `string` | **Required**. The Activity ID     |
+| Parameter   | Type     | Description                       |
+|:------------|:---------|:----------------------------------|
+| `activityID`| `string` | **Required**. The Activity ID     |
 
 #### Response:
 
@@ -406,11 +406,10 @@ To get started, you'll need to install:
   POST /digital_medlemsordning/sign_up_activity/
 ```
 
-| Parameter | Type     | Description                       |
-|:----------|:---------|:----------------------------------|
-| `auth0ID` | `string` | **Required**. The Members Auth0ID |
-| `ID`      | `string` | **Required**. The Activity ID     |
-
+| Parameter   | Type     | Description                       |
+|:------------|:---------|:----------------------------------|
+| `auth0ID`   | `string` | **Required**. The Members Auth0ID |
+| `activityID`| `string` | **Required**. The Activity ID     |
 
 ##### Example POST-Body:
 ```json
@@ -442,11 +441,11 @@ To get started, you'll need to install:
   POST /digital_medlemsordning/undo_signup_activity/
 ```
 
-| Parameter | Type     | Description                        |
-|:----------|:---------|:-----------------------------------|
-| `auth0ID` | `string` | **Required**. The Members Auth0ID  |
-| `userID`  | `string` | **Optional**. The Members User ID  |
-| `ID`      | `string` | **Optional**. The Activity ID      |
+| Parameter    | Type     | Description                        |
+|:-------------|:---------|:-----------------------------------|
+| `auth0ID`    | `string` | **Required**. The Members Auth0ID  |
+| `userID`     | `string` | **Optional**. The Members User ID  |
+| `activityID` | `string` | **Optional**. The Activity ID      |
 
 - Either auth0ID or userID must be provided, but not both.
 
@@ -488,9 +487,9 @@ To get started, you'll need to install:
   GET /digital_medlemsordning/get_signed_up_members/{activityID}/
 ```
 
-| Parameter | Type     | Description                     |
-|:----------|:---------|:--------------------------------|
-| `ID`      | `string` | **Optional**. The Activity ID   |
+| Parameter    | Type     | Description                     |
+|:-------------|:---------|:--------------------------------|
+| `activityID` | `string` | **Optional**. The Activity ID   |
 
 #### Response:
 
@@ -1254,12 +1253,12 @@ To get started, you'll need to install:
 <summary><h4>Delete a specific suggestion:</h4></summary>
 
 ```http
-  DELETE /digital_medlemsordning/delete_suggestion/{ID}/
+  DELETE /digital_medlemsordning/delete_suggestion/{suggestionID}/
 ```
 
-| Parameter | Type     | Description                       |
-|:----------|:---------|:----------------------------------|
-| `ID`      | `string` | **Required**. The Suggestion ID   |
+| Parameter      | Type     | Description                       |
+|:---------------|:---------|:----------------------------------|
+| `suggestionID` | `string` | **Required**. The Suggestion ID   |
 
 #### Response:
 
