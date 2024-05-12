@@ -569,6 +569,71 @@ To get started, you'll need to install:
 
 </details>
 
+
+<details>
+<summary><h4>Retrieve all activites a specific member is registered for:</h4></summary>
+
+```http
+  GET /get_member_activites/{auth0ID}/
+```
+
+| Parameter    | Type     | Description                        |
+|:-------------|:---------|:-----------------------------------|
+| `auth0ID`    | `string` | **Required**. The Members Auth0ID  |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "activityID": 77,
+        "title": "skydive",
+        "description": "skydive",
+        "image": "/media/activity_pics/skydive.jpeg",
+        "date": "2024-05-09",
+        "limit": null,
+        "signed_up_count": 2,
+        "signed_up_members": [
+            {
+                "first_name": "soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+            },
+            {
+                "first_name": "Chris",
+                "last_name": "wfwfwf",
+                "auth0ID": "auth0|661a52a2cad534c6e30e3c37"
+            }
+        ]
+    },
+    {
+        "activityID": 79,
+        "title": "new",
+        "description": "basket",
+        "image": "/media/activity_pics/basket.jpeg",
+        "date": "2024-05-09",
+        "limit": 20,
+        "signed_up_count": 1,
+        "signed_up_members": [
+            {
+                "first_name": "soso",
+                "last_name": "Larote",
+                "auth0ID": "auth0|661e47baf4c703e30aaee8fc"
+            }
+        ]
+    },
+    ...
+]
+```
+
+</details>
+
+
 <details>
 <summary><h4>Delete a specific member:</h4></summary>
 

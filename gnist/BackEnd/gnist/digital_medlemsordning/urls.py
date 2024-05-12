@@ -36,7 +36,7 @@ urlpatterns = [
     # Gets all members signed up for a specific activity
     path('get_signed_up_members/<int:activity_id>/', views.get_signed_up_members, name='get_signed_up_members'),
     # Gets all the activities that a specific member has signed up for
-    path('get_member_activites/<str:auth0_id>/', views.get_member_activities, name='get_member_activity'),
+    path('get_member_activites/<str:auth0_id>/', views.get_member_activities, name='get_member_activities'),
 
 
     
