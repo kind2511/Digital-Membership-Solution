@@ -227,7 +227,7 @@ def get_all_members_info(request):
     members = Members.objects.all()
     serializer = MembersSerializer(members, many=True)
     return Response(serializer.data)
-    
+
 
 # Lets an employee adjust the members points total up or down
 @api_view(['PUT'])
@@ -244,8 +244,7 @@ def adjust_member_points_total(request, auth0_id):
     member.points = member.points + adjusted_points
     member.save()
 
-    serializer = MembersSerializer(member)
-    return Response(serializer.data)
+    return Response({'message': 'Member points altered'}, status=200)
 
 
 # Upload member profile picture

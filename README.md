@@ -846,7 +846,7 @@ To get started, you'll need to install:
         "birthdate": "2002-09-05",
         "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
         "gender": "gutt",
-        "days_without_incident": 101,
+        "points": 101,
         "phone_number": "12345678",
         "email": "testing@gmail.com",
         "guardian_name": null,
@@ -866,7 +866,7 @@ To get started, you'll need to install:
         "birthdate": "2006-03-06",
         "profile_pic": "/media/profile_pics/81zm9tKLsxL._AC_SL1170__JIVQUhu.jpg",
         "gender": "gutt",
-        "days_without_incident": 5,
+        "points": 5,
         "phone_number": "12345678",
         "email": "chrisa2511@gmail.com",
         "guardian_name": "",
@@ -980,6 +980,47 @@ To get started, you'll need to install:
         },
         ...
     ]
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Adjust the points of a member:</h4></summary>
+
+```http
+  PUT /digital_medlemsordning/adjust_member_points_total/{auth0ID}/
+```
+
+| Parameter           | Type     | Description                     |
+|:--------------------|:---------|:--------------------------------|
+| `auth0ID`           | `string` | **Required**. Auth0ID of member |
+| `points`            | `int`    | **Required**. Number of points  |
+
+
+##### Example POST-Body:
+```json
+{
+    "points": 10
+}
+```
+
+##### Example POST-Body:
+```json
+{
+    "points": -10
+}
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `201 Created`| `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Member points altered"
 }
 ```
 
