@@ -400,7 +400,7 @@ To get started, you'll need to install:
 
 
 <details>
-<summary><h4>Sign up a member to a activity:</h4></summary>
+<summary><h4>Sign up a member to an activity:</h4></summary>
 
 ```http
   POST /digital_medlemsordning/sign_up_activity/
@@ -430,6 +430,52 @@ To get started, you'll need to install:
 ```json
 {
     "message": "User signed up for the activity successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Unregister a member from an activity:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/undo_signup_activity/
+```
+
+| Parameter | Type     | Description                        |
+|:----------|:---------|:-----------------------------------|
+| `auth0ID` | `string` | **Required**. The Members Auth0ID  |
+| `userID`  | `string` | **Optional**. The Members User ID  |
+| `ID`      | `string` | **Optional**. The Activity ID      |
+
+- Either authoID or userID must be provided, but not both.
+
+##### Example POST-Body:
+```json
+{
+    "auth0_id": "auth0|661a52a2cad534c6e30e3c37",
+    "activity_id": 75
+}
+```
+
+##### Example POST-Body:
+```json
+{
+    "user_id": "45",
+    "activity_id": 75
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Sign-up undone successfully"
 }
 ```
 
