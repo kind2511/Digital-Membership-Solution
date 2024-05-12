@@ -101,6 +101,10 @@ To get started, you'll need to install:
   POST /digital_medlemsordning/create_activity/
 ```
 
+| Content-Type                      |
+|-----------------------------------|
+|`application/multipart/form-data`  |
+
 | Parameter      | Type     | Description                                |
 |:---------------|:---------|:-------------------------------------------|
 | `title`        | `string` | **Required**. Ttile of activity            |
@@ -122,9 +126,9 @@ To get started, you'll need to install:
 
 #### Response:
 
-| Status Code   | Content-Type                      |
-|:--------------|:----------------------------------|
-| `201 Created` | `application/multipart/form-data` |
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
 
 ##### Example Response Body:
 ```json

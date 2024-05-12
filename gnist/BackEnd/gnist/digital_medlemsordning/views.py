@@ -161,7 +161,7 @@ def add_day(request, auth0_id):
         member.save()
         new_memberdate = MemberDates(date = today, userID = member)
         new_memberdate.save()
-        return Response({'message': 'Successfully added one day without incident'})
+        return Response({'message': 'Successfully registred members attendence'})
     else:
         return Response({'message': 'Cannot add one extra day'})
 
@@ -200,7 +200,7 @@ def create_activity(request):
         serializer = ActivitySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'Activity added successfully'}, status=201)
+            return Response({'message': 'Activity created successfully'}, status=201)
         return Response(serializer.errors, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=405)
@@ -219,7 +219,6 @@ def get_member_activities(request, auth0_id):
             return Response(serializer.data)
         except Members.DoesNotExist:
             return Response({'error': 'Member not found'}, status=404)
-
 
 
 # Gets all info about all members
