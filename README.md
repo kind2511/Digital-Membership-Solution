@@ -1245,7 +1245,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Regiter attendence for a specific member:</h4></summary>
+<summary><h4>Register attendence for a specific member:</h4></summary>
 
 ```http
   POST /digital_medlemsordning/add_day/{auth0ID}/
