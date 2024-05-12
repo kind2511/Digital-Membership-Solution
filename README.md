@@ -1631,3 +1631,39 @@ To get started, you'll need to install:
 
 </details>
 
+
+<details>
+<summary><h4>Answer a question:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/submit_response/{auth0ID}/
+```
+
+| Parameter    | Type       | Description                      |
+|:-------------|:-----------|:---------------------------------|
+| `auth0ID`    | `string`   | **Required**. Auth0ID of member  |
+| `question`   | `string`   | **Required**. ID of question     |
+| `answers`    | `[string]` | **Required**. ID of answer       |
+
+##### Example POST-Body:
+```json
+{
+    "question": "40",
+    "answer": "118"
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "User response submitted successfully."
+}
+```
+
+</details>
