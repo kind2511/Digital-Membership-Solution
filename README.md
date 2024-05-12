@@ -1245,6 +1245,32 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Regiter attendence for a specific member:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/add_day/{auth0ID}/
+```
+
+| Parameter    | Type     | Description                     |
+|:-------------|:---------|:--------------------------------|
+| `auth0ID`    | `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Successfully registred members attendence"
+}
+```
+
+</details>
+
+<details>
 <summary><h4>Upload member porfile picture:</h4></summary>
 
 ```http
