@@ -1155,7 +1155,14 @@ To get started, you'll need to install:
 | Parameter    | Type     | Description                     |
 |:-------------|:---------|:--------------------------------|
 | `auth0ID`    | `string` | **Required**. Auth0ID of member |
-| `profile_pic`| `string` | **Required**. Auth0ID of member |
+| `profile_pic`| `file`   | **Required**. Profile picture   |
+
+##### Example POST-Body:
+```json
+{
+    "profile_pic": "profile_pic_.jpg"
+}
+```
 
 #### Response:
 
@@ -1176,17 +1183,25 @@ To get started, you'll need to install:
 <summary><h4>Upload a member certificate:</h4></summary>
 
 ```http
-  POST /digital_medlemsordning/upload_profile_picture/{auth0ID}/
+  POST /digital_medlemsordning/upload_member_certificates/{auth0ID}/
 ```
 
 | Content-Type                      |
 |-----------------------------------|
 |`application/multipart/form-data`  |
 
-| Parameter    | Type     | Description                     |
-|:-------------|:---------|:--------------------------------|
-| `auth0ID`    | `string` | **Required**. Auth0ID of member |
-| `profile_pic`| `string` | **Required**. Auth0ID of member |
+| Parameter           | Type     | Description                     |
+|:--------------------|:---------|:--------------------------------|
+| `certificate_image` | `file`   | **Required**. Certificate image |
+| `certificate_name`  | `string` | **Required**. Certificate name  |
+
+##### Example POST-Body:
+```json
+{
+    "certificate_image": "dj_certificate_.jpg",
+    "certificate_name": "dj certificate"
+}
+```
 
 #### Response:
 
@@ -1199,6 +1214,43 @@ To get started, you'll need to install:
 {
     "message": "Certificates uploaded successfully"
 }
+```
+
+</details>
+
+<details>
+
+<summary><h4>Get a specific members certificates:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_member_certificates/{auth0ID}/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+| Parameter    | Type     | Description                     |
+|:-------------|:---------|:--------------------------------|
+| `auth0ID`    | `string` | **Required**. Auth0ID of member |
+
+##### Example Response Body:
+```json
+[
+    {
+        "certificateID": 16,
+        "certificate_image": "/media/certificates/New-York-Skyline-Big-Bus-Tours-Jan-2018_jaMkaEM.jpg",
+        "certificate_name": "test_certificate3"
+    },
+    {
+        "certificateID": 17,
+        "certificate_image": "/media/certificates/portofino_2464491k_fue2eAB.jpg",
+        "certificate_name": "test_certificate3"
+    },
+    ...
+]
 ```
 
 </details>
