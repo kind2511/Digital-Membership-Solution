@@ -291,7 +291,7 @@ def upload_member_certificates(request, auth0_id):
             # Save the MemberCertificate object
             member_certificate.save()
 
-        return Response({"message": "Certificate uploaded successfully"}, status=200)
+        return Response({"message": "Certificate uploaded successfully"}, status=201)
     else:
         return Response("Method not allowed", status=405)
 
@@ -323,7 +323,7 @@ def delete_member_certificate(request, certificate_id):
 
     if request.method == 'DELETE':
         certificate.delete()
-        return Response("Certificate deleted successfully", status=204)
+        return Response({"message":"Certificate deleted successfully"}, status=204)
     else:
         return Response("Method not allowed", status=405)
 

@@ -1208,7 +1208,7 @@ To get started, you'll need to install:
 
 | Status Code  | Content-Type       |
 |:-------------|:-------------------|
-| `200 OK`     | `application/json` |
+| `201 Created`     | `application/json` |
 
 ##### Example Response Body:
 ```json
@@ -1252,6 +1252,31 @@ To get started, you'll need to install:
     },
     ...
 ]
+```
+
+</details>
+
+<details>
+<summary><h4>Delete a specific certificarte</h4></summary>
+
+```http
+  DELETE /digital_medlemsordning/delete_member_certificate/{certificateID}/
+```
+
+| Parameter       | Type     | Description                       |
+|:----------------|:---------|:----------------------------------|
+| `certificateID` | `string` | **Required**. ID of a certificate |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+##### Example Response Body:
+```json
+{
+    "message": "Certificate deleted successfully"
+}
 ```
 
 </details>
