@@ -398,6 +398,43 @@ To get started, you'll need to install:
 
 </details>
 
+
+<details>
+<summary><h4>Sign up a member to a activity:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/sign_up_activity/
+```
+
+| Parameter | Type     | Description                       |
+|:----------|:---------|:----------------------------------|
+| `auth0ID` | `string` | **Required**. The Members Auth0ID |
+| `ID`      | `string` | **Required**. The Activity ID     |
+
+
+##### Example POST-Body:
+```json
+{
+    "auth0_id": "auth0|661a52a2cad534c6e30e3c37",
+    "activity_id": 75
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "User signed up for the activity successfully"
+}
+```
+
+</details>
+
 <details>
 <summary><h4>Delete a specific member:</h4></summary>
 
