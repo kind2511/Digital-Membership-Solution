@@ -1152,9 +1152,10 @@ To get started, you'll need to install:
 |-----------------------------------|
 |`application/multipart/form-data`  |
 
-| Parameter | Type     | Description                     |
-|:----------|:---------|:--------------------------------|
-| `auth0ID` | `string` | **Required**. Auth0ID of member |
+| Parameter    | Type     | Description                     |
+|:-------------|:---------|:--------------------------------|
+| `auth0ID`    | `string` | **Required**. Auth0ID of member |
+| `profile_pic`| `string` | **Required**. Auth0ID of member |
 
 #### Response:
 
@@ -1166,6 +1167,37 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Profile picture updated successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Upload a member certificate:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/upload_profile_picture/{auth0ID}/
+```
+
+| Content-Type                      |
+|-----------------------------------|
+|`application/multipart/form-data`  |
+
+| Parameter    | Type     | Description                     |
+|:-------------|:---------|:--------------------------------|
+| `auth0ID`    | `string` | **Required**. Auth0ID of member |
+| `profile_pic`| `string` | **Required**. Auth0ID of member |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Certificates uploaded successfully"
 }
 ```
 

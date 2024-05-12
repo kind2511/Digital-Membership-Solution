@@ -248,9 +248,6 @@ def adjust_member_points_total(request, auth0_id):
     return Response(serializer.data)
 
 
-# Duplicate Code
-#-------------------------------------------------------------------------------------------------------
-
 # Upload member profile picture
 @api_view(['PATCH'])
 def upload_member_profile_pic(request, auth0_id):
@@ -294,7 +291,7 @@ def upload_member_certificates(request, auth0_id):
             # Save the MemberCertificate object
             member_certificate.save()
 
-        return Response("Certificates uploaded successfully", status=200)
+        return Response({"message": "Certificates uploaded successfully"}, status=200)
     else:
         return Response("Method not allowed", status=405)
 
