@@ -338,7 +338,7 @@ def create_question_with_answers(request):
     serializer = PollQuestionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": "Question and answers successfully created.", "data": serializer.data}, status=201)
+        return Response({"message": "Question and answers successfully created."}, status=201)
     return Response({"message": "Could not create question."}, status=400)
 
 

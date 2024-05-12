@@ -1522,3 +1522,43 @@ To get started, you'll need to install:
 
 </details>
 
+<details>
+<summary><h4>Create a new question and corresponding answers:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/create_question/
+```
+
+| Parameter      | Type       | Description                            |
+|:---------------|:-----------|:---------------------------------------|
+| `question`     | `string`   | **Required**. Questiion                |
+| `answers`      | `[string]` | **Required**. Answers to the question  |
+
+##### Example POST-Body:
+```json
+{
+  "question": "Which month",
+  "answers": [
+    {"answer": "January"},
+    {"answer": "February"},
+    {"answer": "March"},
+    {"answer": "April"},
+    {"answer": "May"}
+  ]
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type       |
+|:--------------|:-------------------|
+| `201 Created` | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Question and answers successfully created."
+}
+```
+
+</details>
