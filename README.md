@@ -885,6 +885,68 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Retrieve all information of all members:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_members_info/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+[
+    {
+        "userID": 54,
+        "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "first_name": "Mia",
+        "last_name": "Bird",
+        "birthdate": "2007-01-01",
+        "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+        "gender": "jente",
+        "points": 5,
+        "phone_number": "43675543",
+        "email": "mia@gmail.com",
+        "guardian_name": "",
+        "guardian_phone": "",
+        "verified": true,
+        "banned": false,
+        "banned_from": null,
+        "banned_until": null,
+        "info": "nøkkel til klubbhus",
+        "role": "member"
+    },
+    {
+        "userID": 55,
+        "auth0ID": "auth0|65ef289190350a753bf985ae",
+        "first_name": "Michael",
+        "last_name": "Larson",
+        "birthdate": "2008-01-07",
+        "profile_pic": "/media/profile_pics/Default_Profile_Picture.jpg",
+        "gender": "gutt",
+        "points": 0,
+        "phone_number": "20122310",
+        "email": "larson54@gmail.com",
+        "guardian_name": "",
+        "guardian_phone": "",
+        "verified": true,
+        "banned": false,
+        "banned_from": null,
+        "banned_until": null,
+        "info": "",
+        "role": "member"
+    },
+    ...
+]
+```
+
+</details>
+
+<details>
 <summary><h4>Ban a member:</h4></summary>
 
 ```http
