@@ -367,10 +367,7 @@ def submit_user_response(request, auth0_id):
     member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
     member_answer.save()
 
-    # Serialize the data
-    serializer = MemberAnswerSerializer(member_answer)
-
-    return Response({"message": "User response submitted successfully.", "data": serializer.data}, status=201)
+    return Response({"message": "User response submitted successfully."}, status=201)
 
 
 # Gets all anwesers and correspoinding answer alternatives
