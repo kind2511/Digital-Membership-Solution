@@ -68,14 +68,9 @@ def sign_up_activity(request):
         signup = ActivitySignup(userID=user, activityID=activity)
         signup.save()
 
-        # Serialize the activity object to include in the response
-        activity_serializer = ActivitySerializer(activity)
-
         # Return success response with the signed-up activity details
         return Response({
-            'message': 'User signed up for the activity successfully',
-            'activity': activity_serializer.data  
-        }, status=201)
+            'message': 'User signed up for the activity successfully'}, status=201)
     else:
         # Handle invalid request method
         return Response({'error': 'Invalid request method'})
