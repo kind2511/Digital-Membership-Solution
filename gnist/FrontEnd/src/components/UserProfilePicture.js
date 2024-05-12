@@ -24,7 +24,7 @@ function UserProfilePicture({ profileImg, setProfileImg, isBanned }) {
     formData.append('profile_pic', file);
     try {
       const response = await axios.patch(
-        `http://localhost:8000/digital_medlemsordning/upload-profile-picture/${user.sub}/`,
+        `http://localhost:8000/digital_medlemsordning/upload_profile_picture/${user.sub}/`,
         formData,
         {
           headers: {

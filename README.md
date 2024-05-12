@@ -1145,7 +1145,7 @@ To get started, you'll need to install:
 <summary><h4>Upload member porfile picture:</h4></summary>
 
 ```http
-  PATCH /digital_medlemsordning/upload-profile-picture/{auth0ID}/
+  PATCH /digital_medlemsordning/upload_profile_picture/{auth0ID}/
 ```
 
 | Content-Type                      |

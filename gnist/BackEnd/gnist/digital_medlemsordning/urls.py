@@ -73,7 +73,7 @@ urlpatterns = [
     
 
     # Lets a user upload a profile picture
-    path('upload-profile-picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload-profile-picture'),
+    path('upload_profile_picture/<str:auth0_id>/', views.upload_member_profile_pic, name='upload_profile_picture'),
 
     # Lets a member create and send in a suggestion
     path('create_suggestion/', views.create_suggestion, name='create_suggestion'),
