@@ -95,6 +95,47 @@ To get started, you'll need to install:
 ## API Documentation
 
 <details>
+<summary><h4>Create a new activity:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/create_activity/
+```
+
+| Parameter      | Type     | Description                                |
+|:---------------|:---------|:-------------------------------------------|
+| `title`        | `string` | **Required**. Ttile of activity            |
+| `description`  | `string` | **Required**. Description of activity      |
+| `image`        | `file`   | **Required**. Image of activity            |
+| `date`         | `string` | **Required**. Date of activity             |
+| `limit`        | `string`|  **Optional**. Member capacity of activity  |
+
+##### Example POST-Body:
+```json
+{
+    "title": "Football Night",
+    "description": "Manchester United vs Arsenal 21:00",
+    "image": "football_.jpg",
+    "date": "2024-08-19",
+    "limit": 40
+}
+```
+
+#### Response:
+
+| Status Code   | Content-Type                      |
+|:--------------|:----------------------------------|
+| `201 Created` | `application/multipart/form-data` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Activity created successfully"
+}
+```
+
+</details>
+
+<details>
 <summary><h4>Retrieve all future activities:</h4></summary>
 
 ```http
