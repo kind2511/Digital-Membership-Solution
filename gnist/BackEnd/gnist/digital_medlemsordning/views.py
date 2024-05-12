@@ -291,7 +291,7 @@ def upload_member_certificates(request, auth0_id):
             # Save the MemberCertificate object
             member_certificate.save()
 
-        return Response({"message": "Certificates uploaded successfully"}, status=200)
+        return Response({"message": "Certificate uploaded successfully"}, status=200)
     else:
         return Response("Method not allowed", status=405)
 

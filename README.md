@@ -1157,7 +1157,7 @@ To get started, you'll need to install:
 | `auth0ID`    | `string` | **Required**. Auth0ID of member |
 | `profile_pic`| `file`   | **Required**. Profile picture   |
 
-##### Example POST-Body:
+##### Example PATCH-Body:
 ```json
 {
     "profile_pic": "profile_pic_.jpg"
@@ -1192,6 +1192,7 @@ To get started, you'll need to install:
 
 | Parameter           | Type     | Description                     |
 |:--------------------|:---------|:--------------------------------|
+| `auth0ID`           | `string` | **Required**. Auth0ID of member |
 | `certificate_image` | `file`   | **Required**. Certificate image |
 | `certificate_name`  | `string` | **Required**. Certificate name  |
 
@@ -1212,7 +1213,7 @@ To get started, you'll need to install:
 ##### Example Response Body:
 ```json
 {
-    "message": "Certificates uploaded successfully"
+    "message": "Certificate uploaded successfully"
 }
 ```
 
