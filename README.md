@@ -1725,3 +1725,29 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Retrieve member registration status:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/check_user_registration_status/?sub={auth0ID}
+```
+
+| Parameter    | Type       | Description                      |
+|:-------------|:-----------|:---------------------------------|
+| `auth0ID`    | `string`   | **Required**. Auth0ID of member  |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "registered": true
+}
+```
+
+</details>
