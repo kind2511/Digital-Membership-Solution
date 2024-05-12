@@ -1582,7 +1582,7 @@ To get started, you'll need to install:
     "questions": [
         {
             "questionID": 37,
-            "question": "Who is the author of \"To Kill a Mockingbird\"?",
+            "question": "Who is the author of 'To Kill a Mockingbird'?",
             "answers": [
                 {
                     "answer_id": 109,
@@ -1630,3 +1630,4 @@ To get started, you'll need to install:
 ```
 
 </details>
+
