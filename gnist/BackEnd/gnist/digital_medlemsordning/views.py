@@ -157,7 +157,7 @@ def add_day(request, auth0_id):
         is_registered = True
 
     if is_banned == False and is_registered == False:
-        member.days_without_incident += 1
+        member.points += 1
         member.save()
         new_memberdate = MemberDates(date = today, userID = member)
         new_memberdate.save()
@@ -186,7 +186,7 @@ def register_user(request):
         days = 0
         verified = 0
 
-        new_member = Members(auth0ID=auth0id, first_name=fname, last_name=lname, birthdate=bdate, gender=gender, phone_number=phone_number, email=email, guardian_name=guardian_name, guardian_phone=guardian_phone, banned=is_banned, days_without_incident=days, verified=verified)
+        new_member = Members(auth0ID=auth0id, first_name=fname, last_name=lname, birthdate=bdate, gender=gender, phone_number=phone_number, email=email, guardian_name=guardian_name, guardian_phone=guardian_phone, banned=is_banned, points=days, verified=verified)
         new_member.save()
         return Response({'message': 'Added new user'})
     else:
@@ -237,11 +237,11 @@ def adjust_member_points_total(request, auth0_id):
     except Members.DoesNotExist:
         return Response({"error": "Member not found"}, status=404)
     
-    adjusted_points = request.data.get("days_without_incident")
+    adjusted_points = request.data.get("points")
     if adjusted_points is None:
-        return Response({"error": "Missing 'days_without_incident' field in request data"}, status=400)
+        return Response({"error": "Missing 'points' field in request data"}, status=400)
 
-    member.days_without_incident = member.days_without_incident + adjusted_points
+    member.points = member.points + adjusted_points
     member.save()
 
     serializer = MembersSerializer(member)
@@ -721,16 +721,16 @@ def get_one_member_data(request, auth0_id):
     # Retrieve the highest level
     highest_level = levels.last()
 
-    days_without_incident = member.days_without_incident
+    points = member.points
 
     # Iterate through levels to find the correct level for the member
     for level in levels:
-        if days_without_incident <= level.points:
+        if points <= level.points:
             level_name = level.name
             break
 
     # Check if the member's points exceed the highest level's points
-    if days_without_incident > highest_level.points:
+    if points > highest_level.points:
         level_name = highest_level.name
 
     member_info = {
@@ -962,16 +962,16 @@ def get_all_member_data(request):
     highest_level = levels.last()
 
     for member in members:
-        days_without_incident = member.days_without_incident
+        points = member.points
 
         # Iterate through levels to find the correct level for the member
         for level in levels:
-            if days_without_incident <= level.points:
+            if points <= level.points:
                 level_name = level.name
                 break
 
         # Check if the member's points exceed the highest level's points
-        if days_without_incident > highest_level.points:
+        if points > highest_level.points:
             level_name = highest_level.name
         
         is_banned = member.banned

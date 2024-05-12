@@ -50,7 +50,7 @@ function EndretMedlemsPoen() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ days_without_incident: adjustedPoints })
+                    body: JSON.stringify({ points: adjustedPoints })
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -95,7 +95,7 @@ function EndretMedlemsPoen() {
             {selectedMember && (
                 <div className="endret-medlems-poen-selected-member-container">
                     <h2 className="endret-medlems-poen-selected-member-name">{`${selectedMember.first_name} ${selectedMember.last_name}`}</h2>
-                    <p className="endret-medlems-poen-selected-member-points">Totale poeng: {selectedMember.days_without_incident}</p>
+                    <p className="endret-medlems-poen-selected-member-points">Totale poeng: {selectedMember.points}</p>
                     <input
                         type="number"
                         className="endret-medlems-poen-points-input"

@@ -49,7 +49,8 @@ class Members(models.Model):
     ]
     gender = models.CharField(max_length=15, choices=GENDER_CHOICES)
 
-    days_without_incident = models.IntegerField()
+    #days_without_incident = models.IntegerField()
+    points = models.IntegerField()
     phone_number = models.CharField(max_length=20)
 
     # EmailField checks that the value is a valid email address using EmailValidator.
