@@ -1562,3 +1562,71 @@ To get started, you'll need to install:
 ```
 
 </details>
+
+<details>
+<summary><h4>Retrieve all questions with corresponding answers:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_all_questions/
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "questions": [
+        {
+            "questionID": 37,
+            "question": "Who is the author of \"To Kill a Mockingbird\"?",
+            "answers": [
+                {
+                    "answer_id": 109,
+                    "answer_text": "Harper Lee"
+                },
+                {
+                    "answer_id": 110,
+                    "answer_text": "J.K. Rowling"
+                },
+                {
+                    "answer_id": 111,
+                    "answer_text": "Stephen King"
+                }
+            ]
+        },
+        {
+            "questionID": 42,
+            "question": "What is the capital city of Australia?",
+            "answers": [
+                {
+                    "answer_id": 124,
+                    "answer_text": "Sydney"
+                },
+                {
+                    "answer_id": 125,
+                    "answer_text": "Melbourne"
+                },
+                {
+                    "answer_id": 126,
+                    "answer_text": "Canberra"
+                },
+                {
+                    "answer_id": 127,
+                    "answer_text": "Perth"
+                },
+                {
+                    "answer_id": 128,
+                    "answer_text": "Brisbane"
+                }
+            ]
+        },
+        ...
+    ]
+}
+```
+
+</details>
