@@ -443,7 +443,6 @@ To get started, you'll need to install:
 
 </details>
 
-
 <details>
 <summary><h4>Sign up a member to an activity:</h4></summary>
 
@@ -1689,10 +1688,39 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Answer counts retrieved successfully",
-    "question": "Which month",
+    "question": "Which state is the largest in the US",
     "answer_counts": {
-        "January": 1
+        "Texas": 15,
+        "Alaska": 18,
+        "Main": 0,
+        "New York": 12,
+        "California": 9
     }
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Delete a specific question:</h4></summary>
+
+```http
+  DELETE digital_medlemsordning/delete_question/{questionID}/
+```
+
+| Parameter   | Type     | Description                       |
+|:------------|:---------|:----------------------------------|
+| `questionD` | `string` | **Required**. The Question ID     |
+
+#### Response:
+
+| Status Code   | `204 No Content`   |
+|:--------------|:-------------------|
+
+##### Example Response Body:
+```json
+{
+    "message": "Question deleted successfully"
 }
 ```
 
