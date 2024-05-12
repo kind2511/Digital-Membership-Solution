@@ -140,7 +140,8 @@ def get_signed_up_members(request, activity_id):
 
     return Response(response_data)
 
-@api_view(['GET'])
+# A user registers that they have attended the clubhouse or a club activity that perticular day
+@api_view(['POST'])
 def add_day(request, auth0_id):
     today = datetime.today()
 

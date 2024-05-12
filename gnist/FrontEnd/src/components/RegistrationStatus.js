@@ -24,7 +24,7 @@ function RegistrationStatus({ userSub, isRegistered, setIsRegistered }) {
     if (confirm && !isRegistered) {
       const endpoint = `${baseApiUrl}/digital_medlemsordning/add_day/${userSub}/`;
       try {
-        await axios.get(endpoint);
+        await axios.post(endpoint);
         setIsRegistered(true);
         localStorage.setItem('isRegistered', 'true');
       } catch (error) {
