@@ -448,7 +448,7 @@ To get started, you'll need to install:
 | `userID`  | `string` | **Optional**. The Members User ID  |
 | `ID`      | `string` | **Optional**. The Activity ID      |
 
-- Either authoID or userID must be provided, but not both.
+- Either auth0ID or userID must be provided, but not both.
 
 ##### Example POST-Body:
 ```json
@@ -476,6 +476,50 @@ To get started, you'll need to install:
 ```json
 {
     "message": "Sign-up undone successfully"
+}
+```
+
+</details>
+
+<details>
+<summary><h4>Retrieve all registered members for a specific activity:</h4></summary>
+
+```http
+  GET /digital_medlemsordning/get_signed_up_members/{activityID}/
+```
+
+| Parameter | Type     | Description                     |
+|:----------|:---------|:--------------------------------|
+| `ID`      | `string` | **Optional**. The Activity ID   |
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `200 OK`     | `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "activity_id": 77,
+    "activity_title": "skydive",
+    "sign_up_members": [
+        {
+            "user_id": 299,
+            "first_name": "Miles",
+            "last_name": "Larote",
+            "birthdate": "2001-12-30",
+            "profile_pic": "/media/profile_pics/bevis.png"
+        },
+        {
+            "user_id": 289,
+            "first_name": "John",
+            "last_name": "Davies",
+            "birthdate": "2006-04-16",
+            "profile_pic": "/media/profile_pics/default_profile_picture.png"
+        },
+        ...
+    ]
 }
 ```
 
