@@ -1010,6 +1010,7 @@ To get started, you'll need to install:
 {
     "points": -10
 }
+```
 
 #### Response:
 
