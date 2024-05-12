@@ -354,6 +354,11 @@ def submit_user_response(request, auth0_id):
     question_id = request.data.get('question')
     answer_id = request.data.get('answer')
 
+    try:
+        question = PollQuestion.objects.get(pk=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
     # Check if the user has already answered the question
     if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
         return Response({"error": "User has already answered this question"}, status=400)
