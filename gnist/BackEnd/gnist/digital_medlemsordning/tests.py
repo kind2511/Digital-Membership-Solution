@@ -1880,3 +1880,29 @@ class GetAllQuestionsWithAnswersAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['questions']), 0)
+
+class DeleteQuestionAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample question
+        self.question = PollQuestion.objects.create(question='Sample Question')
+
+    def test_delete_question_success(self):
+        """
+        Test deleting a question successfully
+        """
+        url = reverse('delete_question', kwargs={'question_id': self.question.questionID})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(PollQuestion.objects.filter(questionID=self.question.questionID).exists())
+        self.assertEqual(response.data, {'message': 'Question deleted successfully'})
+
+    def test_delete_question_not_found(self):
+        """
+        Test deleting a question that does not exist
+        """
+        url = reverse('delete_question', kwargs={'question_id': 999})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})

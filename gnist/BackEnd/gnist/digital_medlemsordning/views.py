@@ -210,19 +210,6 @@ def get_answer_counts_for_question(request, question_id):
     }, status=200)
 
 
-# Deletes a specific question
-@api_view(['DELETE'])
-def delete_question(request, question_id):
-    try:
-        question = PollQuestion.objects.get(questionID=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Delete the question
-    question.delete()
-
-    return Response({"message": "Question deleted successfully"}, status=204)
-
 #-------------------------------------------------------------------------------------------------------------------------------
 
 # Checks if the user is fully registered
@@ -869,6 +856,43 @@ def get_all_questions_with_answers(request):
 
     return Response({'questions': serialized_data}, status=200)
 
+
+# Gets all anwesers and correspoinding answer alternatives
+@api_view(['GET'])
+def get_all_questions_with_answers(request):
+    questions = PollQuestion.objects.all()
+    serialized_data = []
+
+    for question in questions:
+        serialized_question = PollQuestionSerializer(question).data
+        answers_data = []
+        
+        # Loop through answers for the current question
+        for answer in question.answers.all():
+            answer_data = {
+                'answer_id': answer.answerID,
+                'answer_text': answer.answer
+            }
+            answers_data.append(answer_data)
+        
+        serialized_question['answers'] = answers_data
+        serialized_data.append(serialized_question)
+
+    return Response({'questions': serialized_data}, status=200)
+
+
+# Deletes a specific question
+@api_view(['DELETE'])
+def delete_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Delete the question
+    question.delete()
+
+    return Response({"message": "Question deleted successfully"}, status=204)
 
 #-------------------------------------------------------------------------------------------------------
 # Ban/Unban
