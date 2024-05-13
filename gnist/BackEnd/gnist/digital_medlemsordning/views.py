@@ -13,7 +13,6 @@ from .models import PollQuestion
 from .models import MemberCertificate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 import json
 from .serializers import MembersSerializer
@@ -165,11 +164,9 @@ def add_day(request, auth0_id):
         return Response({'message': 'Successfully registred members attendence'})
     else:
         return Response({'message': 'Cannot add one extra day'})
+    
 
-
-# Registering a new user
 @api_view(['POST'])
-@csrf_exempt
 def register_user(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -181,17 +178,39 @@ def register_user(request):
         gender = data['gender']
         phone_number = data['phone_number']
         email = data['email']
-        guardian_name = data['guardian_name']
-        guardian_phone = data['guardian_phone']
+        
+        # Check if guardian_name and guardian_phone are present in the data
+        guardian_name = data.get('guardian_name')
+        guardian_phone = data.get('guardian_phone')
+
         is_banned = 0
         days = 0
         verified = 0
 
-        new_member = Members(auth0ID=auth0id, first_name=fname, last_name=lname, birthdate=bdate, gender=gender, phone_number=phone_number, email=email, guardian_name=guardian_name, guardian_phone=guardian_phone, banned=is_banned, points=days, verified=verified)
+        new_member_data = {
+            'auth0ID': auth0id,
+            'first_name': fname,
+            'last_name': lname,
+            'birthdate': bdate,
+            'gender': gender,
+            'phone_number': phone_number,
+            'email': email,
+            'banned': is_banned,
+            'points': days,
+            'verified': verified,
+        }
+
+        # Assign guardian_name and guardian_phone if they exist in the data
+        if guardian_name is not None:
+            new_member_data['guardian_name'] = guardian_name
+        if guardian_phone is not None:
+            new_member_data['guardian_phone'] = guardian_phone
+
+        new_member = Members(**new_member_data)
         new_member.save()
-        return Response({'message': 'Added new user'})
+        return Response({'message': 'Added new user'}, status=201)
     else:
-        return Response({'error': 'Invalid request method'})
+        return Response({'error': 'Invalid request method'}, status=405)
 
 
 # Creates a new activity 
