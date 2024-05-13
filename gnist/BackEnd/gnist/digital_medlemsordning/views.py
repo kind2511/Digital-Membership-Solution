@@ -152,21 +152,6 @@ def create_activity(request):
     else:
         return Response({'error': 'Invalid request method'}, status=405)
 
-
-# Deletes a specific certificate for one member
-@api_view(['DELETE'])
-def delete_member_certificate(request, certificate_id):
-    try:
-        certificate = MemberCertificate.objects.get(certificateID=certificate_id)
-    except MemberCertificate.DoesNotExist:
-        return Response("Certificate not found", status=404)
-
-    if request.method == 'DELETE':
-        certificate.delete()
-        return Response({"message":"Certificate deleted successfully"}, status=204)
-    else:
-        return Response("Method not allowed", status=405)
-
 #-------------------------------------------------------------------------------------------------------    
 
 #-------------------------------------------------------------------------------------------------------------------------------
@@ -748,6 +733,38 @@ def upload_member_certificates(request, auth0_id):
         return Response("Method not allowed", status=405)
     
 
+@api_view(['GET'])
+def get_member_certificates(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            # Retrieve member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+
+            # Filter certificates belonging to the member
+            certificates = MemberCertificate.objects.filter(member=member)
+            serializer = MemberCertificateSerializer(certificates, many=True)
+            return Response(serializer.data, status=200)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=404)
+    else:
+        return Response("Method not allowed", status=405)
+
+
+# Deletes a specific certificate for one member
+@api_view(['DELETE'])
+def delete_member_certificate(request, certificate_id):
+    try:
+        certificate = MemberCertificate.objects.get(certificateID=certificate_id)
+    except MemberCertificate.DoesNotExist:
+        return Response("Certificate not found", status=404)
+
+    if request.method == 'DELETE':
+        certificate.delete()
+        return Response({"message":"Certificate deleted successfully"}, status=204)
+    else:
+        return Response("Method not allowed", status=405)
+
+
 # Gets all info about all members
 @api_view(['GET'])
 def get_all_members_info(request):
@@ -930,22 +947,6 @@ def get_banned_members(request):
 
     return Response(response_data, status=status_code)
 
-
-@api_view(['GET'])
-def get_member_certificates(request, auth0_id):
-    if request.method == 'GET':
-        try:
-            # Retrieve member object based on auth0_id
-            member = Members.objects.get(auth0ID=auth0_id)
-
-            # Filter certificates belonging to the member
-            certificates = MemberCertificate.objects.filter(member=member)
-            serializer = MemberCertificateSerializer(certificates, many=True)
-            return Response(serializer.data, status=200)
-        except Members.DoesNotExist:
-            return Response("Member not found", status=404)
-    else:
-        return Response("Method not allowed", status=405)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

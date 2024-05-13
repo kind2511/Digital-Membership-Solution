@@ -1739,4 +1739,54 @@ class GetMemberCertificatesAPITestCase(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, []) 
+        self.assertEqual(response.data, [])
+
+class DeleteMemberCertificateAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create a test certificate associated with the test member
+        self.certificate = MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 1',
+            certificate_image='certificate1.jpg'
+        )
+
+    def test_delete_member_certificate_success(self):
+        """
+        Test success case
+        """
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': self.certificate.certificateID})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(MemberCertificate.objects.filter(certificateID=self.certificate.certificateID).exists())
+
+    def test_delete_member_certificate_not_found(self):
+        """
+        Test case where certificate is not found
+        """
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': 999})  # Non-existing certificate_id
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Certificate not found')
+
+    def test_delete_member_certificate_method_not_allowed(self):
+        # Attempt to make a request using an unsupported method (e.g., GET)
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': self.certificate.certificateID})
+        response = self.client.get(url)
+
+        # Verify that the response status code is 405 Method Not Allowed
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
