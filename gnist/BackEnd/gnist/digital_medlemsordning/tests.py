@@ -1595,6 +1595,9 @@ class UploadMemberCertificatesAPITestCase(APITestCase):
         )
 
     def test_upload_member_certificates_success(self):
+        """
+        Test success case
+        """
         url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
         # Create sample certificate images
         certificate_image1 = SimpleUploadedFile("certificate1.jpg", b"file_content", content_type="image/jpeg")
@@ -1607,7 +1610,7 @@ class UploadMemberCertificatesAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'Certificate uploaded successfully')
-        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  # Ensure certificates are created
+        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  
 
     def test_upload_member_certificates_missing_member(self):
         url = reverse('upload_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
