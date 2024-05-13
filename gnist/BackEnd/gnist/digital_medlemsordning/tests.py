@@ -1842,3 +1842,41 @@ class CreateQuestionWithAnswersAPITestCase(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class GetAllQuestionsWithAnswersAPITestCase(APITestCase):
+    def setUp(self):
+        # Create sample questions with answers
+        self.question1 = PollQuestion.objects.create(question='Question 1')
+        self.question2 = PollQuestion.objects.create(question='Question 2')
+        self.answer1_1 = PollAnswer.objects.create(question=self.question1, answer='Answer 1 for Question 1')
+        self.answer1_2 = PollAnswer.objects.create(question=self.question1, answer='Answer 2 for Question 1')
+        self.answer2_1 = PollAnswer.objects.create(question=self.question2, answer='Answer 1 for Question 2')
+
+    def test_get_all_questions_with_answers_success(self):
+        """
+        Test retrieving all questions with answers successfully
+        """
+        url = reverse('get_all_questions')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['questions']), 2)
+
+        # Check questions and their answers
+        self.assertEqual(response.data['questions'][0]['question'], 'Question 1')
+        self.assertEqual(len(response.data['questions'][0]['answers']), 2)
+        self.assertEqual(response.data['questions'][0]['answers'][0]['answer_id'], self.answer1_1.answerID)
+        self.assertEqual(response.data['questions'][0]['answers'][0]['answer_text'], 'Answer 1 for Question 1')
+
+    def test_get_all_questions_with_answers_no_questions(self):
+        """
+        Test retrieving all questions with answers when there are no questions
+        """
+        # Delete all questions to simulate no questions in the database
+        PollQuestion.objects.all().delete()
+
+        url = reverse('get_all_questions')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['questions']), 0)
