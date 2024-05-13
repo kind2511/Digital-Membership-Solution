@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity, ActivitySignup, MemberCertificate
+from .models import Activity, ActivitySignup, MemberCertificate, PollQuestion
 from .models import Members
 from .models import MemberDates
 from .models import Level
@@ -1792,4 +1792,53 @@ class DeleteMemberCertificateAPITestCase(APITestCase):
         response = self.client.get(url)
 
         # Verify that the response status code is 405 Method Not Allowed
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class CreateQuestionWithAnswersAPITestCase(APITestCase):
+    def test_create_question_with_answers_success(self):
+        """
+        Test creating a question with answers successfully
+        """
+        data = {
+            'question': 'What is your favorite color?',
+            'answers': [
+                {'answer': 'Red'},
+                {'answer': 'Blue'},
+                {'answer': 'Green'}
+            ]
+        }
+        url = reverse('create_question')
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(PollQuestion.objects.count(), 1)
+        self.assertEqual(PollQuestion.objects.get().question, 'What is your favorite color?')
+        self.assertEqual(PollQuestion.objects.get().answers.count(), 3)
+
+    def test_create_question_with_answers_invalid_data(self):
+        """
+        Test creating a question with invalid data
+        """
+        data = {
+            'question': '',  # Invalid: Missing question
+            'answers': [
+                {'answer': 'Red'},
+                {'answer': 'Blue'},
+                {'answer': 'Green'}
+            ]
+        }
+        url = reverse('create_question')
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(PollQuestion.objects.count(), 0)
+
+    def test_invalid_http_method(self):
+        """
+        Test sending a request with an invalid HTTP method
+        """
+        url = reverse('create_question')
+
+        response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

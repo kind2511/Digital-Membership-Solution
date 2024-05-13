@@ -157,14 +157,7 @@ def create_activity(request):
 #-------------------------------------------------------------------------------------------------------------------------------
 # Handling Polls
 
-# Create a question and corresponding possible answers
-@api_view(['POST'])
-def create_question_with_answers(request):
-    serializer = PollQuestionSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"message": "Question and answers successfully created."}, status=201)
-    return Response({"message": "Could not create question."}, status=400)
+
 
 
 # Create the ability for a member to answer a question
@@ -864,6 +857,24 @@ def delete_suggestion(request, suggestion_id):
     
 #-------------------------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------------------------
+# Suggestions
+#-------------------------------------------------------------------------------------------------------
+
+# Create a question and corresponding possible answers
+@api_view(['POST'])
+def create_question_with_answers(request):
+    serializer = PollQuestionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Question and answers successfully created."}, status=201)
+    return Response({"message": "Could not create question."}, status=400)
+
+
+#-------------------------------------------------------------------------------------------------------
+# Ban/Unban
+#-------------------------------------------------------------------------------------------------------
+
 # Bans a member
 @api_view(['PUT'])
 def ban_member(request, auth0_id):
@@ -947,6 +958,7 @@ def get_banned_members(request):
 
     return Response(response_data, status=status_code)
 
+#-------------------------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
