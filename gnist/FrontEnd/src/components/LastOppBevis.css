@@ -99,7 +99,7 @@
 
 .last-opp-modal-container {
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   position: fixed;
   top: 0;
@@ -116,7 +116,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 50%;  
-  min-height: 400px;  
+  max-height: 80%;  
+  overflow-y: auto; 
 }
 
 .last-opp-close-modal {
@@ -135,7 +136,12 @@
 }
 
 .vis-bevis-modal-button {
-  color: #32325D;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 }
 
 .certificates-container {
@@ -144,6 +150,8 @@
 }
 
 .certificate-entry {
+  display: flex;
+  justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
@@ -153,16 +161,29 @@
   border-bottom: none;
 }
 
+.certificate-entry div {
+  flex-grow: 1;
+}
+
+.certificate-entry button {
+  margin-left: 10px;
+}
 
 .certificate-image {
   width: 100%;  
   max-height: 400px;  
   object-fit: contain;  
   margin-top: 20px;  
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
 }
 
-
-.last-opp-delete-button{
-  padding: 9px;
-  background-color:red;
+.last-opp-delete-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: red;
+  color: white;
+  cursor: pointer;
 }
