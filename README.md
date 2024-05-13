@@ -38,7 +38,11 @@ To get started, you'll need to install:
     ```
     git clone https://gitlab.stud.idi.ntnu.no/ahmadmm/gnist.git
     ```
-    Then, navigate to the project directory:
+    Navigate into the prog2900-gnistdigital folder
+    ```
+    cd prog2900-gnistdigital
+    ```
+    Navigate to the project directory:
     ```
     cd gnist
     ```
@@ -60,7 +64,7 @@ To get started, you'll need to install:
     ```
     Set up a Python virtual environment:
     ```
-    python -m venv venv
+    python -m venv {name of environment}
     ```
     Activate the virtual environment:
     For Windows:
@@ -69,7 +73,7 @@ To get started, you'll need to install:
     ```
     For macOS and Linux:
     ```
-    source venv/bin/activate
+    source {name of environment}/bin/activate
     ```
     Install the required Python packages:
     ```
@@ -86,7 +90,7 @@ To get started, you'll need to install:
    Your default web browser will open to `http://localhost:3000`.
 
 2. **Start the BackEnd**:
-   In a new terminal window, ensure you're in the BackEnd directory and the virtual environment is activated, then start the Django server:
+   In a new terminal window, ensure you're in the BackEnd directory within the same folder as the manage.py file and the virtual environment is activated, then start the Django server:
     ```
     python manage.py runserver
     ```
