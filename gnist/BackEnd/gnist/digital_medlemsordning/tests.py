@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity, MemberCertificate
+from .models import Activity, ActivitySignup, MemberCertificate
 from .models import Members
 from .models import MemberDates
 from .models import Level
@@ -1629,3 +1629,56 @@ class UploadMemberCertificatesAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {'certificate_image': ['This field is required.'], 'certificate_name': ['This field is required.']})
+
+class GetMemberActivitiesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create test activities
+        self.activity1 = Activity.objects.create(
+            title='Activity 1',
+            description='Description 1',
+            date='2024-06-01',
+        )
+        self.activity2 = Activity.objects.create(
+            title='Activity 2',
+            description='Description 2',
+            date='2024-06-02',
+        )
+
+        # Sign up the member for activity 1
+        ActivitySignup.objects.create(userID=self.member, activityID=self.activity1)
+
+    def test_get_member_activities_success(self):
+        """
+        Test success case
+        """
+        url = reverse('get_member_activities', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  # Ensure only one activity is returned
+        self.assertEqual(response.data[0]['title'], 'Activity 1')  # Ensure correct activity is returned
+
+    def test_get_member_activities_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('get_member_activities', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+    
+    

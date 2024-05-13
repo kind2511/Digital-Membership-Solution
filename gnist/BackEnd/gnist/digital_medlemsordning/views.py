@@ -153,29 +153,6 @@ def create_activity(request):
         return Response({'error': 'Invalid request method'}, status=405)
 
 
-# Get all activities a specific member is signed up to
-@api_view(['GET'])
-def get_member_activities(request, auth0_id):
-    if request.method == 'GET':
-        try:
-            member = Members.objects.get(auth0ID=auth0_id)
-            member_activities = ActivitySignup.objects.filter(userID=member)
-            activity_ids = member_activities.values_list('activityID', flat=True)
-            activities = Activity.objects.filter(activityID__in=activity_ids)
-            serializer = ActivitySerializer(activities, many=True)
-            return Response(serializer.data)
-        except Members.DoesNotExist:
-            return Response({'error': 'Member not found'}, status=404)
-
-
-# Gets all info about all members
-@api_view(['GET'])
-def get_all_members_info(request):
-    members = Members.objects.all()
-    serializer = MembersSerializer(members, many=True)
-    return Response(serializer.data)
-
-
 @api_view(['GET'])
 def get_member_certificates(request, auth0_id):
     if request.method == 'GET':
@@ -786,6 +763,14 @@ def upload_member_certificates(request, auth0_id):
         return Response({"message": "Certificate uploaded successfully"}, status=201)
     else:
         return Response("Method not allowed", status=405)
+    
+
+# Gets all info about all members
+@api_view(['GET'])
+def get_all_members_info(request):
+    members = Members.objects.all()
+    serializer = MembersSerializer(members, many=True)
+    return Response(serializer.data)
 #-------------------------------------------------------------------------------------------------------
 # Levels
 #-------------------------------------------------------------------------------------------------------
@@ -1038,6 +1023,21 @@ def get_all_member_data(request):
         'members': member_data,
     }
     return Response(response_data)
+
+
+# Get all activities a specific member is signed up to
+@api_view(['GET'])
+def get_member_activities(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            member = Members.objects.get(auth0ID=auth0_id)
+            member_activities = ActivitySignup.objects.filter(userID=member)
+            activity_ids = member_activities.values_list('activityID', flat=True)
+            activities = Activity.objects.filter(activityID__in=activity_ids)
+            serializer = ActivitySerializer(activities, many=True)
+            return Response(serializer.data)
+        except Members.DoesNotExist:
+            return Response({'error': 'Member not found'}, status=404)
 
 
 #-------------------------------------------------------------------------------------------------------------------------------
