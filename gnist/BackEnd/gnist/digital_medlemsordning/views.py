@@ -139,79 +139,6 @@ def get_signed_up_members(request, activity_id):
 
     return Response(response_data)
 
-# A user registers that they have attended the clubhouse or a club activity that perticular day
-@api_view(['POST'])
-def add_day(request, auth0_id):
-    today = datetime.today()
-
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
-    
-    is_banned = member.banned
-    dates = MemberDates.objects.filter(date=today, userID=member)
-    if not dates:
-        is_registered = False
-    else:
-        is_registered = True
-
-    if is_banned == False and is_registered == False:
-        member.points += 1
-        member.save()
-        new_memberdate = MemberDates(date = today, userID = member)
-        new_memberdate.save()
-        return Response({'message': 'Successfully registred members attendence'})
-    else:
-        return Response({'message': 'Cannot add one extra day'})
-    
-
-@api_view(['POST'])
-def register_user(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        
-        auth0id = data['auth0id']
-        fname = data['first_name']
-        lname = data['last_name']
-        bdate = data['birthdate']
-        gender = data['gender']
-        phone_number = data['phone_number']
-        email = data['email']
-        
-        # Check if guardian_name and guardian_phone are present in the data
-        guardian_name = data.get('guardian_name')
-        guardian_phone = data.get('guardian_phone')
-
-        is_banned = 0
-        days = 0
-        verified = 0
-
-        new_member_data = {
-            'auth0ID': auth0id,
-            'first_name': fname,
-            'last_name': lname,
-            'birthdate': bdate,
-            'gender': gender,
-            'phone_number': phone_number,
-            'email': email,
-            'banned': is_banned,
-            'points': days,
-            'verified': verified,
-        }
-
-        # Assign guardian_name and guardian_phone if they exist in the data
-        if guardian_name is not None:
-            new_member_data['guardian_name'] = guardian_name
-        if guardian_phone is not None:
-            new_member_data['guardian_phone'] = guardian_phone
-
-        new_member = Members(**new_member_data)
-        new_member.save()
-        return Response({'message': 'Added new user'}, status=201)
-    else:
-        return Response({'error': 'Invalid request method'}, status=405)
-
 
 # Creates a new activity 
 @api_view(['POST'])
@@ -224,127 +151,6 @@ def create_activity(request):
         return Response(serializer.errors, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=405)
-
-
-# Get all activities a specific member is signed up to
-@api_view(['GET'])
-def get_member_activities(request, auth0_id):
-    if request.method == 'GET':
-        try:
-            member = Members.objects.get(auth0ID=auth0_id)
-            member_activities = ActivitySignup.objects.filter(userID=member)
-            activity_ids = member_activities.values_list('activityID', flat=True)
-            activities = Activity.objects.filter(activityID__in=activity_ids)
-            serializer = ActivitySerializer(activities, many=True)
-            return Response(serializer.data)
-        except Members.DoesNotExist:
-            return Response({'error': 'Member not found'}, status=404)
-
-
-# Gets all info about all members
-@api_view(['GET'])
-def get_all_members_info(request):
-    members = Members.objects.all()
-    serializer = MembersSerializer(members, many=True)
-    return Response(serializer.data)
-
-
-# Lets an employee adjust the members points total up or down
-@api_view(['PUT'])
-def adjust_member_points_total(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    adjusted_points = request.data.get("points")
-    if adjusted_points is None:
-        return Response({"error": "Missing 'points' field in request data"}, status=400)
-
-    member.points = member.points + adjusted_points
-    member.save()
-
-    return Response({'message': 'Member points altered'}, status=200)
-
-
-# Upload member profile picture
-@api_view(['PATCH'])
-def upload_member_profile_pic(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    if request.method == 'PATCH':
-        # Get the profile picture data from the request
-        profile_pic_data = request.data.get('profile_pic')
-        
-        # If profile picture data is provided, update the profile picture
-        if profile_pic_data:
-            member.profile_pic = profile_pic_data
-            member.save()
-            return Response({"message": "Profile picture updated successfully"}, status=200)
-        else:
-            return Response({"error": "Profile picture data not provided"}, status=400)
-    
-
-# Uploads certificates to member
-@api_view(['POST'])
-def upload_member_certificates(request, auth0_id):
-    if request.method == 'POST':
-        try:
-            # Get the member object based on auth0_id
-            member = Members.objects.get(auth0ID=auth0_id)
-        except Members.DoesNotExist:
-            return Response("Member not found", status=404)
-
-        # Retrieve list of uploaded certificates and names
-        member_certificates = request.FILES.getlist('certificate_image')
-        certificate_names = request.POST.getlist('certificate_name')
-
-        # Iterate over each uploaded certificate image and corresponding name
-        for certificate, name in zip(member_certificates, certificate_names):
-            # Create a MemberCertificate object and associate it with the member
-            member_certificate = MemberCertificate(member=member, certificate_image=certificate, certificate_name=name)
-
-            # Save the MemberCertificate object
-            member_certificate.save()
-
-        return Response({"message": "Certificate uploaded successfully"}, status=201)
-    else:
-        return Response("Method not allowed", status=405)
-
-
-@api_view(['GET'])
-def get_member_certificates(request, auth0_id):
-    if request.method == 'GET':
-        try:
-            # Retrieve member object based on auth0_id
-            member = Members.objects.get(auth0ID=auth0_id)
-
-            # Filter certificates belonging to the member
-            certificates = MemberCertificate.objects.filter(member=member)
-            serializer = MemberCertificateSerializer(certificates, many=True)
-            return Response(serializer.data, status=200)
-        except Members.DoesNotExist:
-            return Response("Member not found", status=405)
-    else:
-        return Response("Method not allowed", status=405)
-
-
-# Deletes a specific certificate for one member
-@api_view(['DELETE'])
-def delete_member_certificate(request, certificate_id):
-    try:
-        certificate = MemberCertificate.objects.get(certificateID=certificate_id)
-    except MemberCertificate.DoesNotExist:
-        return Response("Certificate not found", status=404)
-
-    if request.method == 'DELETE':
-        certificate.delete()
-        return Response({"message":"Certificate deleted successfully"}, status=204)
-    else:
-        return Response("Method not allowed", status=405)
 
 #-------------------------------------------------------------------------------------------------------    
 
@@ -530,6 +336,60 @@ def delete_activity(request, activity_id):
         return Response({'message': 'Activity deleted successfully'}, status=204)
 
 #----------------------------------------------------------------------------------------------------------------------------
+
+# Registers a new user
+@api_view(['POST'])
+def register_user(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        
+            auth0id = data['auth0id']
+            fname = data['first_name']
+            lname = data['last_name']
+            bdate = data['birthdate']
+            gender = data['gender']
+            phone_number = data['phone_number']
+            email = data['email']
+        
+            # Check if guardian_name and guardian_phone are present in the data
+            guardian_name = data.get('guardian_name')
+            guardian_phone = data.get('guardian_phone')
+
+            # Sets default values
+            is_banned = 0
+            days = 0
+            verified = 0
+
+            new_member_data = {
+                'auth0ID': auth0id,
+                'first_name': fname,
+                'last_name': lname,
+                'birthdate': bdate,
+                'gender': gender,
+                'phone_number': phone_number,
+                'email': email,
+                'banned': is_banned,
+                'points': days,
+                'verified': verified,
+            }
+
+            # Assign guardian_name and guardian_phone if they exist in the data
+            if guardian_name is not None:
+                new_member_data['guardian_name'] = guardian_name
+            if guardian_phone is not None:
+                new_member_data['guardian_phone'] = guardian_phone
+
+            new_member = Members(**new_member_data)
+            new_member.save()
+            return Response({'message': 'Added new user'}, status=201)
+        except KeyError as e:
+            return Response({'error': f'Missing required field: {str(e)}'}, status=400)
+        except Exception as e:
+            return Response({'error': f'Failed to create new user: {str(e)}'}, status=500)
+    else:
+        return Response({'error': 'Invalid request method'}, status=405)
+
 
 # Reomves a member that does not pass the verification process in the employee dashboard
 @api_view(['DELETE'])
@@ -765,6 +625,152 @@ def get_one_member_data(request, auth0_id):
     }
     return Response(response_data, status=200)
 
+
+# A user registers that they have attended the clubhouse or a club activity that perticular day
+@api_view(['POST'])
+def add_day(request, auth0_id):
+    today = datetime.today()
+
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({'error': 'User does not exist'}, status=404)
+    
+    is_banned = member.banned
+    dates = MemberDates.objects.filter(date=today, userID=member)
+    if not dates:
+        is_registered = False
+    else:
+        is_registered = True
+
+    if is_banned == False and is_registered == False:
+        member.points += 1
+        member.save()
+        new_memberdate = MemberDates(date = today, userID = member)
+        new_memberdate.save()
+        return Response({'message': 'Successfully registred members attendence'})
+    else:
+        return Response({'message': 'Cannot add one extra day'})
+
+
+# Upload member profile picture
+@api_view(['PATCH'])
+def upload_member_profile_pic(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        # Get the profile picture data from the request
+        profile_pic_data = request.data.get('profile_pic')
+        
+        # If profile picture data is provided, update the profile picture
+        if profile_pic_data:
+            member.profile_pic = profile_pic_data
+            member.save()
+            return Response({"message": "Profile picture updated successfully"}, status=200)
+        else:
+            return Response({"error": "Profile picture data not provided"}, status=400)
+
+
+# Lets an employee adjust the members points total up or down
+@api_view(['PUT'])
+def adjust_member_points_total(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    adjusted_points = request.data.get("points")
+    if adjusted_points is None:
+        return Response({"error": "Missing 'points' field in request data"}, status=400)
+
+    try:
+        adjusted_points = int(adjusted_points)  # Convert to integer
+    except ValueError:
+        return Response({"error": "'points' must be an integer"}, status=400)
+
+    member.points = member.points + adjusted_points
+    member.save()
+
+    return Response({'message': 'Member points altered'}, status=200)
+
+
+# Uploads certificates to member
+@api_view(['POST'])
+def upload_member_certificates(request, auth0_id):
+    if request.method == 'POST':
+        try:
+            # Get the member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=404)
+
+        # Retrieve list of uploaded certificates and names
+        member_certificates = request.FILES.getlist('certificate_image')
+        certificate_names = request.POST.getlist('certificate_name')
+
+        # Check if required fields are provided
+        if not member_certificates or not certificate_names:
+            error_data = {}
+            if not member_certificates:
+                error_data['certificate_image'] = ['This field is required.']
+            if not certificate_names:
+                error_data['certificate_name'] = ['This field is required.']
+            return Response(error_data, status=400)
+
+        # Iterate over each uploaded certificate image and corresponding name
+        for certificate, name in zip(member_certificates, certificate_names):
+            # Create a MemberCertificate object and associate it with the member
+            member_certificate = MemberCertificate(member=member, certificate_image=certificate, certificate_name=name)
+
+            # Save the MemberCertificate object
+            member_certificate.save()
+
+        return Response({"message": "Certificate uploaded successfully"}, status=201)
+    else:
+        return Response("Method not allowed", status=405)
+    
+
+@api_view(['GET'])
+def get_member_certificates(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            # Retrieve member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+
+            # Filter certificates belonging to the member
+            certificates = MemberCertificate.objects.filter(member=member)
+            serializer = MemberCertificateSerializer(certificates, many=True)
+            return Response(serializer.data, status=200)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=404)
+    else:
+        return Response("Method not allowed", status=405)
+
+
+# Deletes a specific certificate for one member
+@api_view(['DELETE'])
+def delete_member_certificate(request, certificate_id):
+    try:
+        certificate = MemberCertificate.objects.get(certificateID=certificate_id)
+    except MemberCertificate.DoesNotExist:
+        return Response("Certificate not found", status=404)
+
+    if request.method == 'DELETE':
+        certificate.delete()
+        return Response({"message":"Certificate deleted successfully"}, status=204)
+    else:
+        return Response("Method not allowed", status=405)
+
+
+# Gets all info about all members
+@api_view(['GET'])
+def get_all_members_info(request):
+    members = Members.objects.all()
+    serializer = MembersSerializer(members, many=True)
+    return Response(serializer.data)
 #-------------------------------------------------------------------------------------------------------
 # Levels
 #-------------------------------------------------------------------------------------------------------
@@ -941,6 +947,7 @@ def get_banned_members(request):
 
     return Response(response_data, status=status_code)
 
+
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)
 #---------------------------------------------------------------------------------------------------------------------
@@ -1017,6 +1024,21 @@ def get_all_member_data(request):
         'members': member_data,
     }
     return Response(response_data)
+
+
+# Get all activities a specific member is signed up to
+@api_view(['GET'])
+def get_member_activities(request, auth0_id):
+    if request.method == 'GET':
+        try:
+            member = Members.objects.get(auth0ID=auth0_id)
+            member_activities = ActivitySignup.objects.filter(userID=member)
+            activity_ids = member_activities.values_list('activityID', flat=True)
+            activities = Activity.objects.filter(activityID__in=activity_ids)
+            serializer = ActivitySerializer(activities, many=True)
+            return Response(serializer.data)
+        except Members.DoesNotExist:
+            return Response({'error': 'Member not found'}, status=404)
 
 
 #-------------------------------------------------------------------------------------------------------------------------------

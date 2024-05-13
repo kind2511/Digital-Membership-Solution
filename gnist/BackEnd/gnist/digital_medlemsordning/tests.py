@@ -1,14 +1,18 @@
 from datetime import date, timedelta, datetime, timezone
+import json
+from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .models import Activity
+from django.core.files.uploadedfile import SimpleUploadedFile
+from .models import Activity, ActivitySignup, MemberCertificate
 from .models import Members
 from .models import MemberDates
 from .models import Level
 from .models import SuggestionBox
 from .serializers import SuggestionBoxSerializer
 from .serializers import ActivitySerializer
+from .serializers import MembersSerializer
 
 # Create your tests here.
 
@@ -1308,3 +1312,481 @@ class GetAllMemberDashboardDataTests(APITestCase):
         self.assertIn('members', response.data)
         members_data = response.data['members']
         self.assertEqual(len(members_data), 0)  # No members
+
+class RegisterUserAPITestCase(APITestCase):
+    def setUp(self):
+        self.valid_data = {
+            "auth0id": "example_auth0_id",
+            "first_name": "John",
+            "last_name": "Doe",
+            "birthdate": "1990-01-01",
+            "gender": "male",
+            "phone_number": "1234567890",
+            "email": "john@example.com"
+        }
+
+    def test_register_user_success(self):
+        """
+        Test succesfully adding a new member
+        """
+        url = reverse('register_user')
+        response = self.client.post(url, data=json.dumps(self.valid_data), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Added new user')
+
+    def test_invalid_data(self):
+        """
+        Test where invalid data is sent in the request
+        """
+        invalid_data = self.valid_data.copy()
+        # Remove a required field to make the data invalid
+        del invalid_data["first_name"]
+    
+        url = reverse('register_user')
+        response = self.client.post(url, data=json.dumps(invalid_data), content_type='application/json')
+    
+        # Verify that the response status code is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # Verify that the response contains the expected error message
+        self.assertIn('Missing required field', response.data['error'])
+
+    def test_invalid_request_method(self):
+        """
+        Test where use of wrong HTTP request method
+        """
+        # Attempt to send a GET request to the register_user endpoint
+        url = reverse('register_user')
+        response = self.client.get(url)
+        
+        # Verify that the response status code is 405 Method Not Allowed
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class AddDayAPITestCase(APITestCase):
+    def setUp(self):
+        self.valid_data = {
+            "auth0ID": "test_auth0_id",
+            "first_name": "John",
+            "last_name": "Doe",
+            "birthdate": "1990-01-01",
+            "gender": "gutt",
+            "phone_number": "1234567890",
+            "email": "john@example.com",
+            "points": 1,
+            "role": "member"
+        }
+
+        self.member = Members.objects.create(**self.valid_data)
+        self.today = datetime.today().date()
+
+    def test_add_day_success(self):
+        """
+        Test of success case
+        """
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Successfully registred members attendence')
+        self.member.refresh_from_db()
+        self.assertTrue(MemberDates.objects.filter(date=self.today, userID=self.member).exists())
+
+    def test_add_day_non_existing_member(self):
+        """
+        Test where user does not exist
+        """
+        url = reverse('add_day', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'User does not exist')
+
+    def test_add_day_already_registered(self):
+        """
+        Test where user has already registered
+        """
+        MemberDates.objects.create(date=self.today, userID=self.member)
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Cannot add one extra day')
+        self.member.refresh_from_db()
+
+    def test_add_day_banned_member(self):
+        """
+        Test where user is banned
+        """
+        self.member.banned = True
+        self.banned_from = "2024-05-13"
+        self.banned_until = "2024-05-16"
+        self.member.save()
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Cannot add one extra day')
+        self.member.refresh_from_db()
+
+class GetAllMembersInfoAPITestCase(APITestCase):
+    def setUp(self):
+        # Create some test members
+        self.member1 = Members.objects.create(
+            auth0ID='test_auth0_id1',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+        self.member2 = Members.objects.create(
+            auth0ID='test_auth0_id2',
+            first_name='Jane',
+            last_name='Smith',
+            birthdate='1995-05-05',
+            gender='jente',
+            points=5,
+            phone_number='9876543210',
+            email='jane@example.com',
+            role='member'
+        )
+
+    def test_get_all_members_info(self):
+        """
+        Test where retrieval of all member info is a success
+        """
+        url = reverse('get_all_members_info')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Retrieve members from the database
+        members = Members.objects.all()
+        serializer = MembersSerializer(members, many=True)
+
+        # Compare serialized data from the response with the expected data
+        self.assertEqual(response.data, serializer.data)
+
+class AdjustMemberPointsTotalAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_adjust_member_points_total_success(self):
+        """
+        Test for success case
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {'points': 5}  # Adjusting points by 5
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Member points altered')
+        self.member.refresh_from_db()
+        self.assertEqual(self.member.points, 15)  # 10 (initial) + 5 (adjusted)
+
+    def test_adjust_member_points_total_missing_member(self):
+        """
+        Test where member does not exist
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        data = {'points': 5}  # Adjusting points by 5
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+
+    def test_adjust_member_points_total_missing_points_field(self):
+        """
+        Test where points param is missing
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.put(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], "Missing 'points' field in request data")
+
+    def test_adjust_member_points_total_invalid_points(self):
+        """
+        Test where points param is not of type integer
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {'points': 'abc'}  # Invalid points value (non-integer)
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], "'points' must be an integer")
+
+
+class UploadMemberProfilePicAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_upload_member_profile_pic_success(self):
+        """
+        Test success case
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'test_auth0_id'})
+        # Create a sample image file
+        image = SimpleUploadedFile("profile_pic.jpg", b"file_content", content_type="image/jpeg")
+        data = {'profile_pic': image}
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Profile picture updated successfully')
+        self.member.refresh_from_db()
+        self.assertIsNotNone(self.member.profile_pic)
+
+    def test_upload_member_profile_pic_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        image = SimpleUploadedFile("profile_pic.jpg", b"file_content", content_type="image/jpeg")
+        data = {'profile_pic': image}
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+
+    def test_upload_member_profile_pic_missing_profile_pic_data(self):
+        """
+        Test where image is not provided
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {}  # No profile picture data provided
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], 'Profile picture data not provided')
+
+class UploadMemberCertificatesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_upload_member_certificates_success(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        # Create sample certificate images
+        certificate_image1 = SimpleUploadedFile("certificate1.jpg", b"file_content", content_type="image/jpeg")
+        certificate_image2 = SimpleUploadedFile("certificate2.jpg", b"file_content", content_type="image/jpeg")
+        data = {
+            'certificate_image': [certificate_image1, certificate_image2],
+            'certificate_name': ['Certificate 1', 'Certificate 2']
+        }
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Certificate uploaded successfully')
+        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  # Ensure certificates are created
+
+    def test_upload_member_certificates_missing_member(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        # Create a sample certificate image
+        certificate_image = SimpleUploadedFile("certificate.jpg", b"file_content", content_type="image/jpeg")
+        data = {
+            'certificate_image': [certificate_image],
+            'certificate_name': ['Certificate']
+        }
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Member not found')
+
+    def test_upload_member_certificates_missing_certificate_data(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {}  # No certificate data provided
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {'certificate_image': ['This field is required.'], 'certificate_name': ['This field is required.']})
+
+class GetMemberActivitiesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create test activities
+        self.activity1 = Activity.objects.create(
+            title='Activity 1',
+            description='Description 1',
+            date='2024-06-01',
+        )
+        self.activity2 = Activity.objects.create(
+            title='Activity 2',
+            description='Description 2',
+            date='2024-06-02',
+        )
+
+        # Sign up the member for activity 1
+        ActivitySignup.objects.create(userID=self.member, activityID=self.activity1)
+
+    def test_get_member_activities_success(self):
+        """
+        Test success case
+        """
+        url = reverse('get_member_activities', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  # Ensure only one activity is returned
+        self.assertEqual(response.data[0]['title'], 'Activity 1')  # Ensure correct activity is returned
+
+    def test_get_member_activities_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('get_member_activities', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+    
+class GetMemberCertificatesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create test certificates for the member
+        MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 1',
+            certificate_image='certificate1.jpg'
+        )
+        MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 2',
+            certificate_image='certificate2.jpg'
+        )
+
+    def test_get_member_certificates_success(self):
+        """
+        Test success case
+        """
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)  # Ensure correct number of certificates returned
+
+    def test_get_member_certificates_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Member not found')
+
+    def test_get_member_certificates_empty(self):
+        """
+        Test where a member has no certificates
+        """
+        # Delete the certificates created in the setUp method
+        MemberCertificate.objects.filter(member=self.member).delete()
+
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [])
+
+class DeleteMemberCertificateAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create a test certificate associated with the test member
+        self.certificate = MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 1',
+            certificate_image='certificate1.jpg'
+        )
+
+    def test_delete_member_certificate_success(self):
+        """
+        Test success case
+        """
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': self.certificate.certificateID})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(MemberCertificate.objects.filter(certificateID=self.certificate.certificateID).exists())
+
+    def test_delete_member_certificate_not_found(self):
+        """
+        Test case where certificate is not found
+        """
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': 999})  # Non-existing certificate_id
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Certificate not found')
+
+    def test_delete_member_certificate_method_not_allowed(self):
+        # Attempt to make a request using an unsupported method (e.g., GET)
+        url = reverse('delete_member_certificate', kwargs={'certificate_id': self.certificate.certificateID})
+        response = self.client.get(url)
+
+        # Verify that the response status code is 405 Method Not Allowed
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
