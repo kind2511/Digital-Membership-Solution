@@ -7,6 +7,7 @@ function LastOppBevis() {
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [certificates, setCertificates] = useState([]);
     const [imageViewer, setImageViewer] = useState('');
@@ -36,6 +37,7 @@ function LastOppBevis() {
         fetch(`http://127.0.0.1:8000/digital_medlemsordning/get_member_certificates/${auth0ID}/`)
             .then(response => response.json())
             .then(data => {
+                console.log('Fetched certificates:', data);
                 setCertificates(data);
             })
             .catch(error => {
@@ -44,13 +46,30 @@ function LastOppBevis() {
     };
 
     const deleteCertificate = (certificateId) => {
+        console.log('Deleting certificate with ID:', certificateId);
+        if (certificateId === undefined) {
+            console.error('Certificate ID is undefined.');
+            return;
+        }
         fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_member_certificate/${certificateId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            return response.json().catch(() => {});
+        })
         .then(data => {
-            alert('Certificate deleted successfully');
-            fetchCertificates(selectedMember.auth0ID); 
+            console.log('Success data:', data);
+            setDeleteSuccess(true);
+            setTimeout(() => setDeleteSuccess(false), 3000);
+            fetchCertificates(selectedMember.auth0ID);
         })
         .catch(error => {
             console.error("Error deleting certificate:", error);
@@ -104,8 +123,6 @@ function LastOppBevis() {
             console.log('Success:', data);
             setUploadSuccess(true);
             setTimeout(() => setUploadSuccess(false), 3000);
-            setSelectedMember(null);
-            setSearchTerm('');
             fetchCertificates(selectedMember.auth0ID); 
         })
         .catch(error => {
@@ -167,17 +184,23 @@ function LastOppBevis() {
             {uploadSuccess && (
                 <div className="last-opp-success-message">Bevis ble lastet opp</div>
             )}
+            {deleteSuccess && (
+                <div className="last-opp-success-message">Bevis ble slettet</div>
+            )}
             {showModal && (
                 <div className="last-opp-modal-container">
                     <div className="last-opp-modal-content">
                         <span className="last-opp-close-modal" onClick={toggleModal}>&times;</span>
                         <div className="certificates-container">
                             {certificates.map((cert, index) => (
-                                <div key={index} className="certificate-entry">
+                                <div key={cert.certificateID} className="certificate-entry">
                                     <div onClick={() => handleCertificateClick(cert)}>
                                         {`${index + 1}. ${cert.certificate_name}`}
                                     </div>
-                                    <button className="last-opp-delete-button" onClick={() => deleteCertificate(cert.id)}>Slett</button>
+                                    <button className="last-opp-delete-button" onClick={() => {
+                                        console.log('Certificate ID to be deleted:', cert.certificateID);
+                                        deleteCertificate(cert.certificateID);
+                                    }}>Slett</button>
                                 </div>
                             ))}
                         </div>
