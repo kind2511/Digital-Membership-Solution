@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity, ActivitySignup, MemberCertificate, PollQuestion
+from .models import Activity, ActivitySignup, MemberCertificate, PollAnswer, PollQuestion
 from .models import Members
 from .models import MemberDates
 from .models import Level
