@@ -176,50 +176,6 @@ def get_all_members_info(request):
     return Response(serializer.data)
 
 
-# Lets an employee adjust the members points total up or down
-@api_view(['PUT'])
-def adjust_member_points_total(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    adjusted_points = request.data.get("points")
-    if adjusted_points is None:
-        return Response({"error": "Missing 'points' field in request data"}, status=400)
-
-    try:
-        adjusted_points = int(adjusted_points)  # Convert to integer
-    except ValueError:
-        return Response({"error": "'points' must be an integer"}, status=400)
-
-    member.points = member.points + adjusted_points
-    member.save()
-
-    return Response({'message': 'Member points altered'}, status=200)
-
-
-# Upload member profile picture
-@api_view(['PATCH'])
-def upload_member_profile_pic(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-    
-    if request.method == 'PATCH':
-        # Get the profile picture data from the request
-        profile_pic_data = request.data.get('profile_pic')
-        
-        # If profile picture data is provided, update the profile picture
-        if profile_pic_data:
-            member.profile_pic = profile_pic_data
-            member.save()
-            return Response({"message": "Profile picture updated successfully"}, status=200)
-        else:
-            return Response({"error": "Profile picture data not provided"}, status=400)
-    
-
 # Uploads certificates to member
 @api_view(['POST'])
 def upload_member_certificates(request, auth0_id):
@@ -233,6 +189,15 @@ def upload_member_certificates(request, auth0_id):
         # Retrieve list of uploaded certificates and names
         member_certificates = request.FILES.getlist('certificate_image')
         certificate_names = request.POST.getlist('certificate_name')
+
+        # Check if required fields are provided
+        if not member_certificates or not certificate_names:
+            error_data = {}
+            if not member_certificates:
+                error_data['certificate_image'] = ['This field is required.']
+            if not certificate_names:
+                error_data['certificate_name'] = ['This field is required.']
+            return Response(error_data, status=400)
 
         # Iterate over each uploaded certificate image and corresponding name
         for certificate, name in zip(member_certificates, certificate_names):
@@ -778,6 +743,85 @@ def add_day(request, auth0_id):
     else:
         return Response({'message': 'Cannot add one extra day'})
 
+
+# Upload member profile picture
+@api_view(['PATCH'])
+def upload_member_profile_pic(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    if request.method == 'PATCH':
+        # Get the profile picture data from the request
+        profile_pic_data = request.data.get('profile_pic')
+        
+        # If profile picture data is provided, update the profile picture
+        if profile_pic_data:
+            member.profile_pic = profile_pic_data
+            member.save()
+            return Response({"message": "Profile picture updated successfully"}, status=200)
+        else:
+            return Response({"error": "Profile picture data not provided"}, status=400)
+
+
+# Lets an employee adjust the members points total up or down
+@api_view(['PUT'])
+def adjust_member_points_total(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+    
+    adjusted_points = request.data.get("points")
+    if adjusted_points is None:
+        return Response({"error": "Missing 'points' field in request data"}, status=400)
+
+    try:
+        adjusted_points = int(adjusted_points)  # Convert to integer
+    except ValueError:
+        return Response({"error": "'points' must be an integer"}, status=400)
+
+    member.points = member.points + adjusted_points
+    member.save()
+
+    return Response({'message': 'Member points altered'}, status=200)
+
+
+# Uploads certificates to member
+@api_view(['POST'])
+def upload_member_certificates(request, auth0_id):
+    if request.method == 'POST':
+        try:
+            # Get the member object based on auth0_id
+            member = Members.objects.get(auth0ID=auth0_id)
+        except Members.DoesNotExist:
+            return Response("Member not found", status=404)
+
+        # Retrieve list of uploaded certificates and names
+        member_certificates = request.FILES.getlist('certificate_image')
+        certificate_names = request.POST.getlist('certificate_name')
+
+        # Check if required fields are provided
+        if not member_certificates or not certificate_names:
+            error_data = {}
+            if not member_certificates:
+                error_data['certificate_image'] = ['This field is required.']
+            if not certificate_names:
+                error_data['certificate_name'] = ['This field is required.']
+            return Response(error_data, status=400)
+
+        # Iterate over each uploaded certificate image and corresponding name
+        for certificate, name in zip(member_certificates, certificate_names):
+            # Create a MemberCertificate object and associate it with the member
+            member_certificate = MemberCertificate(member=member, certificate_image=certificate, certificate_name=name)
+
+            # Save the MemberCertificate object
+            member_certificate.save()
+
+        return Response({"message": "Certificate uploaded successfully"}, status=201)
+    else:
+        return Response("Method not allowed", status=405)
 #-------------------------------------------------------------------------------------------------------
 # Levels
 #-------------------------------------------------------------------------------------------------------
