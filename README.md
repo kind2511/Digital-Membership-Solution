@@ -650,7 +650,7 @@ To get started, you'll need to install:
 | `guardian_name`  | `string` | **Optional**. Members guardian name  |
 | `guardian_phone` | `string` | **Optional**. Members guardian phone |
 
-- Gender options: gutt | jente | ikke-Binær | 
+- Gender options: gutt | jente | ikke-Binær | vil ikke si
 
 ##### Example POST-Body:
 ```json
