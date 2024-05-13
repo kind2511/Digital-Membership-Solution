@@ -1,4 +1,5 @@
 from datetime import date, timedelta, datetime, timezone
+import json
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -1308,3 +1309,37 @@ class GetAllMemberDashboardDataTests(APITestCase):
         self.assertIn('members', response.data)
         members_data = response.data['members']
         self.assertEqual(len(members_data), 0)  # No members
+
+class RegisterUserAPITestCase(APITestCase):
+    def setUp(self):
+        self.valid_data = {
+            "auth0id": "example_auth0_id",
+            "first_name": "John",
+            "last_name": "Doe",
+            "birthdate": "1990-01-01",
+            "gender": "male",
+            "phone_number": "1234567890",
+            "email": "john@example.com"
+        }
+
+    def test_register_user_success(self):
+        """
+        Test succesfully adding a new member
+        """
+        url = reverse('register_user')
+        response = self.client.post(url, data=json.dumps(self.valid_data), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Added new user')
+
+    
+
+    def test_invalid_request_method(self):
+        """
+        Test where use of wrong HTTP request method
+        """
+        # Attempt to send a GET request to the register_user endpoint
+        url = reverse('register_user')
+        response = self.client.get(url)
+        
+        # Verify that the response status code is 405 Method Not Allowed
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
