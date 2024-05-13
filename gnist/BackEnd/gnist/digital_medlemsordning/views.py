@@ -139,35 +139,6 @@ def get_signed_up_members(request, activity_id):
 
     return Response(response_data)
 
-# A user registers that they have attended the clubhouse or a club activity that perticular day
-@api_view(['POST'])
-def add_day(request, auth0_id):
-    today = datetime.today()
-
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({'error': 'User does not exist'}, status=404)
-    
-    is_banned = member.banned
-    dates = MemberDates.objects.filter(date=today, userID=member)
-    if not dates:
-        is_registered = False
-    else:
-        is_registered = True
-
-    if is_banned == False and is_registered == False:
-        member.points += 1
-        member.save()
-        new_memberdate = MemberDates(date = today, userID = member)
-        new_memberdate.save()
-        return Response({'message': 'Successfully registred members attendence'})
-    else:
-        return Response({'message': 'Cannot add one extra day'})
-    
-
-
-
 
 # Creates a new activity 
 @api_view(['POST'])
@@ -774,6 +745,33 @@ def get_one_member_data(request, auth0_id):
         'member': member_info
     }
     return Response(response_data, status=200)
+
+
+# A user registers that they have attended the clubhouse or a club activity that perticular day
+@api_view(['POST'])
+def add_day(request, auth0_id):
+    today = datetime.today()
+
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({'error': 'User does not exist'}, status=404)
+    
+    is_banned = member.banned
+    dates = MemberDates.objects.filter(date=today, userID=member)
+    if not dates:
+        is_registered = False
+    else:
+        is_registered = True
+
+    if is_banned == False and is_registered == False:
+        member.points += 1
+        member.save()
+        new_memberdate = MemberDates(date = today, userID = member)
+        new_memberdate.save()
+        return Response({'message': 'Successfully registred members attendence'})
+    else:
+        return Response({'message': 'Cannot add one extra day'})
 
 #-------------------------------------------------------------------------------------------------------
 # Levels
