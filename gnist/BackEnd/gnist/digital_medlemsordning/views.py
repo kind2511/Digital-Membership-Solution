@@ -139,19 +139,6 @@ def get_signed_up_members(request, activity_id):
     return Response(response_data)
 
 
-# Creates a new activity 
-@api_view(['POST'])
-def create_activity(request):
-    if request.method == 'POST':
-        serializer = ActivitySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Activity created successfully'}, status=201)
-        return Response(serializer.errors, status=400)
-    else:
-        return Response({'error': 'Invalid request method'}, status=405)
-
-
 #-------------------------------------------------------------------------------------------------------------------------------
 
 # Checks if the user is fully registered
@@ -190,6 +177,19 @@ def check_user_registration_status(request):
 #----------------------------------------------------------------------------------------------------------------------------
 # Activities
 #----------------------------------------------------------------------------------------------------------------------------
+
+# Creates a new activity 
+@api_view(['POST'])
+def create_activity(request):
+    if request.method == 'POST':
+        serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Activity created successfully'}, status=201)
+        return Response(serializer.errors, status=400)
+    else:
+        return Response({'error': 'Invalid request method'}, status=405)
+
 
 # Gets all activites that that happens today or in the future
 @api_view(['GET'])

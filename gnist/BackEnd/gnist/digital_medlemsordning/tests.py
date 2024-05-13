@@ -50,7 +50,6 @@ class GetFutureActivitiesTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
-
 class GetPastActivitiesTestCase(APITestCase):
     def setUp(self):
         # Create test data
@@ -81,7 +80,6 @@ class GetPastActivitiesTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
-
 class GetTodaysActivitiesTestCase(APITestCase):
     def setUp(self):
         # Create test data
@@ -111,7 +109,6 @@ class GetTodaysActivitiesTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
-
 
 class GetAllActivitiesTestCase(APITestCase):
     def setUp(self):
@@ -212,6 +209,41 @@ class GetSpecificActivityDetailsTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Activity not found')
+
+class CreateActivityAPITestCase(APITestCase):
+    def test_create_activity_success(self):
+        """
+        Test creating a new activity successfully
+        """
+        url = reverse('create_activity')
+        data = {
+            'title': 'Test Activity',
+            'description': 'This is a test activity.',
+            'date': '2024-05-20',
+            'limit': 50,
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'Activity created successfully'})
+        self.assertTrue(Activity.objects.filter(title='Test Activity').exists())
+
+    def test_create_activity_without_limit_success(self):
+        """
+        Test creating a new activity successfully
+        """
+        url = reverse('create_activity')
+        data = {
+            'title': 'Test Activity',
+            'description': 'This is a test activity.',
+            'date': '2024-05-20',
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'Activity created successfully'})
+        self.assertTrue(Activity.objects.filter(title='Test Activity').exists())
+
 
 #---------------------------------------------------------------------------------------------------------------------
 
@@ -2021,3 +2053,4 @@ class SubmitUserResponseAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {'error': 'User has already answered this question'})
+
