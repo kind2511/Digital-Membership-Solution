@@ -114,6 +114,12 @@ and (-webkit-min-device-pixel-ratio: 2) {
   right: 45px;
   bottom: 20px;
 }
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 749px; 
+  left: 77%; 
+  
+}
 }
 
 /* Samsung S8+ in portrait */
