@@ -188,28 +188,6 @@ def submit_user_response(request, auth0_id):
     return Response({"message": "User response submitted successfully."}, status=201)
 
 
-# Gets the number of answers for each alternative answer for a specific question
-@api_view(['GET'])
-def get_answer_counts_for_question(request, question_id):
-    try:
-        question = PollQuestion.objects.get(questionID=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Retrieve all answers for the given question along with their counts
-    answer_counts = {}
-    for answer in question.answers.all():
-        count = answer.memberanswer_set.count()
-        answer_counts[answer.answer] = count
-
-    # Return response with serialized question and answer counts
-    return Response({
-        "message": "Answer counts retrieved successfully",
-        "question": question.question,  # Manually serialize the question
-        "answer_counts": answer_counts
-    }, status=200)
-
-
 #-------------------------------------------------------------------------------------------------------------------------------
 
 # Checks if the user is fully registered
@@ -870,6 +848,30 @@ def delete_question(request, question_id):
     question.delete()
 
     return Response({"message": "Question deleted successfully"}, status=204)
+
+
+# Gets the number of answers for each alternative answer for a specific question
+@api_view(['GET'])
+def get_answer_counts_for_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Retrieve all answers for the given question along with their counts
+    answer_counts = {}
+    for answer in question.answers.all():
+        count = answer.memberanswer_set.count()
+        answer_counts[answer.answer] = count
+
+    # Return response with serialized question and answer counts
+    return Response({
+        "message": "Answer counts retrieved successfully",
+        "question": question.question,  # Manually serialize the question
+        "answer_counts": answer_counts
+    }, status=200)
+
+
 #-------------------------------------------------------------------------------------------------------
 # Ban/Unban
 #-------------------------------------------------------------------------------------------------------

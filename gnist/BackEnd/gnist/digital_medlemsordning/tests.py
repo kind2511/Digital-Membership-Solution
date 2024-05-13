@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity, ActivitySignup, MemberCertificate, PollAnswer, PollQuestion
+from .models import Activity, ActivitySignup, MemberAnswer, MemberCertificate, PollAnswer, PollQuestion
 from .models import Members
 from .models import MemberDates
 from .models import Level
@@ -1903,6 +1903,54 @@ class DeleteQuestionAPITestCase(APITestCase):
         """
         url = reverse('delete_question', kwargs={'question_id': 999})
         response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})
+
+class GetAnswerCountsForQuestionAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample question with answers
+        self.question = PollQuestion.objects.create(question='Sample Question')
+        self.answer1 = PollAnswer.objects.create(question=self.question, answer='Answer 1')
+        self.answer2 = PollAnswer.objects.create(question=self.question, answer='Answer 2')
+
+        # Create a sample member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create sample member answers associated with the member
+        # Create sample member answers associated with the member and the question's answers
+        MemberAnswer.objects.create(member=self.member, answer=self.answer1, question=self.question)
+        MemberAnswer.objects.create(member=self.member, answer=self.answer1, question=self.question)
+        MemberAnswer.objects.create(member=self.member, answer=self.answer2, question=self.question)
+
+    def test_get_answer_counts_for_question_success(self):
+        """
+        Test retrieving answer counts for a question successfully
+        """
+        url = reverse('get_question_responses', kwargs={'question_id': self.question.questionID})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Answer counts retrieved successfully')
+        self.assertEqual(response.data['question'], 'Sample Question')
+        self.assertEqual(response.data['answer_counts'], {'Answer 1': 2, 'Answer 2': 1})
+
+    def test_get_answer_counts_for_question_not_found(self):
+        """
+        Test retrieving answer counts for a question that does not exist
+        """
+        url = reverse('get_question_responses', kwargs={'question_id': 999})  # Non-existing question_id
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data, {'error': 'Question not found'})
