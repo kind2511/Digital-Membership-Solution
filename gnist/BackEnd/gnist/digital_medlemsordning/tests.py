@@ -1357,3 +1357,66 @@ class RegisterUserAPITestCase(APITestCase):
         
         # Verify that the response status code is 405 Method Not Allowed
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class AddDayAPITestCase(APITestCase):
+    def setUp(self):
+        self.valid_data = {
+            "auth0ID": "test_auth0_id",
+            "first_name": "John",
+            "last_name": "Doe",
+            "birthdate": "1990-01-01",
+            "gender": "gutt",
+            "phone_number": "1234567890",
+            "email": "john@example.com",
+            "points": 1,
+            "role": "member"
+        }
+
+        self.member = Members.objects.create(**self.valid_data)
+        self.today = datetime.today().date()
+
+    def test_add_day_success(self):
+        """
+        Test of success case
+        """
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Successfully registred members attendence')
+        self.member.refresh_from_db()
+        self.assertTrue(MemberDates.objects.filter(date=self.today, userID=self.member).exists())
+
+    def test_add_day_non_existing_member(self):
+        """
+        Test where user does not exist
+        """
+        url = reverse('add_day', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'User does not exist')
+
+    def test_add_day_already_registered(self):
+        """
+        Test where user has already registered
+        """
+        MemberDates.objects.create(date=self.today, userID=self.member)
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Cannot add one extra day')
+        self.member.refresh_from_db()
+
+    def test_add_day_banned_member(self):
+        """
+        Test where user is banned
+        """
+        self.member.banned = True
+        self.banned_from = "2024-05-13"
+        self.banned_until = "2024-05-16"
+        self.member.save()
+        url = reverse('add_day', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Cannot add one extra day')
+        self.member.refresh_from_db()
+
