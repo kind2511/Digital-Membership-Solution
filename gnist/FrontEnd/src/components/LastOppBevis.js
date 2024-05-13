@@ -7,6 +7,7 @@ function LastOppBevis() {
     const [results, setResults] = useState([]);
     const [searchStatus, setSearchStatus] = useState('');
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [showModal, setShowModal] = useState(false); 
     const fileInputRef = useRef(null);
     const certificateNameRef = useRef(null);
 
@@ -87,12 +88,16 @@ function LastOppBevis() {
             console.error('Error:', error);
         });
     };
-    
 
     const handleClose = () => {
         setSelectedMember(null);
         setSearchTerm('');
         setSearchStatus('');
+    };
+
+    // Function to toggle modal display
+    const toggleModal = () => {
+        setShowModal(!showModal);
     };
 
     return (
@@ -116,6 +121,8 @@ function LastOppBevis() {
                     <div className="buttons-container">
                         <button className="upload-button" onClick={handleUpload}>Last Opp</button>
                         <button className="close-button" onClick={handleClose}>Lukk</button>
+                        {/* vis bevis */}
+                        <button className="vis-bevis-modal-button" onClick={toggleModal}>Vis Andre Bevis</button>
                     </div>
                 </div>
             ) : (
@@ -129,6 +136,15 @@ function LastOppBevis() {
             )}
             {uploadSuccess && (
                 <div className="last-opp-success-message">Bevis ble lastet opp</div>
+            )}
+            {/* Modal container */}
+            {showModal && (
+                <div className="last-opp-modal-container">
+                    <div className="last-opp-modal-content">
+                        <span className="last-opp-close-modal" onClick={toggleModal}>&times;</span>
+                        <p>Modalt innhold går her.</p>
+                    </div>
+                </div>
             )}
         </div>
     );
