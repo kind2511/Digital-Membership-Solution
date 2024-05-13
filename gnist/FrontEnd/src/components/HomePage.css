@@ -131,6 +131,14 @@ and (-webkit-min-device-pixel-ratio: 4) {
   right: 45px;
   bottom: 20px;
 }
+
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 640px; 
+  left: 50%; 
+  
+}
+
 }
 
 /* iPads in portrait and landscape */
