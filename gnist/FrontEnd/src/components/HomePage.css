@@ -158,4 +158,10 @@ and (-webkit-min-device-pixel-ratio: 2) {
   right: 190px;
   bottom: 20px;
 }
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 900px; 
+  left: 75%; 
+  
+}
 }
