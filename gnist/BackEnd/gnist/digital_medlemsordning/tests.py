@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .models import Activity
 from .models import Members
 from .models import MemberDates
@@ -1523,3 +1524,57 @@ class AdjustMemberPointsTotalAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], "'points' must be an integer")
+
+
+class UploadMemberProfilePicAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_upload_member_profile_pic_success(self):
+        """
+        Test success case
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'test_auth0_id'})
+        # Create a sample image file
+        image = SimpleUploadedFile("profile_pic.jpg", b"file_content", content_type="image/jpeg")
+        data = {'profile_pic': image}
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Profile picture updated successfully')
+        self.member.refresh_from_db()
+        self.assertIsNotNone(self.member.profile_pic)
+
+    def test_upload_member_profile_pic_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        image = SimpleUploadedFile("profile_pic.jpg", b"file_content", content_type="image/jpeg")
+        data = {'profile_pic': image}
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+
+    def test_upload_member_profile_pic_missing_profile_pic_data(self):
+        """
+        Test where image is not provided
+        """
+        url = reverse('upload_profile_picture', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {}  # No profile picture data provided
+        response = self.client.patch(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], 'Profile picture data not provided')
