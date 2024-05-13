@@ -632,6 +632,55 @@ To get started, you'll need to install:
 </details>
 
 <details>
+<summary><h4>Create a new member:</h4></summary>
+
+```http
+  POST /digital_medlemsordning/register_user/
+```
+
+| Parameter        | Type     | Description                          |
+|:-----------------|:---------|:-------------------------------------|
+| `auth0id`        | `string` | **Required**. The Members Auth0ID    |
+| `first_name`     | `string` | **Required**. Members first name     |
+| `last_name`      | `string` | **Required**. Members last name      |
+| `birthdate`      | `string` | **Required**. Members birthdate      |
+| `gender`         | `string` | **Required**. Members gneder         |
+| `phone_number`   | `string` | **Required**. Members phone number   |
+| `email`          | `string` | **Required**. Members email          |
+| `guardian_name`  | `string` | **Optional**. Members guardian name  |
+| `guardian_phone` | `string` | **Optional**. Members guardian phone |
+
+- Gender options: gutt | jente | ikke-Binær |
+
+##### Example POST-Body:
+```json
+{
+    "auth0id": "auth",
+    "first_name": "Samuel",
+    "last_name": "Samson",
+    "birthdate": "2002-09-05",
+    "phone_number": "12344321",
+    "gender": "gutt",
+    "email": "lol@hotmail.com",
+}
+```
+
+#### Response:
+
+| Status Code  | Content-Type       |
+|:-------------|:-------------------|
+| `201 Created`| `application/json` |
+
+##### Example Response Body:
+```json
+{
+    "message": "Added new user"
+}
+```
+
+</details>
+
+<details>
 <summary><h4>Delete a specific member:</h4></summary>
 
 ```http
