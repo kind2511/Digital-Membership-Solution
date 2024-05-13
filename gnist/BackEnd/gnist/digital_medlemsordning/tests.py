@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity
+from .models import Activity, MemberCertificate
 from .models import Members
 from .models import MemberDates
 from .models import Level
@@ -1578,3 +1578,54 @@ class UploadMemberProfilePicAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], 'Profile picture data not provided')
+
+class UploadMemberCertificatesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_upload_member_certificates_success(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        # Create sample certificate images
+        certificate_image1 = SimpleUploadedFile("certificate1.jpg", b"file_content", content_type="image/jpeg")
+        certificate_image2 = SimpleUploadedFile("certificate2.jpg", b"file_content", content_type="image/jpeg")
+        data = {
+            'certificate_image': [certificate_image1, certificate_image2],
+            'certificate_name': ['Certificate 1', 'Certificate 2']
+        }
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Certificate uploaded successfully')
+        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  # Ensure certificates are created
+
+    def test_upload_member_certificates_missing_member(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        # Create a sample certificate image
+        certificate_image = SimpleUploadedFile("certificate.jpg", b"file_content", content_type="image/jpeg")
+        data = {
+            'certificate_image': [certificate_image],
+            'certificate_name': ['Certificate']
+        }
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Member not found')
+
+    def test_upload_member_certificates_missing_certificate_data(self):
+        url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {}  # No certificate data provided
+        response = self.client.post(url, data, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {'certificate_image': ['This field is required.'], 'certificate_name': ['This field is required.']})
