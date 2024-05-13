@@ -1681,4 +1681,62 @@ class GetMemberActivitiesAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Member not found')
     
-    
+class GetMemberCertificatesAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create test certificates for the member
+        MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 1',
+            certificate_image='certificate1.jpg'
+        )
+        MemberCertificate.objects.create(
+            member=self.member,
+            certificate_name='Certificate 2',
+            certificate_image='certificate2.jpg'
+        )
+
+    def test_get_member_certificates_success(self):
+        """
+        Test success case
+        """
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)  # Ensure correct number of certificates returned
+
+    def test_get_member_certificates_missing_member(self):
+        """
+        Test where member is not found
+        """
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, 'Member not found')
+
+    def test_get_member_certificates_empty(self):
+        """
+        Test where a member has no certificates
+        """
+        # Delete the certificates created in the setUp method
+        MemberCertificate.objects.filter(member=self.member).delete()
+
+        url = reverse('get_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, []) 
