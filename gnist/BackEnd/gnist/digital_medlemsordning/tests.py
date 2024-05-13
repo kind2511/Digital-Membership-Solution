@@ -1331,7 +1331,21 @@ class RegisterUserAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'Added new user')
 
+    def test_invalid_data(self):
+        """
+        Test where invalid data is sent in the request
+        """
+        invalid_data = self.valid_data.copy()
+        # Remove a required field to make the data invalid
+        del invalid_data["first_name"]
     
+        url = reverse('register_user')
+        response = self.client.post(url, data=json.dumps(invalid_data), content_type='application/json')
+    
+        # Verify that the response status code is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # Verify that the response contains the expected error message
+        self.assertIn('Missing required field', response.data['error'])
 
     def test_invalid_request_method(self):
         """
