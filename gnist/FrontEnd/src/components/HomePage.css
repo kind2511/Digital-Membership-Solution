@@ -72,6 +72,15 @@
   color: #003E70;
 }
 
+/* Logo specific styles */
+.home-page .left .home-page-logo {
+  height: 60px; 
+  position: absolute;
+  top: 636px; 
+  left: 75%; 
+  transform: translateX(-50%); 
+}
+
 @media only screen and (max-width: 768px) {
   .kontakt-oss-link-container {
     right: 45px;  
