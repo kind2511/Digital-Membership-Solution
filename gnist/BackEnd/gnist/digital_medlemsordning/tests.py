@@ -1,5 +1,6 @@
 from datetime import date, timedelta, datetime, timezone
 import json
+from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -10,6 +11,7 @@ from .models import Level
 from .models import SuggestionBox
 from .serializers import SuggestionBoxSerializer
 from .serializers import ActivitySerializer
+from .serializers import MembersSerializer
 
 # Create your tests here.
 
@@ -1419,4 +1421,46 @@ class AddDayAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['message'], 'Cannot add one extra day')
         self.member.refresh_from_db()
+
+class GetAllMembersInfoAPITestCase(APITestCase):
+    def setUp(self):
+        # Create some test members
+        self.member1 = Members.objects.create(
+            auth0ID='test_auth0_id1',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+        self.member2 = Members.objects.create(
+            auth0ID='test_auth0_id2',
+            first_name='Jane',
+            last_name='Smith',
+            birthdate='1995-05-05',
+            gender='jente',
+            points=5,
+            phone_number='9876543210',
+            email='jane@example.com',
+            role='member'
+        )
+
+    def test_get_all_members_info(self):
+        """
+        Test where retrieval of all member info is a success
+        """
+        url = reverse('get_all_members_info')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Retrieve members from the database
+        members = Members.objects.all()
+        serializer = MembersSerializer(members, many=True)
+
+        # Compare serialized data from the response with the expected data
+        self.assertEqual(response.data, serializer.data)
 
