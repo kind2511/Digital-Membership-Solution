@@ -99,7 +99,7 @@ def undo_sign_up_activity(request):
                 activity.save()
 
             signup.delete()
-            return Response({'message': 'Sign-up undone successfully'}, status=200)
+            return Response({'message': 'Sign-up undon successfully'}, status=200)
         except ActivitySignup.DoesNotExist:
             return Response({'error': 'Sign-up record not found'}, status=404)
     else:
@@ -168,11 +168,7 @@ def check_user_registration_status(request):
     else:
         return Response({'error': 'Method not allowed'}, status=405)
 
-    
-    
-#----------------------------------------------------------------------------------------------------------------------------
-# TETED VIEWS
-#----------------------------------------------------------------------------------------------------------------------------
+
 
 #----------------------------------------------------------------------------------------------------------------------------
 # Activities

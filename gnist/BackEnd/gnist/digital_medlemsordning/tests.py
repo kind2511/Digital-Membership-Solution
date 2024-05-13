@@ -230,7 +230,7 @@ class CreateActivityAPITestCase(APITestCase):
 
     def test_create_activity_without_limit_success(self):
         """
-        Test creating a new activity successfully
+        Test creating a new activity without limit successfully 
         """
         url = reverse('create_activity')
         data = {
@@ -2054,3 +2054,41 @@ class SubmitUserResponseAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {'error': 'User has already answered this question'})
 
+class UndoSignUpActivityAPITestCase(APITestCase):
+    def setUp(self):
+        # Set up sample user and activity
+        self.user = Members.objects.create(auth0ID="test_auth0_id", first_name="John", last_name="Doe", birthdate="1990-01-01", gender="male", phone_number="1234567890", email="john@example.com", points=0)
+        self.activity = Activity.objects.create(title="Test Activity", description="Sample description", date="2024-01-01")
+
+    def test_undo_sign_up_activity_success(self):
+        """
+        Test unregistering from an activity successfully
+        """
+        # Sign up the user for the activity
+        ActivitySignup.objects.create(userID=self.user, activityID=self.activity)
+
+        url = reverse('undo_signup_activity')
+        data = {
+            'user_id': self.user.userID,
+            'auth0_id': self.user.auth0ID,
+            'activity_id': self.activity.activityID
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {'message': 'Sign-up undon successfully'})
+
+    def test_undo_sign_up_activity_record_not_found(self):
+        """
+        Test unregistering when the sign-up record is not found
+        """
+        url = reverse('undo_signup_activity')
+        data = {
+            'user_id': self.user.userID,
+            'auth0_id': self.user.auth0ID,
+            'activity_id': self.activity.activityID
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Sign-up record not found'})
