@@ -650,7 +650,20 @@ To get started, you'll need to install:
 | `guardian_name`  | `string` | **Optional**. Members guardian name  |
 | `guardian_phone` | `string` | **Optional**. Members guardian phone |
 
-- Gender options: gutt | jente | ikke-Binær |
+- Gender options: gutt | jente | ikke-Binær | 
+
+##### Example POST-Body:
+```json
+{
+    "auth0id": "auth",
+    "first_name": "Samuel",
+    "last_name": "Samson",
+    "birthdate": "2002-09-05",
+    "phone_number": "12344321",
+    "gender": "gutt",
+    "email": "lol@hotmail.com"
+}
+```
 
 ##### Example POST-Body:
 ```json
@@ -662,6 +675,8 @@ To get started, you'll need to install:
     "phone_number": "12344321",
     "gender": "gutt",
     "email": "lol@hotmail.com",
+    "guardian_name": "Miles",
+    "guardian_phone": "987654321"
 }
 ```
 
