@@ -1450,7 +1450,7 @@ To get started, you'll need to install:
 </details>
 
 <details>
-<summary><h4>Delete a specific certificarte</h4></summary>
+<summary><h4>Delete a specific certificate</h4></summary>
 
 ```http
   DELETE /digital_medlemsordning/delete_member_certificate/{certificateID}/
