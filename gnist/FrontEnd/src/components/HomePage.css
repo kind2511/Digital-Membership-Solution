@@ -72,6 +72,15 @@
   color: #003E70;
 }
 
+/* Logo specific styles */
+.home-page .left .home-page-logo {
+  height: 60px; 
+  position: absolute;
+  top: 636px; 
+  left: 75%; 
+  transform: translateX(-50%); 
+}
+
 @media only screen and (max-width: 768px) {
   .kontakt-oss-link-container {
     right: 45px;  
@@ -88,6 +97,12 @@ and (-webkit-min-device-pixel-ratio: 2) {
   right: 45px;
   bottom: 20px;
 }
+.home-page .left .home-page-logo {
+  height: 40px;
+  top: 749px; 
+  left: 77%; 
+  
+}
 }
 
 /* iPhone XR, iPhone 11, iPhone 12 Pro, iPhone 14 Max Pro in portrait */
@@ -98,6 +113,12 @@ and (-webkit-min-device-pixel-ratio: 2) {
 .kontakt-oss-link-container {
   right: 45px;
   bottom: 20px;
+}
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 785px; 
+  left: 77%; 
+  
 }
 }
 
@@ -110,6 +131,13 @@ and (-webkit-min-device-pixel-ratio: 4) {
   right: 45px;
   bottom: 20px;
 }
+
+.home-page .left .home-page-logo {
+  height: 50px;
+  top: 640px; 
+  left: 74%; 
+  }
+
 }
 
 /* iPads in portrait and landscape */
@@ -119,6 +147,12 @@ and (max-device-width: 1024px) {
 .kontakt-oss-link-container {
   right: 140px;
   bottom: 20px;
+}
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 900px; 
+  left: 75%; 
+  
 }
 }
 
@@ -130,5 +164,11 @@ and (-webkit-min-device-pixel-ratio: 2) {
 .kontakt-oss-link-container {
   right: 190px;
   bottom: 20px;
+}
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 1260px; 
+  left: 76%; 
+  
 }
 }
