@@ -21,7 +21,6 @@ from .serializers import LevelSerializer
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
-from .serializers import MemberAnswerSerializer
 from .serializers import MemberAttendanceSerializer
 from .serializers import MemberCertificateSerializer
 from django.db.models import Q
@@ -151,41 +150,6 @@ def create_activity(request):
         return Response(serializer.errors, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=405)
-
-#-------------------------------------------------------------------------------------------------------    
-
-#-------------------------------------------------------------------------------------------------------------------------------
-# Handling Polls
-
-
-
-
-# Create the ability for a member to answer a question
-@api_view(['POST'])
-def submit_user_response(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-
-    # Extract question and answer from request data
-    question_id = request.data.get('question')
-    answer_id = request.data.get('answer')
-
-    try:
-        question = PollQuestion.objects.get(pk=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Check if the user has already answered the question
-    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
-        return Response({"error": "User has already answered this question"}, status=400)
-
-    # Create MemberAnswer object
-    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
-    member_answer.save()
-
-    return Response({"message": "User response submitted successfully."}, status=201)
 
 
 #-------------------------------------------------------------------------------------------------------------------------------
@@ -811,6 +775,7 @@ def create_question_with_answers(request):
         return Response({"message": "Question and answers successfully created."}, status=201)
     return Response({"message": "Could not create question."}, status=400)
 
+
 # Gets all anwesers and correspoinding answer alternatives
 @api_view(['GET'])
 def get_all_questions_with_answers(request):
@@ -870,6 +835,33 @@ def get_answer_counts_for_question(request, question_id):
         "answer_counts": answer_counts
     }, status=200)
 
+
+# Create the ability for a member to answer a question
+@api_view(['POST'])
+def submit_user_response(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+
+    # Extract question and answer from request data
+    question_id = request.data.get('question')
+    answer_id = request.data.get('answer')
+
+    try:
+        question = PollQuestion.objects.get(pk=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Check if the user has already answered the question
+    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
+        return Response({"error": "User has already answered this question"}, status=400)
+
+    # Create MemberAnswer object
+    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
+    member_answer.save()
+
+    return Response({"message": "User response submitted successfully."}, status=201)
 
 #-------------------------------------------------------------------------------------------------------
 # Ban/Unban

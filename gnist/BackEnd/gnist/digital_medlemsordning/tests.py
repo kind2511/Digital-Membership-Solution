@@ -1949,8 +1949,75 @@ class GetAnswerCountsForQuestionAPITestCase(APITestCase):
         """
         Test retrieving answer counts for a question that does not exist
         """
-        url = reverse('get_question_responses', kwargs={'question_id': 999})  # Non-existing question_id
+        url = reverse('get_question_responses', kwargs={'question_id': 999})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data, {'error': 'Question not found'})
+
+class SubmitUserResponseAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create a sample question with answers
+        self.question = PollQuestion.objects.create(question='Sample Question')
+        self.answer1 = self.question.answers.create(answer='Answer 1')
+        self.answer2 = self.question.answers.create(answer='Answer 2')
+
+    def test_submit_user_response_success(self):
+        """
+        Test submitting a user response successfully
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': self.question.pk, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'User response submitted successfully.'})
+
+    def test_submit_user_response_member_not_found(self):
+        """
+        Test submitting a user response when member is not found
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': 'non_existing_id'})
+        data = {'question': self.question.pk, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Member not found'})
+
+    def test_submit_user_response_question_not_found(self):
+        """
+        Test submitting a user response for a non-existing question
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': 999, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})
+
+    def test_submit_user_response_user_already_answered(self):
+        """
+        Test submitting a user response when the user has already answered the question
+        """
+        # Create a member answer for the same question and member
+        MemberAnswer.objects.create(member=self.member, question=self.question, answer=self.answer1)
+
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': self.question.pk, 'answer': self.answer2.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {'error': 'User has already answered this question'})
