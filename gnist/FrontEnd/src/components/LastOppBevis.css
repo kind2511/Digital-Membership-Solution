@@ -97,10 +97,9 @@
   z-index: 100;  
 }
 
-/* Modal Styles */
 .last-opp-modal-container {
   display: flex;
-  justify-content: center;
+  justify-content:center;
   align-items: center;
   position: fixed;
   top: 0;
@@ -116,6 +115,8 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50%;  
+  min-height: 400px;  
 }
 
 .last-opp-close-modal {
@@ -134,5 +135,28 @@
 }
 
 .vis-bevis-modal-button {
-  color:#32325D;
+  color: #32325D;
+}
+
+.certificates-container {
+  max-height: 350px;  
+  overflow-y: auto;
+}
+
+.certificate-entry {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.certificate-entry:last-child {
+  border-bottom: none;
+}
+
+
+.certificate-image {
+  width: 100%;  
+  max-height: 400px;  
+  object-fit: contain;  
+  margin-top: 20px;  
 }
