@@ -141,6 +141,12 @@ and (max-device-width: 1024px) {
   right: 140px;
   bottom: 20px;
 }
+.home-page .left .home-page-logo {
+  height: 60px;
+  top: 785px; 
+  left: 75%; 
+  
+}
 }
 
 /* iPads Pro in portrait and landscape */
