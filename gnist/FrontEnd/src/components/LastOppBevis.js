@@ -43,6 +43,21 @@ function LastOppBevis() {
             });
     };
 
+    const deleteCertificate = (certificateId) => {
+        fetch(`http://127.0.0.1:8000/digital_medlemsordning/delete_member_certificate/${certificateId}/`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Certificate deleted successfully');
+            fetchCertificates(selectedMember.auth0ID); 
+        })
+        .catch(error => {
+            console.error("Error deleting certificate:", error);
+            alert('Failed to delete certificate.');
+        });
+    };
+
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
@@ -79,32 +94,32 @@ function LastOppBevis() {
                 'Accept': 'application/json',
             },
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-                setUploadSuccess(true);
-                setTimeout(() => setUploadSuccess(false), 3000);
-                setSelectedMember(null);
-                setSearchTerm('');
-                setCertificates([]); 
-            })
-            .catch(error => {
-                alert('Failed to upload certificate.');
-                console.error('Error:', error);
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            setUploadSuccess(true);
+            setTimeout(() => setUploadSuccess(false), 3000);
+            setSelectedMember(null);
+            setSearchTerm('');
+            fetchCertificates(selectedMember.auth0ID); 
+        })
+        .catch(error => {
+            alert('Failed to upload certificate.');
+            console.error('Error:', error);
+        });
     };
 
     const handleClose = () => {
         setSelectedMember(null);
         setSearchTerm('');
         setSearchStatus('');
-        setCertificates([]); // Clear certificates on close
-        setImageViewer(''); // Clear the image viewer
+        setCertificates([]); 
+        setImageViewer(''); 
     };
 
     const toggleModal = () => {
@@ -158,8 +173,11 @@ function LastOppBevis() {
                         <span className="last-opp-close-modal" onClick={toggleModal}>&times;</span>
                         <div className="certificates-container">
                             {certificates.map((cert, index) => (
-                                <div key={index} className="certificate-entry" onClick={() => handleCertificateClick(cert)}>
-                                    {`${index + 1}. ${cert.certificate_name}`}
+                                <div key={index} className="certificate-entry">
+                                    <div onClick={() => handleCertificateClick(cert)}>
+                                        {`${index + 1}. ${cert.certificate_name}`}
+                                    </div>
+                                    <button className="last-opp-delete-button" onClick={() => deleteCertificate(cert.id)}>Slett</button>
                                 </div>
                             ))}
                         </div>

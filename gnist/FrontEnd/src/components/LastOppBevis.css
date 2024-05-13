@@ -160,3 +160,9 @@
   object-fit: contain;  
   margin-top: 20px;  
 }
+
+
+.last-opp-delete-button{
+  padding: 9px;
+  background-color:red;
+}
