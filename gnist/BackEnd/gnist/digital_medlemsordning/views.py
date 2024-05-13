@@ -188,6 +188,11 @@ def adjust_member_points_total(request, auth0_id):
     if adjusted_points is None:
         return Response({"error": "Missing 'points' field in request data"}, status=400)
 
+    try:
+        adjusted_points = int(adjusted_points)  # Convert to integer
+    except ValueError:
+        return Response({"error": "'points' must be an integer"}, status=400)
+
     member.points = member.points + adjusted_points
     member.save()
 
