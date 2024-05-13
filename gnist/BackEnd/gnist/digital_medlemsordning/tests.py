@@ -1464,3 +1464,62 @@ class GetAllMembersInfoAPITestCase(APITestCase):
         # Compare serialized data from the response with the expected data
         self.assertEqual(response.data, serializer.data)
 
+class AdjustMemberPointsTotalAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a test member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+    def test_adjust_member_points_total_success(self):
+        """
+        Test for success case
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {'points': 5}  # Adjusting points by 5
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Member points altered')
+        self.member.refresh_from_db()
+        self.assertEqual(self.member.points, 15)  # 10 (initial) + 5 (adjusted)
+
+    def test_adjust_member_points_total_missing_member(self):
+        """
+        Test where member does not exist
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'non_existing_auth0_id'})
+        data = {'points': 5}  # Adjusting points by 5
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'Member not found')
+
+    def test_adjust_member_points_total_missing_points_field(self):
+        """
+        Test where points param is missing
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        response = self.client.put(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], "Missing 'points' field in request data")
+
+    def test_adjust_member_points_total_invalid_points(self):
+        """
+        Test where points param is not of type integer
+        """
+        url = reverse('adjust_member_points_total', kwargs={'auth0_id': 'test_auth0_id'})
+        data = {'points': 'abc'}  # Invalid points value (non-integer)
+        response = self.client.put(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], "'points' must be an integer")
