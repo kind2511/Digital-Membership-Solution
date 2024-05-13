@@ -106,7 +106,7 @@ urlpatterns = [
     # Lets a member answer a question
     path('submit_response/<str:auth0_id>/', views.submit_user_response, name='submit_response'),
     # Gets the number of member responses for each answer for a specific question
-    path('get_question_responses/<int:question_id>/', views.get_answer_counts_for_question, name='answer_counts_for_question'),
+    path('get_question_responses/<int:question_id>/', views.get_answer_counts_for_question, name='get_question_responses'),
     # Gets all questions and corresponding anwsers
     path('get_all_questions/', views.get_all_questions_with_answers, name='get_all_questions'),
     # Deletes a question and all corresponing answers
