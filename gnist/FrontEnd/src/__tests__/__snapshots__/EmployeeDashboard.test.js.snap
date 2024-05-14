@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmployeeDashboard component snapshot 1`] = `
+<div
+  className="emp-dashboard-container"
+>
+  <div
+    className="emp-navbar"
+  >
+    <div
+      className="emp-navbar-menu"
+    >
+      <div
+        className="emp-nav-item emp-active"
+        onClick={[Function]}
+      >
+        Tilstede
+      </div>
+      <div
+        className="emp-nav-item "
+        onClick={[Function]}
+      >
+        Rød
+      </div>
+      <div
+        className="emp-nav-item "
+        onClick={[Function]}
+      >
+        Aktiviteter
+      </div>
+      <div
+        className="emp-nav-item "
+        onClick={[Function]}
+      >
+        Undersøkelser
+      </div>
+      <div
+        className="emp-nav-item "
+        onClick={[Function]}
+      >
+        Medleminfo
+      </div>
+      <div
+        className="emp-nav-item "
+        onClick={[Function]}
+      >
+        Finn Bruker
+      </div>
+      <div
+        className="emp-nav-item emp-logout-item"
+        onClick={[Function]}
+      >
+        Logg Ut
+      </div>
+    </div>
+  </div>
+  <div
+    className="emp-main-content"
+  >
+    <div>
+      Tilstede Component
+    </div>
+  </div>
+</div>
+`;
