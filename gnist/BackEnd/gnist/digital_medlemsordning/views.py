@@ -436,7 +436,7 @@ def members_with_info(request):
     serializer = MembersSerializer(members_with_info, many=True)
     
     # Extracting only auth0ID and info from the serializer data
-    response_data = [{"auth0ID": member['auth0ID'], "info": member['info']} for member in serializer.data]
+    response_data = [{"auth0ID": member['auth0ID'], "first_name": member["first_name"], "last_name": member["last_name"] ,"info": member['info'], } for member in serializer.data]
 
     return Response(response_data, status=200)
 
