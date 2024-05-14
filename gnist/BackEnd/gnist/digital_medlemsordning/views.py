@@ -21,7 +21,6 @@ from .serializers import LevelSerializer
 from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
-from .serializers import MemberAnswerSerializer
 from .serializers import MemberAttendanceSerializer
 from .serializers import MemberCertificateSerializer
 from django.db.models import Q
@@ -100,7 +99,7 @@ def undo_sign_up_activity(request):
                 activity.save()
 
             signup.delete()
-            return Response({'message': 'Sign-up undone successfully'}, status=200)
+            return Response({'message': 'Sign-up undon successfully'}, status=200)
         except ActivitySignup.DoesNotExist:
             return Response({'error': 'Sign-up record not found'}, status=404)
     else:
@@ -140,120 +139,6 @@ def get_signed_up_members(request, activity_id):
     return Response(response_data)
 
 
-# Creates a new activity 
-@api_view(['POST'])
-def create_activity(request):
-    if request.method == 'POST':
-        serializer = ActivitySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Activity created successfully'}, status=201)
-        return Response(serializer.errors, status=400)
-    else:
-        return Response({'error': 'Invalid request method'}, status=405)
-
-#-------------------------------------------------------------------------------------------------------    
-
-#-------------------------------------------------------------------------------------------------------------------------------
-# Handling Polls
-
-# Create a question and corresponding possible answers
-@api_view(['POST'])
-def create_question_with_answers(request):
-    serializer = PollQuestionSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"message": "Question and answers successfully created."}, status=201)
-    return Response({"message": "Could not create question."}, status=400)
-
-
-# Create the ability for a member to answer a question
-@api_view(['POST'])
-def submit_user_response(request, auth0_id):
-    try:
-        member = Members.objects.get(auth0ID=auth0_id)
-    except Members.DoesNotExist:
-        return Response({"error": "Member not found"}, status=404)
-
-    # Extract question and answer from request data
-    question_id = request.data.get('question')
-    answer_id = request.data.get('answer')
-
-    try:
-        question = PollQuestion.objects.get(pk=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Check if the user has already answered the question
-    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
-        return Response({"error": "User has already answered this question"}, status=400)
-
-    # Create MemberAnswer object
-    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
-    member_answer.save()
-
-    return Response({"message": "User response submitted successfully."}, status=201)
-
-
-# Gets all anwesers and correspoinding answer alternatives
-@api_view(['GET'])
-def get_all_questions_with_answers(request):
-    questions = PollQuestion.objects.all()
-    serialized_data = []
-
-    for question in questions:
-        serialized_question = PollQuestionSerializer(question).data
-        answers_data = []
-        
-        # Loop through answers for the current question
-        for answer in question.answers.all():
-            answer_data = {
-                'answer_id': answer.answerID,
-                'answer_text': answer.answer
-            }
-            answers_data.append(answer_data)
-        
-        serialized_question['answers'] = answers_data
-        serialized_data.append(serialized_question)
-
-    return Response({'questions': serialized_data}, status=200)
-
-
-# Gets the number of answers for each alternative answer for a specific question
-@api_view(['GET'])
-def get_answer_counts_for_question(request, question_id):
-    try:
-        question = PollQuestion.objects.get(questionID=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Retrieve all answers for the given question along with their counts
-    answer_counts = {}
-    for answer in question.answers.all():
-        count = answer.memberanswer_set.count()
-        answer_counts[answer.answer] = count
-
-    # Return response with serialized question and answer counts
-    return Response({
-        "message": "Answer counts retrieved successfully",
-        "question": question.question,  # Manually serialize the question
-        "answer_counts": answer_counts
-    }, status=200)
-
-
-# Deletes a specific question
-@api_view(['DELETE'])
-def delete_question(request, question_id):
-    try:
-        question = PollQuestion.objects.get(questionID=question_id)
-    except PollQuestion.DoesNotExist:
-        return Response({"error": "Question not found"}, status=404)
-
-    # Delete the question
-    question.delete()
-
-    return Response({"message": "Question deleted successfully"}, status=204)
-
 #-------------------------------------------------------------------------------------------------------------------------------
 
 # Checks if the user is fully registered
@@ -283,15 +168,24 @@ def check_user_registration_status(request):
     else:
         return Response({'error': 'Method not allowed'}, status=405)
 
-    
-    
-#----------------------------------------------------------------------------------------------------------------------------
-# TETED VIEWS
-#----------------------------------------------------------------------------------------------------------------------------
+
 
 #----------------------------------------------------------------------------------------------------------------------------
 # Activities
 #----------------------------------------------------------------------------------------------------------------------------
+
+# Creates a new activity 
+@api_view(['POST'])
+def create_activity(request):
+    if request.method == 'POST':
+        serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Activity created successfully'}, status=201)
+        return Response(serializer.errors, status=400)
+    else:
+        return Response({'error': 'Invalid request method'}, status=405)
+
 
 # Gets all activites that that happens today or in the future
 @api_view(['GET'])
@@ -507,7 +401,7 @@ def add_member_info(request, auth0_id):
             # Manually construct response data with desired fields
             response_data = {
                 "auth0ID": serializer.data.get('auth0ID'),
-                "info": serializer.data.get('info')
+                "info": serializer.data.get('info'),
             }
             return Response(response_data, status=200)
         return Response(serializer.errors, status=400)
@@ -542,7 +436,7 @@ def members_with_info(request):
     serializer = MembersSerializer(members_with_info, many=True)
     
     # Extracting only auth0ID and info from the serializer data
-    response_data = [{"auth0ID": member['auth0ID'], "info": member['info']} for member in serializer.data]
+    response_data = [{"auth0ID": member['auth0ID'], "first_name": member["first_name"], "last_name": member["last_name"] ,"info": member['info'], } for member in serializer.data]
 
     return Response(response_data, status=200)
 
@@ -864,6 +758,111 @@ def delete_suggestion(request, suggestion_id):
     
 #-------------------------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------------------------
+# Questions and answers
+#-------------------------------------------------------------------------------------------------------
+
+# Create a question and corresponding possible answers
+@api_view(['POST'])
+def create_question_with_answers(request):
+    serializer = PollQuestionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Question and answers successfully created."}, status=201)
+    return Response({"message": "Could not create question."}, status=400)
+
+
+# Gets all anwesers and correspoinding answer alternatives
+@api_view(['GET'])
+def get_all_questions_with_answers(request):
+    questions = PollQuestion.objects.all()
+    serialized_data = []
+
+    for question in questions:
+        serialized_question = PollQuestionSerializer(question).data
+        answers_data = []
+        
+        # Loop through answers for the current question
+        for answer in question.answers.all():
+            answer_data = {
+                'answer_id': answer.answerID,
+                'answer_text': answer.answer
+            }
+            answers_data.append(answer_data)
+        
+        serialized_question['answers'] = answers_data
+        serialized_data.append(serialized_question)
+
+    return Response({'questions': serialized_data}, status=200)
+
+
+# Deletes a specific question
+@api_view(['DELETE'])
+def delete_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Delete the question
+    question.delete()
+
+    return Response({"message": "Question deleted successfully"}, status=204)
+
+
+# Gets the number of answers for each alternative answer for a specific question
+@api_view(['GET'])
+def get_answer_counts_for_question(request, question_id):
+    try:
+        question = PollQuestion.objects.get(questionID=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Retrieve all answers for the given question along with their counts
+    answer_counts = {}
+    for answer in question.answers.all():
+        count = answer.memberanswer_set.count()
+        answer_counts[answer.answer] = count
+
+    # Return response with serialized question and answer counts
+    return Response({
+        "message": "Answer counts retrieved successfully",
+        "question": question.question,  # Manually serialize the question
+        "answer_counts": answer_counts
+    }, status=200)
+
+
+# Create the ability for a member to answer a question
+@api_view(['POST'])
+def submit_user_response(request, auth0_id):
+    try:
+        member = Members.objects.get(auth0ID=auth0_id)
+    except Members.DoesNotExist:
+        return Response({"error": "Member not found"}, status=404)
+
+    # Extract question and answer from request data
+    question_id = request.data.get('question')
+    answer_id = request.data.get('answer')
+
+    try:
+        question = PollQuestion.objects.get(pk=question_id)
+    except PollQuestion.DoesNotExist:
+        return Response({"error": "Question not found"}, status=404)
+
+    # Check if the user has already answered the question
+    if MemberAnswer.objects.filter(member=member, question_id=question_id).exists():
+        return Response({"error": "User has already answered this question"}, status=400)
+
+    # Create MemberAnswer object
+    member_answer = MemberAnswer(member=member, question_id=question_id, answer_id=answer_id)
+    member_answer.save()
+
+    return Response({"message": "User response submitted successfully."}, status=201)
+
+#-------------------------------------------------------------------------------------------------------
+# Ban/Unban
+#-------------------------------------------------------------------------------------------------------
+
 # Bans a member
 @api_view(['PUT'])
 def ban_member(request, auth0_id):
@@ -947,6 +946,7 @@ def get_banned_members(request):
 
     return Response(response_data, status=status_code)
 
+#-------------------------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------------------------------------
 # Tested views (But not currently used in application)

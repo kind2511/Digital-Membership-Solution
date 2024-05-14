@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Activity, ActivitySignup, MemberCertificate
+from .models import Activity, ActivitySignup, MemberAnswer, MemberCertificate, PollAnswer, PollQuestion
 from .models import Members
 from .models import MemberDates
 from .models import Level
@@ -50,7 +50,6 @@ class GetFutureActivitiesTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
-
 class GetPastActivitiesTestCase(APITestCase):
     def setUp(self):
         # Create test data
@@ -81,7 +80,6 @@ class GetPastActivitiesTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
-
 class GetTodaysActivitiesTestCase(APITestCase):
     def setUp(self):
         # Create test data
@@ -111,7 +109,6 @@ class GetTodaysActivitiesTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
-
 
 class GetAllActivitiesTestCase(APITestCase):
     def setUp(self):
@@ -212,6 +209,41 @@ class GetSpecificActivityDetailsTests(APITestCase):
         # Assert error message
         self.assertIn('error', response.data)
         self.assertEqual(response.data['error'], 'Activity not found')
+
+class CreateActivityAPITestCase(APITestCase):
+    def test_create_activity_success(self):
+        """
+        Test creating a new activity successfully
+        """
+        url = reverse('create_activity')
+        data = {
+            'title': 'Test Activity',
+            'description': 'This is a test activity.',
+            'date': '2024-05-20',
+            'limit': 50,
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'Activity created successfully'})
+        self.assertTrue(Activity.objects.filter(title='Test Activity').exists())
+
+    def test_create_activity_without_limit_success(self):
+        """
+        Test creating a new activity without limit successfully 
+        """
+        url = reverse('create_activity')
+        data = {
+            'title': 'Test Activity',
+            'description': 'This is a test activity.',
+            'date': '2024-05-20',
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'Activity created successfully'})
+        self.assertTrue(Activity.objects.filter(title='Test Activity').exists())
+
 
 #---------------------------------------------------------------------------------------------------------------------
 
@@ -1595,6 +1627,9 @@ class UploadMemberCertificatesAPITestCase(APITestCase):
         )
 
     def test_upload_member_certificates_success(self):
+        """
+        Test success case
+        """
         url = reverse('upload_member_certificates', kwargs={'auth0_id': 'test_auth0_id'})
         # Create sample certificate images
         certificate_image1 = SimpleUploadedFile("certificate1.jpg", b"file_content", content_type="image/jpeg")
@@ -1607,7 +1642,7 @@ class UploadMemberCertificatesAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'Certificate uploaded successfully')
-        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  # Ensure certificates are created
+        self.assertEqual(MemberCertificate.objects.filter(member=self.member).count(), 2)  
 
     def test_upload_member_certificates_missing_member(self):
         url = reverse('upload_member_certificates', kwargs={'auth0_id': 'non_existing_auth0_id'})
@@ -1790,3 +1825,270 @@ class DeleteMemberCertificateAPITestCase(APITestCase):
 
         # Verify that the response status code is 405 Method Not Allowed
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class CreateQuestionWithAnswersAPITestCase(APITestCase):
+    def test_create_question_with_answers_success(self):
+        """
+        Test creating a question with answers successfully
+        """
+        data = {
+            'question': 'What is your favorite color?',
+            'answers': [
+                {'answer': 'Red'},
+                {'answer': 'Blue'},
+                {'answer': 'Green'}
+            ]
+        }
+        url = reverse('create_question')
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(PollQuestion.objects.count(), 1)
+        self.assertEqual(PollQuestion.objects.get().question, 'What is your favorite color?')
+        self.assertEqual(PollQuestion.objects.get().answers.count(), 3)
+
+    def test_create_question_with_answers_invalid_data(self):
+        """
+        Test creating a question with invalid data
+        """
+        data = {
+            'question': '',  # Invalid: Missing question
+            'answers': [
+                {'answer': 'Red'},
+                {'answer': 'Blue'},
+                {'answer': 'Green'}
+            ]
+        }
+        url = reverse('create_question')
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(PollQuestion.objects.count(), 0)
+
+    def test_invalid_http_method(self):
+        """
+        Test sending a request with an invalid HTTP method
+        """
+        url = reverse('create_question')
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class GetAllQuestionsWithAnswersAPITestCase(APITestCase):
+    def setUp(self):
+        # Create sample questions with answers
+        self.question1 = PollQuestion.objects.create(question='Question 1')
+        self.question2 = PollQuestion.objects.create(question='Question 2')
+        self.answer1_1 = PollAnswer.objects.create(question=self.question1, answer='Answer 1 for Question 1')
+        self.answer1_2 = PollAnswer.objects.create(question=self.question1, answer='Answer 2 for Question 1')
+        self.answer2_1 = PollAnswer.objects.create(question=self.question2, answer='Answer 1 for Question 2')
+
+    def test_get_all_questions_with_answers_success(self):
+        """
+        Test retrieving all questions with answers successfully
+        """
+        url = reverse('get_all_questions')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['questions']), 2)
+
+        # Check questions and their answers
+        self.assertEqual(response.data['questions'][0]['question'], 'Question 1')
+        self.assertEqual(len(response.data['questions'][0]['answers']), 2)
+        self.assertEqual(response.data['questions'][0]['answers'][0]['answer_id'], self.answer1_1.answerID)
+        self.assertEqual(response.data['questions'][0]['answers'][0]['answer_text'], 'Answer 1 for Question 1')
+
+    def test_get_all_questions_with_answers_no_questions(self):
+        """
+        Test retrieving all questions with answers when there are no questions
+        """
+        # Delete all questions to simulate no questions in the database
+        PollQuestion.objects.all().delete()
+
+        url = reverse('get_all_questions')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['questions']), 0)
+
+class DeleteQuestionAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample question
+        self.question = PollQuestion.objects.create(question='Sample Question')
+
+    def test_delete_question_success(self):
+        """
+        Test deleting a question successfully
+        """
+        url = reverse('delete_question', kwargs={'question_id': self.question.questionID})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(PollQuestion.objects.filter(questionID=self.question.questionID).exists())
+        self.assertEqual(response.data, {'message': 'Question deleted successfully'})
+
+    def test_delete_question_not_found(self):
+        """
+        Test deleting a question that does not exist
+        """
+        url = reverse('delete_question', kwargs={'question_id': 999})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})
+
+class GetAnswerCountsForQuestionAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample question with answers
+        self.question = PollQuestion.objects.create(question='Sample Question')
+        self.answer1 = PollAnswer.objects.create(question=self.question, answer='Answer 1')
+        self.answer2 = PollAnswer.objects.create(question=self.question, answer='Answer 2')
+
+        # Create a sample member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create sample member answers associated with the member
+        # Create sample member answers associated with the member and the question's answers
+        MemberAnswer.objects.create(member=self.member, answer=self.answer1, question=self.question)
+        MemberAnswer.objects.create(member=self.member, answer=self.answer1, question=self.question)
+        MemberAnswer.objects.create(member=self.member, answer=self.answer2, question=self.question)
+
+    def test_get_answer_counts_for_question_success(self):
+        """
+        Test retrieving answer counts for a question successfully
+        """
+        url = reverse('get_question_responses', kwargs={'question_id': self.question.questionID})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Answer counts retrieved successfully')
+        self.assertEqual(response.data['question'], 'Sample Question')
+        self.assertEqual(response.data['answer_counts'], {'Answer 1': 2, 'Answer 2': 1})
+
+    def test_get_answer_counts_for_question_not_found(self):
+        """
+        Test retrieving answer counts for a question that does not exist
+        """
+        url = reverse('get_question_responses', kwargs={'question_id': 999})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})
+
+class SubmitUserResponseAPITestCase(APITestCase):
+    def setUp(self):
+        # Create a sample member
+        self.member = Members.objects.create(
+            auth0ID='test_auth0_id',
+            first_name='John',
+            last_name='Doe',
+            birthdate='1990-01-01',
+            gender='gutt',
+            points=10,
+            phone_number='1234567890',
+            email='john@example.com',
+            role='member'
+        )
+
+        # Create a sample question with answers
+        self.question = PollQuestion.objects.create(question='Sample Question')
+        self.answer1 = self.question.answers.create(answer='Answer 1')
+        self.answer2 = self.question.answers.create(answer='Answer 2')
+
+    def test_submit_user_response_success(self):
+        """
+        Test submitting a user response successfully
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': self.question.pk, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {'message': 'User response submitted successfully.'})
+
+    def test_submit_user_response_member_not_found(self):
+        """
+        Test submitting a user response when member is not found
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': 'non_existing_id'})
+        data = {'question': self.question.pk, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Member not found'})
+
+    def test_submit_user_response_question_not_found(self):
+        """
+        Test submitting a user response for a non-existing question
+        """
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': 999, 'answer': self.answer1.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Question not found'})
+
+    def test_submit_user_response_user_already_answered(self):
+        """
+        Test submitting a user response when the user has already answered the question
+        """
+        # Create a member answer for the same question and member
+        MemberAnswer.objects.create(member=self.member, question=self.question, answer=self.answer1)
+
+        url = reverse('submit_response', kwargs={'auth0_id': self.member.auth0ID})
+        data = {'question': self.question.pk, 'answer': self.answer2.pk}
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {'error': 'User has already answered this question'})
+
+class UndoSignUpActivityAPITestCase(APITestCase):
+    def setUp(self):
+        # Set up sample user and activity
+        self.user = Members.objects.create(auth0ID="test_auth0_id", first_name="John", last_name="Doe", birthdate="1990-01-01", gender="male", phone_number="1234567890", email="john@example.com", points=0)
+        self.activity = Activity.objects.create(title="Test Activity", description="Sample description", date="2024-01-01")
+
+    def test_undo_sign_up_activity_success(self):
+        """
+        Test unregistering from an activity successfully
+        """
+        # Sign up the user for the activity
+        ActivitySignup.objects.create(userID=self.user, activityID=self.activity)
+
+        url = reverse('undo_signup_activity')
+        data = {
+            'user_id': self.user.userID,
+            'auth0_id': self.user.auth0ID,
+            'activity_id': self.activity.activityID
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {'message': 'Sign-up undon successfully'})
+
+    def test_undo_sign_up_activity_record_not_found(self):
+        """
+        Test unregistering when the sign-up record is not found
+        """
+        url = reverse('undo_signup_activity')
+        data = {
+            'user_id': self.user.userID,
+            'auth0_id': self.user.auth0ID,
+            'activity_id': self.activity.activityID
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {'error': 'Sign-up record not found'})
