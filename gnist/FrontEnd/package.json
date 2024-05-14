@@ -18,6 +18,11 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "axios-mock-adapter": "^1.19.0",
+    "babel-jest": "^29.0.0",
     "react-test-renderer": "^18.3.1"
   },
   "scripts": {
@@ -30,6 +35,14 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)/"
     ]
   },
   "browserslist": {
