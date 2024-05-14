@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodayActivitiesComponent snapshot 1`] = `
+<div
+  className="today-activities-container"
+>
+  <div
+    className="promo-sentence-container"
+  >
+    <p
+      className="promo-sentence "
+    />
+  </div>
+  <div
+    className="today-activities-list"
+  />
+</div>
+`;
