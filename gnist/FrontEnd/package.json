@@ -17,6 +17,9 @@
     "recharts": "^2.12.5",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "react-test-renderer": "^18.3.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
