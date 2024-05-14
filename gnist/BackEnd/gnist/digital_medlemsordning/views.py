@@ -401,8 +401,6 @@ def add_member_info(request, auth0_id):
             # Manually construct response data with desired fields
             response_data = {
                 "auth0ID": serializer.data.get('auth0ID'),
-                "first_name": serializer.data.get('first_name'),
-                "last_name": serializer.data.get('last_name'),
                 "info": serializer.data.get('info'),
             }
             return Response(response_data, status=200)
