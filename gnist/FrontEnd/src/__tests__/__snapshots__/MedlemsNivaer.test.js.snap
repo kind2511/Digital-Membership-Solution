@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MedlemsNivaer component snapshot 1`] = `
+<div
+  className="medlems-nivaer-container"
+>
+  <h2
+    className="medlems-nivaer-section-title"
+  >
+    Medlems Nivåer
+  </h2>
+  <div
+    className="section-content"
+  >
+    <div
+      className="level-list"
+    />
+    <div
+      className="add-level-form"
+    >
+      <input
+        onChange={[Function]}
+        placeholder="Navn på nivå"
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Poeng"
+        type="text"
+        value=""
+      />
+      <button
+        className="level-button add-button"
+        onClick={[Function]}
+      >
+        Legg til nytt nivå
+      </button>
+    </div>
+  </div>
+</div>
+`;
