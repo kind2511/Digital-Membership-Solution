@@ -76,7 +76,7 @@ function FinnBruker() {
                     <p>Verifisert: {selectedUser.verified ? 'Ja' : 'Nei'}</p>
                     <p>Status : {selectedUser.banned ? 'Ja' : 'Nei'}</p>
                     <p>Status Dato: {selectedUser.banned_from || 'N/A'} til {selectedUser.banned_until || 'N/A'}</p>
-                    <p>Ekstra Info: {selectedUser.additional_info || 'N/A'}</p>
+                    <p>Ekstra Info: {selectedUser.info || 'N/A'}</p>
                     <button className="close-details-button" onClick={handleCloseDetails}>Lukk</button>
                 </div>
             )}
