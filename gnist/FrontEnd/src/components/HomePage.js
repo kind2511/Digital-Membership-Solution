@@ -13,7 +13,6 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <div className="left">
-        <img src="/log.png" alt="Logo" className="home-page-logo"/>
       </div>
       <div className="right">
         <div className="nav-logo">Kom i<span> gang</span></div>

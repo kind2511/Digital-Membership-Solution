@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Undersøkelser component snapshot 1`] = `
+<div
+  className="undersøkelser-container"
+>
+  <div
+    className="section nytt-spørsmål"
+  >
+    <h2
+      className="section-title"
+    >
+      Nytt Spørsmål
+    </h2>
+    <form
+      className="question-form"
+      onSubmit={[Function]}
+    >
+      <input
+        onChange={[Function]}
+        placeholder="Skriv inn spørsmålet"
+        required={true}
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Svar 1"
+        required={true}
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Svar 2"
+        required={true}
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Svar 3"
+        required={true}
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Svar 4"
+        required={true}
+        type="text"
+        value=""
+      />
+      <input
+        onChange={[Function]}
+        placeholder="Svar 5"
+        required={true}
+        type="text"
+        value=""
+      />
+      <button
+        type="submit"
+      >
+        Lagre Spørsmål
+      </button>
+    </form>
+  </div>
+  <div
+    className="section fetched-questions"
+  >
+    <h2
+      className="section-title"
+    >
+      Alle Spørsmål
+    </h2>
+    <div
+      className="questions-list"
+    />
+  </div>
+</div>
+`;
