@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EndretMedlemsPoen component snapshot 1`] = `
+<div
+  className="endret-medlems-poen-container"
+>
+  <h2
+    className="endret-medlems-poen-title"
+  >
+    Endret medlems poeng
+  </h2>
+  <input
+    className="endret-medlems-poen-search-input"
+    onChange={[Function]}
+    placeholder="Søk etter medlem..."
+    type="text"
+    value=""
+  />
+  <div
+    className="endret-medlems-poen-search-status"
+  />
+  <div
+    className="endret-medlems-poen-section-content"
+  />
+</div>
+`;

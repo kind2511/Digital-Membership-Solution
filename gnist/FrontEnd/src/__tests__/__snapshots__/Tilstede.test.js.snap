@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tilstede component snapshot 1`] = `
+<div
+  className="tilstede-container"
+>
+  <div
+    className="section registrerte-medlemmer"
+  >
+    <h2
+      className="section-title"
+    >
+      Registrerte Medlemmer
+    </h2>
+    <div
+      className="date-filter-container"
+    >
+      <label
+        className="date-filter-label"
+        htmlFor="dateFilter"
+      >
+        Filtrer etter dato:
+      </label>
+      <input
+        className="date-filter-input"
+        id="dateFilter"
+        onChange={[Function]}
+        type="date"
+        value=""
+      />
+      <button
+        className="button-clear"
+        onClick={[Function]}
+      >
+        Tøm
+      </button>
+    </div>
+    <div
+      className="members-list"
+    >
+      <p
+        className="no-members-message"
+      >
+        Velg en dato for å se aktive brukere
+      </p>
+    </div>
+  </div>
+  <div
+    className="section statistikk"
+  >
+    <h2
+      className="section-title"
+    >
+      Statistikk
+    </h2>
+    <div
+      className="date-filter-container"
+    >
+      <label
+        className="date-filter-label"
+        htmlFor="startDate"
+      >
+        Start Dato:
+      </label>
+      <input
+        className="date-filter-input"
+        id="startDate"
+        onChange={[Function]}
+        type="date"
+        value=""
+      />
+      <label
+        className="date-filter-label"
+        htmlFor="endDate"
+      >
+        Slutt Dato:
+      </label>
+      <input
+        className="date-filter-input"
+        id="endDate"
+        onChange={[Function]}
+        type="date"
+        value=""
+      />
+      <button
+        className="reset-button"
+        onClick={[Function]}
+      >
+        Tøm
+      </button>
+    </div>
+    <div
+      className="statistikk-message"
+    >
+      <p>
+        Velg en start dato og slutt dato for å se statistikken.
+      </p>
+    </div>
+  </div>
+</div>
+`;

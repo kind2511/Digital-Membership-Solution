@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Forslag component snapshot 1`] = `
+<div
+  className="forslag-container"
+>
+  <h2
+    className="section-title"
+  >
+    Forslag
+  </h2>
+  <div
+    className="section-content"
+  />
+</div>
+`;

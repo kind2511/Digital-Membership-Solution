@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EkstraInfoOmMedlem component snapshot 1`] = `
+<div
+  className="eiom-container"
+>
+  <h2
+    className="eiom-title"
+  >
+    Ekstra Info om Medlem
+  </h2>
+  <div
+    className="eiom-section-content"
+  />
+</div>
+`;

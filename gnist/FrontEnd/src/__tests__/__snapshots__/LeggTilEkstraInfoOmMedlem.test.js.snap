@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeggTilEkstraInfoOmMedlem component snapshot 1`] = `
+<div
+  className="legg-til-ekstra-info-om-medlem-container"
+>
+  <h2
+    className="section-title"
+  >
+    Legg til ekstra info om medlem (IKKE SENSITIVE)
+  </h2>
+  <input
+    className="legg-til-ekstra-info-om-medlem-search-input"
+    onChange={[Function]}
+    placeholder="Søk etter medlem..."
+    type="text"
+    value=""
+  />
+  <div
+    className="legg-til-ekstra-info-om-medlem-search-status"
+  />
+  <div
+    className="legg-til-ekstra-info-om-medlem-section-content"
+  />
+</div>
+`;

@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegistrationStatus component snapshot - default state 1`] = `
+<div
+  className="registration-status"
+>
+  <label
+    className="switch"
+  >
+    <input
+      checked={false}
+      onChange={[Function]}
+      onClick={[Function]}
+      type="checkbox"
+    />
+    <span
+      className="slider round"
+    />
+  </label>
+  <span
+    className="status-text"
+  >
+    Ikke Aktiv
+  </span>
+</div>
+`;
+
+exports[`RegistrationStatus component snapshot - registered state 1`] = `
+<div
+  className="registration-status"
+>
+  <label
+    className="switch"
+  >
+    <input
+      checked={true}
+      onChange={[Function]}
+      onClick={[Function]}
+      type="checkbox"
+    />
+    <span
+      className="slider round"
+    />
+  </label>
+  <span
+    className="status-text"
+  >
+    Aktiv
+  </span>
+</div>
+`;
+
+exports[`RegistrationStatus component snapshot - with confirmation modal 1`] = `
+<div
+  className="registration-status"
+>
+  <label
+    className="switch"
+  >
+    <input
+      checked={false}
+      onChange={[Function]}
+      onClick={[Function]}
+      type="checkbox"
+    />
+    <span
+      className="slider round"
+    />
+  </label>
+  <span
+    className="status-text"
+  >
+    Ikke Aktiv
+  </span>
+  <div
+    className="registration-modal-overlay"
+  >
+    <div
+      className="registration-modal-content"
+    >
+      <p>
+        Er du sikker på at du vil registrere deg?
+      </p>
+      <button
+        onClick={[Function]}
+      >
+        Ja
+      </button>
+      <button
+        onClick={[Function]}
+      >
+        Nei
+      </button>
+    </div>
+  </div>
+</div>
+`;

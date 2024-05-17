@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EndeligGodkjenning component snapshot 1`] = `
+<div
+  className="eg-godkjenning-container"
+>
+  <h2
+    className="eg-section-title"
+  >
+    Endelig Godkjenning
+  </h2>
+  <div
+    className="eg-section-content"
+  >
+    <ul
+      className="eg-members-list"
+    />
+  </div>
+</div>
+`;

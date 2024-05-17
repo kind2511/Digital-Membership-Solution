@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import './TodayActivitiesComponent.css';
@@ -16,19 +16,7 @@ function TodayActivitiesComponent() {
     const [messageType, setMessageType] = useState('');
     const baseApiUrl = 'http://127.0.0.1:8000';
 
-    useEffect(() => {
-        fetchTodayActivities();
-    }, []);
-
-    useEffect(() => {
-        const timerId = setInterval(() => {
-            setDisplayedText(promoSentences[sentenceIndex]);
-            setSentenceIndex((sentenceIndex + 1) % promoSentences.length);
-        }, 3000);
-        return () => clearInterval(timerId);
-    }, [sentenceIndex]);
-
-    const fetchTodayActivities = async () => {
+    const fetchTodayActivities = useCallback(async () => {
         try {
             const response = await fetch(`${baseApiUrl}/digital_medlemsordning/get_activity_today/`);
             const data = await response.json();
@@ -42,7 +30,19 @@ function TodayActivitiesComponent() {
             console.error("Failed to fetch today's activities:", error);
             setActivities([]);
         }
-    };
+    }, [user.sub]);
+
+    useEffect(() => {
+        fetchTodayActivities();
+    }, [fetchTodayActivities]);
+
+    useEffect(() => {
+        const timerId = setInterval(() => {
+            setDisplayedText(promoSentences[sentenceIndex]);
+            setSentenceIndex((sentenceIndex + 1) % promoSentences.length);
+        }, 3000);
+        return () => clearInterval(timerId);
+    }, [sentenceIndex]);
 
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);

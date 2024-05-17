@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Medleminfo component snapshot 1`] = `
+<div
+  className="medleminfo-grid-container"
+>
+  <div
+    className="component-container"
+  >
+    <div>
+      EndeligGodkjenning Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      MedlemsNivaer Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      Forslag Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      LastOppBevis Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      EkstraInfoOmMedlem Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      EndretMedlemsPoen Component
+    </div>
+  </div>
+  <div
+    className="component-container"
+  >
+    <div>
+      LeggTilEkstraInfoOmMedlem Component
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MinMening component snapshot 1`] = `
+<div
+  className="minMeningUniqueContainer"
+>
+  <section
+    className="uniqueSuggestionSection"
+  >
+    <h2>
+      Send Inn Forslag
+    </h2>
+    <form
+      onSubmit={[Function]}
+    >
+      <input
+        onChange={[Function]}
+        placeholder="Tittel"
+        required={true}
+        type="text"
+        value=""
+      />
+      <textarea
+        onChange={[Function]}
+        placeholder="Ditt forslag"
+        required={true}
+        value=""
+      />
+      <button
+        className="uniqueSendInnButton"
+        disabled={true}
+        onClick={[Function]}
+        type="button"
+      >
+        Send Inn
+      </button>
+    </form>
+  </section>
+  <section
+    className="uniqueQuestionSection"
+  >
+    <h2>
+      Avstemninger
+    </h2>
+  </section>
+</div>
+`;

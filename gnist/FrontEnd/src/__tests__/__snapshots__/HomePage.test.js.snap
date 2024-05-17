@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomePage component snapshot 1`] = `
+<div
+  className="home-page"
+>
+  <div
+    className="left"
+  >
+    <img
+      alt="Logo"
+      className="home-page-logo"
+      src="/log.png"
+    />
+  </div>
+  <div
+    className="right"
+  >
+    <div
+      className="nav-logo"
+    >
+      Kom i
+      <span>
+         gang
+      </span>
+    </div>
+    <button
+      onClick={[Function]}
+    >
+      Login/Register
+    </button>
+  </div>
+  <div
+    className="kontakt-oss-link-container"
+  >
+    <a
+      className="kontakt-link"
+      href="/kontakt-oss"
+      onClick={[Function]}
+    >
+      Kontakt oss
+    </a>
+  </div>
+</div>
+`;

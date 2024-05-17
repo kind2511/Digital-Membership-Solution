@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProtectedRoute handles error state 1`] = `
+<div>
+  Oops... 
+  Something went wrong
+</div>
+`;
+
+exports[`ProtectedRoute redirects when not authenticated 1`] = `
+<div>
+  Loading...
+</div>
+`;
+
+exports[`ProtectedRoute renders component when authenticated 1`] = `
+<div>
+  Mock Component
+</div>
+`;
+
+exports[`ProtectedRoute renders loading state 1`] = `
+<div>
+  Loading...
+</div>
+`;

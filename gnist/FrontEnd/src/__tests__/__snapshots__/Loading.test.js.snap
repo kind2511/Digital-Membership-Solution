@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading component snapshot 1`] = `
+<div
+  className="loading-container"
+>
+  <div
+    className="loading-spinner"
+  />
+  <p>
+    Loading...
+  </p>
+</div>
+`;

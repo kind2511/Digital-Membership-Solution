@@ -56,7 +56,11 @@ To get started, you'll need to install:
     ```
     npm install
     ```
-
+    In FrontEnd directory create .env file and add:
+    ```
+    REACT_APP_AUTH0_DOMAIN=gnist.uk.auth0.com
+    REACT_APP_AUTH0_CLIENT_ID=TV0H80JyrQzkbCIUcn7RiOCoZpjUee91
+    ```
 3. **BackEnd Setup**:
     Navigate to the BackEnd directory:
     ```
@@ -64,21 +68,23 @@ To get started, you'll need to install:
     ```
     Set up a Python virtual environment:
     ```
-    python -m venv {name of environment}
+    python -m venv myenv
     ```
-    Activate the virtual environment:
+    Navigate to myenv then activate the virtual environment:
     For Windows:
     ```
-    venv\Scripts\activate
+    .\Scripts\activate 
     ```
     For macOS and Linux:
     ```
-    source {name of environment}/bin/activate
+    source myenv/bin/activate
     ```
+    Inside the BackEnd directory where is the requirements.txt located
     Install the required Python packages:
     ```
     pip install -r requirements.txt
     ```
+    Navigate to gnist again and follow the Start the BackEnd instructions bellow.
 
 ## Running the Application
 
