@@ -79,10 +79,12 @@ To get started, you'll need to install:
     ```
     source myenv/bin/activate
     ```
+    Inside the BackEnd directory where is the requirements.txt located
     Install the required Python packages:
     ```
     pip install -r requirements.txt
     ```
+    Navigate to gnist again and follow the Start the BackEnd instructions bellow.
 
 ## Running the Application
 
