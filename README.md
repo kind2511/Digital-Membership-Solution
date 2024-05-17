@@ -64,12 +64,14 @@ To get started, you'll need to install:
     ```
     Set up a Python virtual environment:
     ```
-    python -m venv {name of environment}
+    python -m venv myenv
+    ```
+    cd myenv
     ```
     Activate the virtual environment:
     For Windows:
     ```
-    venv\Scripts\activate
+    .\Scripts\activate  
     ```
     For macOS and Linux:
     ```
