@@ -64,14 +64,12 @@ To get started, you'll need to install:
     ```
     Set up a Python virtual environment:
     ```
-    python -m venv myenv
-    ```
-    cd myenv
+    python -m venv {name of environment}
     ```
     Activate the virtual environment:
     For Windows:
     ```
-    .\Scripts\activate  
+    .\Scripts\activate 
     ```
     For macOS and Linux:
     ```
@@ -1238,14 +1236,10 @@ To get started, you'll need to install:
 [
     {
         "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
-        "first_name": "John",
-        "last_name": "Pilkington",
         "info": "Key to clubhouse"
     },
     {
         "auth0ID": "auth0|661711a8bdf844868576402b",
-        "first_name": "Mia",
-        "last_name": "Davies",
         "info": "Allowed to access clubhouse on saturdays"
     },
     ...
