@@ -68,16 +68,16 @@ To get started, you'll need to install:
     ```
     Set up a Python virtual environment:
     ```
-    python -m venv {name of environment}
+    python -m venv myenv
     ```
-    Activate the virtual environment:
+    Navigate to myenv then activate the virtual environment:
     For Windows:
     ```
     .\Scripts\activate 
     ```
     For macOS and Linux:
     ```
-    source {name of environment}/bin/activate
+    source myenv/bin/activate
     ```
     Install the required Python packages:
     ```
