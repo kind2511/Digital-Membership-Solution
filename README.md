@@ -1236,10 +1236,14 @@ To get started, you'll need to install:
 [
     {
         "auth0ID": "auth0|65ef275a34065d2b94cc1d8d",
+        "first_name": "John",
+        "last_name": "Pilkington",
         "info": "Key to clubhouse"
     },
     {
         "auth0ID": "auth0|661711a8bdf844868576402b",
+        "first_name": "Mia",
+        "last_name": "Davies",
         "info": "Allowed to access clubhouse on saturdays"
     },
     ...
