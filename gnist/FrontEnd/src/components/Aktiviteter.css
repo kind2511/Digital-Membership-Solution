@@ -33,7 +33,7 @@
 .activity-form-unique button {
   padding: 10px 20px;
   border: none;
-  background-color: RGB(19, 182, 253);
+  background-color: #005A9E;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -103,7 +103,7 @@
 
 .activity-info-unique h3 {
   margin: 0;
-  color: RGB(19, 182, 253);
+  color: #005A9E;
   font-size: 18px;
 }
 
