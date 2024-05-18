@@ -29,7 +29,7 @@ function Bevis() {
 
   return (
     <div className="meldinger-content">
-      <h2 className="section-title">Mitt Bevis</h2>
+      <h2 className="section-title">Mine Bevis</h2>
       {certificates.length > 0 ? (
         certificates.map((certificate) => (
           <div className="certificate-card" key={certificate.certificateID}>
