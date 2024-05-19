@@ -76,7 +76,7 @@ function EndretMedlemsPoen() {
 
     return (
         <div className="endret-medlems-poen-container">
-            <h2 className="endret-medlems-poen-title">Endret medlems poeng</h2>
+            <h2 className="endret-medlems-poen-title">Endre Medlems Poeng</h2>
             <input
                 type="text"
                 className="endret-medlems-poen-search-input"

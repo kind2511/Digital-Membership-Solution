@@ -150,7 +150,7 @@ function LastOppBevis() {
 
     return (
         <div className="last-opp-bevis-container">
-            <h2 className="section-title">Last Opp Bevis</h2>
+            <h2 className="section-title">Håndtering av Bevis</h2>
             {!selectedMember && (
                 <input
                     type="text"
