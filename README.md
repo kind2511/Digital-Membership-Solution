@@ -58,7 +58,7 @@ To get started, you'll need to install:
     ```
     npm install
     ```
-    In FrontEnd directory create .env file and add:
+    In FrontEnd directory create .env file in the root of the Frontend folder and add:
     ```
     REACT_APP_AUTH0_DOMAIN={your auth0 domain}
     REACT_APP_AUTH0_CLIENT_ID={your auth0 client id}
