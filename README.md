@@ -91,10 +91,12 @@ To get started, you'll need to install:
    In the terminal window ensure that you're in the Backend directory within the same folder as the manage.py file and the vitual environment is activated. 
 
 1. **Create migrations**
+   ```
    python manage.py makemigrations digital_medlemsordning
-
+   ```
 2. **Apply migrations**
    python manage.py migrate 
+   ```
 
 ## Running the Application
 
