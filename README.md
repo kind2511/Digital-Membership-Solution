@@ -22,6 +22,7 @@ The GNIST project is organized into two main components:
 Root directory files:
 - `.gitignore`: Specifies intentionally untracked files to ignore.
 - `README.md`: Documentation that provides setup instructions and information.
+- `Gnist brukermanual.pdf`: User manual for the applicaiton.
 
 ## Getting Started
 
