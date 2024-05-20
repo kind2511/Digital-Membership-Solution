@@ -59,8 +59,8 @@ To get started, you'll need to install:
     ```
     In FrontEnd directory create .env file and add:
     ```
-    REACT_APP_AUTH0_DOMAIN=gnist.uk.auth0.com
-    REACT_APP_AUTH0_CLIENT_ID=TV0H80JyrQzkbCIUcn7RiOCoZpjUee91
+    REACT_APP_AUTH0_DOMAIN={your auth0 domain}
+    REACT_APP_AUTH0_CLIENT_ID={your auth0 client id}
     ```
 3. **BackEnd Setup**:
     Navigate to the BackEnd directory:
