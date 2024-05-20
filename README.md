@@ -95,6 +95,7 @@ To get started, you'll need to install:
    python manage.py makemigrations digital_medlemsordning
    ```
 2. **Apply migrations**
+   ```
    python manage.py migrate 
    ```
 
