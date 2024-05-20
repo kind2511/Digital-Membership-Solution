@@ -8,8 +8,9 @@ Welcome to GNIST. This project is developed by Gruppe 208 for PROG2900 at NTNU.
 2. [Getting Started](#getting-started)
    - [Prerequisites](#prerequisites)
    - [Local Setup](#local-setup)
-3. [Running the Application](#running-the-application)
-4. [API Documentation](#api-documentation)
+3. [Migrating the database](#migrating-the-database)
+4. [Running the Application](#running-the-application)
+5. [API Documentation](#api-documentation)
 
 ## Project Structure
 
