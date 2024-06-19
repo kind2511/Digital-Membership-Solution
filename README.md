@@ -1,6 +1,7 @@
 # GNIST
 
-Welcome to GNIST. This project is a bachelor thesis project for programming at NTNU. 
+Welcome to GNIST. 
+This project is a bachelor thesis project for programming at NTNU. 
 GNIST is a digital membership application which enables the employees at a clubhouse to keep track of its members.
 The application has two different user interfaces. One for the employees and another one for the members.
 
