@@ -80,14 +80,25 @@ WSGI_APPLICATION = "gnist.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "gnist",
+# 	"USER": "admin",
+# 	"PASSWORD": "bg9uxDPNYXZzIuX5Fke8",
+# 	"PORT": 3306,
+# 	"HOST": "database-1.chiwoyka4rye.eu-north-1.rds.amazonaws.com",
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "gnist",
-	"USER": "admin",
-	"PASSWORD": "bg9uxDPNYXZzIuX5Fke8",
+	"USER": "root",
+	"PASSWORD": "chrisa2511",
 	"PORT": 3306,
-	"HOST": "database-1.chiwoyka4rye.eu-north-1.rds.amazonaws.com",
+	"HOST": "127.0.0.1",
     }
 }
 

@@ -131,16 +131,4 @@ urlpatterns = [
 
     # Deletes a member that does not pass the verification stage
     path('delete_member/<str:auth0_id>/', views.delete_member, name='delete_member'),
-
-
-
-
-
-    #----------------------------------------------------------------------------------------------------
-    # Code not used or tested
-    #----------------------------------------------------------------------------------------------------
-
-    # Messages
-    path('send_message/', views.send_message, name='send_message'),
-    path('get_sent_messages/<int:sender_id>/', views.get_sent_messages, name='get_sent_messages'),
 ]

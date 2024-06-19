@@ -1,13 +1,11 @@
 from django.http import HttpResponse
 from datetime import date, datetime
 from .models import Members
-from .models import Employee
 from .models import MemberDates
 from .models import Activity
 from .models import ActivitySignup
 from .models import SuggestionBox
 from .models import Level
-from .models import Message
 from .models import MemberAnswer
 from .models import PollQuestion
 from .models import MemberCertificate
@@ -18,7 +16,6 @@ import json
 from .serializers import MembersSerializer
 from .serializers import SuggestionBoxSerializer
 from .serializers import LevelSerializer
-from .serializers import MessageSerializer
 from .serializers import ActivitySerializer
 from .serializers import PollQuestionSerializer
 from .serializers import MemberAttendanceSerializer
@@ -665,6 +662,7 @@ def get_all_members_info(request):
     members = Members.objects.all()
     serializer = MembersSerializer(members, many=True)
     return Response(serializer.data)
+
 #-------------------------------------------------------------------------------------------------------
 # Levels
 #-------------------------------------------------------------------------------------------------------
@@ -1042,53 +1040,4 @@ def get_member_activities(request, auth0_id):
 
 
 #-------------------------------------------------------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------------------------------------------------------
-# Code not used or tested or used by the application
-#-------------------------------------------------------------------------------------------------------------------------------
-
-# send message from employee to member
-@api_view(['POST'])
-def send_message(request):
-    if request.method == 'POST':
-      
-        data = request.data
-        sender_id = data.get('sender_id')
-        recipient_id = data.get('recipient_id')
-        subject = data.get('subject')
-        body = data.get('body')
-
-        try:
-         
-            sender = Employee.objects.get(employeeID=sender_id)
-            recipient = Members.objects.get(userID=recipient_id)
-        except (Employee.DoesNotExist, Members.DoesNotExist):
-            return Response({'error': 'Sender or recipient does not exist'}, status=404)
-
-       
-        message = Message.objects.create(
-            sender=sender,
-            recipient=recipient,
-            subject=subject,
-            body=body
-        )
-
-        # Serialize the message data
-        serializer = MessageSerializer(message)
-
-        return Response(serializer.data, status=201)
-    else:
-        return Response({'error': 'Invalid request method'})
-    
-
-# get messages sent from a specific employee
-@api_view(['GET'])
-def get_sent_messages(request, sender_id):
-    try:
-        sent_messages = Message.objects.filter(sender_id=sender_id)
-        serializer = MessageSerializer(sent_messages, many=True)
-        return Response(serializer.data)
-    except Message.DoesNotExist:
-        return Response({'error': 'No messages found for the sender'}, status=404)
-    
 

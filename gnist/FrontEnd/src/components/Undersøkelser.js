@@ -25,12 +25,12 @@ function Undersøkelser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const payload = {
       question: newQuestion.question,
       answers: newQuestion.answers.map(answer => ({ answer })),
     };
-
+  
     fetch('http://127.0.0.1:8000/digital_medlemsordning/create_question/', {
       method: 'POST',
       headers: {
@@ -44,14 +44,21 @@ function Undersøkelser() {
         setSuccessMessage('Spørsmålet ble lagret');
         setShowSuccessMessage(true);
         setTimeout(() => {
-          setNewQuestion({ question: '', answers: ['', '', ''] });
+          setNewQuestion({ question: '', answers: ['', '', '', '', ''] });
           setShowSuccessMessage(false);
         }, 4000);
+        // Fetch updated list of questions
+        return fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions/');
+      })
+      .then(response => response.json())
+      .then(data => {
+        setQuestions(data.questions);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
+  
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/digital_medlemsordning/get_all_questions/')

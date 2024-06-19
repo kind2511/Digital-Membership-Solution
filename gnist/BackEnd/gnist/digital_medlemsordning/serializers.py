@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Members
 from .models import SuggestionBox
 from .models import Level
-from .models import Message
 from .models import Activity
 from .models import ActivitySignup
 from .models import PollQuestion 
@@ -45,12 +44,6 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ['activityID', 'title', 'description', 'image', 'date', 'limit', 'signed_up_count', 'signed_up_members']
-
-
-class MessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = ['id','sender', 'recipient', 'subject', 'body', 'is_read']
 
 
 class PollAnswerSerializer(serializers.ModelSerializer):
