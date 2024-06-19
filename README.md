@@ -1,6 +1,27 @@
 # GNIST
 
-Welcome to GNIST. This project is developed by Gruppe 208 for PROG2900 at NTNU.
+Welcome to GNIST. This project is a bachelor thesis project for programming at NTNU. 
+GNIST is a digital membership application which enables the employees at a clubhouse to keep track of its members.
+The application has two different user interfaces. One for the employees and another one for the members.
+
+Some of the functionalities the employee UI provides the employee with is the ability to:
+* Keep track of which members visited the clubhouse on a given date.
+* Retrieve statistics of the member attendance based on gender for a specified time period.
+* Ban a member for a given time period.
+* Create activities for the members.
+* Hand out certificates to a specific member.
+* Create levels which members can achieve by attending the clubhouse.
+* Reduce or increase a members points.
+* Send questions to members.
+* And much more. For details on functionalities read the "Gnist brukermanual.pdf" available in the repo. (NB! Only available in Norwegian).
+
+Functionalities of the member UI:
+* Register attendance for current day.
+* View their current level.
+* View activities that they can sign up to.
+* View their certificates that they can be rewarded by the employees.
+* Answer questions.
+* Send suggestions to the clubhouse.
 
 ## Table of Contents
 
@@ -38,7 +59,7 @@ To get started, you'll need to install:
 1. **Clone the Repository**:
    Clone the repository to your local machine using the following command:
     ```
-    git clone https://gitlab.stud.idi.ntnu.no/ahmadmm/gnist.git
+    git clone https://github.com/kind2511/Digital-Membership-Solution.git
     ```
     Navigate into the prog2900-gnistdigital folder
     ```
@@ -81,13 +102,12 @@ To get started, you'll need to install:
     ```
     source myenv/bin/activate
     ```
-    Inside the BackEnd directory where is the requirements.txt located
+    Inside the BackEnd directory is where the requirements.txt is located
     Install the required Python packages:
     ```
     pip install -r requirements.txt
     ```
-    Navigate to gnist again and follow the Start the BackEnd instructions bellow.
-
+   Navigate to gnist again and follow the Start the BackEnd instructions bellow.
 
 ## Migrating the databse
    In the terminal window ensure that you're in the Backend directory within the same folder as the manage.py file and the vitual environment is activated. 
