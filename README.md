@@ -25,6 +25,9 @@ Functionalities of the member UI:
 * Answer questions.
 * Send suggestions to the clubhouse.
 
+## Auth0
+This application uses Auth0 for handling of user authentication.
+
 ## Table of Contents
 
 1. [Project Structure](#project-structure)
